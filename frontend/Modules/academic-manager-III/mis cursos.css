@@ -81,7 +81,7 @@
 .cursosDisponibles{
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Espacio entre cartas */
+    gap: 2px; /* Espacio entre cartas (casi pegadas) */
     width: 100%;
 }
 
@@ -90,10 +90,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 10px; 
     width: 100%;  /* Ancho completo*/
     min-height: 120px; /* Altura minima*/
-    margin-bottom: 20px;
+    margin-bottom: 2px; /* Espacio inferior (casi pegado) */
     overflow: hidden;
 }
 
@@ -103,7 +102,8 @@
 }
 
 .infoDeCurso{
-    padding: 20px 30px;
+    padding: 18px 26px;
+    transform: translateY(-39px); 
 }
 
 .gradoDelCurso{
@@ -121,7 +121,7 @@
 
 .CursoProfesor{
     color: #5c7cfa;
-    font-size: 0.9rem;
+    font-size: 0.9rem; 
     margin: 5px; /* Margen Inferior*/
     cursor: pointer;
 }
@@ -141,9 +141,9 @@
     padding: 20px 30px;
     object-fit: cover; /* Recorte para llenar espacio*/
     display: block; /* No espacios residuales*/
-    border-radius: 12px; /* Esquinas redondeadas - más ligero */
+    border-radius: 40px; /* Esquinas redondeadas - más ligero */
 }
 
 .img-rounded{ /* Clase utilitaria: esquinas redondeadas */
-    border-radius: 60px;
+    border-radius: 30px;
 }
