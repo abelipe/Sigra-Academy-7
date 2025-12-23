@@ -11,7 +11,7 @@ export async function getUser(req, res) {
 		const user = await getUserModel(userId)
 		if (!user) return res.status(404).json({ message: 'User not found' })
 
-		// Normalize response keys (optional)
+		
 		const result = {
 			id: user.user_id,
 			role_id: user.role_id,
@@ -79,6 +79,7 @@ export async function getUserByEmail(req, res) {
 			last_name: user.last_name,
 			email: user.email,
 			phone: user.phone,
+			password_hash: user.password_hash,
 			is_active: Boolean(user.is_active),
 			created_at: user.created_at,
 			updated_at: user.updated_at

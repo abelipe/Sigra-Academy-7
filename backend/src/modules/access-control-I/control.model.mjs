@@ -26,15 +26,15 @@ export async function getUserByName(name) {
 }
 
 export async function getUserByEmail(email) {
-    if (!email) return null
-    const query = `SELECT user_id, role_id, first_name, last_name, email, phone, is_active, created_at, updated_at FROM users WHERE email = ? LIMIT 1`;
-    try {
-        const [rows] = await db.execute(query, [email]);
-        if (!rows || rows.length === 0) return null
-        return rows[0]
-    } catch (error) {
-        throw error
-    }
+	if (!email) return null
+	const query = `SELECT user_id, role_id, first_name, last_name, email, phone, password_hash, is_active, created_at, updated_at FROM users WHERE email = ? LIMIT 1`;
+	try {
+		const [rows] = await db.execute(query, [email]);
+		if (!rows || rows.length === 0) return null
+		return rows[0]
+	} catch (error) {
+		throw error
+	}
 }
 
 export async function getUserRoleById(userId) {
