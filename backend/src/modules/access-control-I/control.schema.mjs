@@ -31,4 +31,19 @@ export function validateGetUserName(req, res, next) {
   return next()
 }
 
+// Esquema para validar params de GET /users/email/:email
+export const getUserEmailParamsSchema = z.object({
+  email: z.string().email()
+})
+
+export function validateGetUserEmail(req, res, next) {
+  const result = getUserEmailParamsSchema.safeParse(req.params)
+  if (!result.success) {
+    return res.status(400).json({ message: 'Invalid parameters', errors: result.error.errors })
+  }
+
+  req.params.email = result.data.email
+  return next()
+}
+
 export default { getUserParamsSchema, validateGetUser }
