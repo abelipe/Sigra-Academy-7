@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGRA - Gestión de Prelaciones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">
+                <img src="Adobe Express - file.png" alt="Colegio Monte del Mar" class="logo-img">
+                <span class="logo-text">SIGRA</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#">Inicio</a>
+                <a href="#" class="active">Asignaturas</a>
+                <a href="#">Docentes</a>
+                <a href="#">Reportes</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <div class="search-bar">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Buscar...">
+            </div>
+            <div class="notifications">
+                <i class="fa-solid fa-bell"></i>
+                <span class="dot"></span>
+            </div>
+            <div class="profile">
+                <img src="https://i.pravatar.cc/150?img=11" alt="Profile">
+            </div>
+        </div>
+    </header>
+
+    <div class="page-header container">
+        <div class="breadcrumbs">
+            <i class="fa-solid fa-house"></i> Inicio <span>></span> Asignaturas <span>></span> <span class="current">Prelaciones</span>
+        </div>
+        <h1>Gestión de Prelaciones</h1>
+        <p class="subtitle">Defina y actualice los requisitos académicos previos para cada asignatura. Las prelaciones aseguran que los estudiantes sigan el orden lógico del plan de estudios.</p>
+    </div>
+
+    <main class="container main-grid">
+        
+        <section class="card config-section">
+            <div class="card-header">
+                <h3><i class="fa-solid fa-bars-staggered"></i> Configurar Requisitos</h3>
+            </div>
+            <div class="card-body">
+                
+                <div class="form-group">
+                    <label>1. Seleccionar Materia Principal</label>
+                    <div class="search-input-group">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="materia-search" placeholder="Buscar por código o nombre (ej. MAT-204, Matematica I)" list="materias-list">
+                        <datalist id="materias-list">
+                            <!-- Primer Año -->
+                            <option value="MAT-204 — Matematica I">MAT-204 — Matematica I</option>
+                            <option value="FIS-201 — Fisica I">FIS-201 — Fisica I</option>
+                            <option value="QUI-299 — Quimica I">QUI-299 — Quimica I</option>
+                            <option value="BIO-501 — Biologia I">BIO-501 — Biologia I</option>
+                            <option value="COM-403 — Computacion I">COM-403 — Computacion I</option>
+                            <option value="DIB-309 — Dibujo I">DIB-309 — Dibujo I</option>
+                            <option value="LIT-199 — Lenguaje y Literatura I">LIT-199 — Lenguaje y Literatura I</option>
+                            <option value="HIS-101 — Historia General">HIS-101 — Historia General</option>
+                            <option value="GEO-301 — Geografía I">GEO-301 — Geografía I</option>
+                            <option value="DEP-401 — Deporte I">DEP-401 — Deporte I</option>
+                            <option value="ING-601 — Ingles I">ING-601 — Ingles I</option>
+                            <!-- Segundo Año -->
+                            <option value="MAT-205 — Matematica II">MAT-205 — Matematica II</option>
+                            <option value="FIS-202 — Fisica II">FIS-202 — Fisica II</option>
+                            <option value="QUI-300 — Quimica II">QUI-300 — Quimica II</option>
+                            <option value="BIO-502 — Biologia II">BIO-502 — Biologia II</option>
+                            <option value="COM-404 — Computacion II">COM-404 — Computacion II</option>
+                            <option value="DIB-310 — Dibujo II">DIB-310 — Dibujo II</option>
+                            <option value="LIT-200 — Lenguaje y Literatura II">LIT-200 — Lenguaje y Literatura II</option>
+                            <option value="HIS-102 — Historia II">HIS-102 — Historia II</option>
+                            <option value="GEO-302 — Geografía II">GEO-302 — Geografía II</option>
+                            <option value="DEP-402 — Deporte II">DEP-402 — Deporte II</option>
+                            <option value="ING-602 — Ingles II">ING-602 — Ingles II</option>
+                        </datalist>
+                    </div>
+
+                    <div class="selected-item" id="selected-materia-container" style="display: none;">
+                        <div class="selected-info">
+                            <span class="materia-tag">MATERIA SELECCIONADA</span>
+                            <h4 id="selected-materia-title">MAT-206 — Matemática II</h4>
+                            <p id="selected-materia-year">2do Año</p>
+                        </div>
+                        <button class="close-btn" id="clear-materia-btn"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>2. Asignar Materias Prerrequisito</label>
+                    <div class="dropdown-action">
+                        <select class="form-select" id="prereq-select">
+                            <option>Seleccione una asignatura...</option>
+                            <!-- Se llenará dinámicamente con las materias disponibles -->
+                        </select>
+                        <button class="btn btn-primary-dark" id="add-prereq-btn"><i class="fa-solid fa-plus"></i> Añadir</button>
+                    </div>
+                </div>
+
+                <div class="prerequisites-list" id="prereq-list">
+                    <div class="prereq-item">
+                        <div class="prereq-code">COM-404</div>
+                        <div class="prereq-details">
+                            <strong>Computacion II</strong>
+                            <span>2do Año</span>
+                        </div>
+                        <button class="delete-prereq-btn"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                    <div class="prereq-item">
+                        <div class="prereq-code">DIB-310</div>
+                        <div class="prereq-details">
+                            <strong>Dibujo II</strong>
+                            <span>2do Año</span>
+                        </div>
+                        <button class="delete-prereq-btn"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button class="btn btn-outline" id="cancel-config-btn">Cancelar</button>
+                <button class="btn btn-primary" id="save-btn">
+                    <i class="fa-solid fa-floppy-disk"></i> Guardar Prelaciones
+                </button>
+            </div>
+        </section>
+
+        <aside class="sidebar">
+            <div class="info-box">
+                <div class="info-title">
+                    <i class="fa-solid fa-circle-info"></i> Información
+                </div>
+                <p>Al definir una prelación, el sistema bloqueará la inscripción de la materia principal hasta que el estudiante haya aprobado todas las materias asignadas como requisitos.</p>
+                <ul>
+                    <li>Evite crear ciclos infinitos (A requiere B, B requiere A).</li>
+                    <li>Puede asignar múltiples materias como requisito.</li>
+                </ul>
+            </div>
+
+            <div class="card recent-activity">
+                <div class="card-header-flex">
+                    <h4>Prelaciones Recientes</h4>
+                    <a href="#" id="view-all-prelaciones">Ver todas</a>
+                </div>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="act-header">
+                            <span class="badge-gray">FIS-203</span>
+                            <span class="time">Hace 2h</span>
+                        </div>
+                        <h5>Física II</h5>
+                        <p class="arrow-text"><i class="fa-solid fa-arrow-right"></i> Requiere: Fisica I, Matematica I</p>
+                    </div>
+                    <div class="activity-item">
+                        <div class="act-header">
+                            <span class="badge-gray">GEO-302</span>
+                            <span class="time">Ayer</span>
+                        </div>
+                        <h5>Geografia II</h5>
+                        <p class="arrow-text"><i class="fa-solid fa-arrow-right"></i> Requiere: Geografia I</p>
+                    </div>
+                    <div class="activity-item">
+                        <div class="act-header">
+                            <span class="badge-gray">HIS-101</span>
+                            <span class="time">Ayer</span>
+                        </div>
+                        <h5>Historia General</h5>
+                        <p class="success-text"><i class="fa-solid fa-circle-check"></i> Sin prelaciones</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <section class="card table-section full-width">
+            <div class="table-header-tools">
+                <h3>Resumen de Prelaciones - SIGRA</h3>
+                <div class="tools">
+                    <button class="btn btn-white"><i class="fa-solid fa-filter"></i> Filtrar</button>
+                    <button class="btn btn-white"><i class="fa-solid fa-download"></i> Exportar</button>
+                </div>
+            </div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>CÓDIGO</th>
+                        <th>MATERIA PRINCIPAL</th>
+                        <th>BACHILLERATO</th>
+                        <th>PRERREQUISITOS ACTIVOS</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="code-col">MAT-206</td>
+                        <td><strong>Matematica II</strong></td>
+                        <td class="text-gray">2do Año</td>
+                        <td>
+                            <span class="badge-blue">FIS-202 Física I</span>
+                            <span class="badge-blue">MAT-205 Matemática I</span>
+                        </td>
+                        <td class="actions">
+                            <i class="fa-solid fa-pencil"></i>
+                            <i class="fa-solid fa-trash-can"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="code-col">BIO-502</td>
+                        <td><strong>Biologia II</strong></td>
+                        <td class="text-gray">2do Año</td>
+                        <td>
+                            <span class="badge-blue">QUI-301 Quimica I</span>
+                            <span class="badge-blue">BIO-501 Biologia I</span>
+                        </td>
+                        <td class="actions">
+                            <i class="fa-solid fa-pencil"></i>
+                            <i class="fa-solid fa-trash-can"></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="table-footer">
+                <span>Mostrando 1 a 2 de 24 resultados</span>
+                <div class="pagination">
+                    <button class="page-btn">Anterior</button>
+                    <span class="pagination-separator">—</span>
+                    <button class="page-btn">Siguiente</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="delete-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-triangle-exclamation"></i> Confirmar Eliminación</h3>
+            </div>
+            <div class="modal-body">
+                <p class="modal-message">¿Estás seguro de que deseas eliminar esta configuración de prelación?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-delete" class="btn btn-outline">Cancelar</button>
+                <button id="confirm-delete" class="btn btn-danger">
+                    <i class="fa-solid fa-trash-can"></i> Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para "Ver todas" las Prelaciones Recientes -->
+    <div id="prelaciones-modal" class="modal-overlay">
+        <div class="modal-card prelaciones-modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-clock-rotate-left"></i> Todas las Prelaciones Recientes</h3>
+                <button class="close-modal-btn" id="close-prelaciones-modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="prelaciones-container" id="prelaciones-list">
+                    <!-- Las prelaciones se cargarán dinámicamente aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

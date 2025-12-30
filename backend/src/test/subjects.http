@@ -1,0 +1,2 @@
+### ruta para obtener todas las materias 
+GET http://localhost:4300/subjects/all
