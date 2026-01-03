@@ -44,8 +44,7 @@
               </svg>
             </span>
             <input id="contrasena" name="contrasena" type="password" placeholder="Ingresa tu contraseña" aria-label="Contraseña" autocomplete="current-password" />
-            
-            <button class="ghost-button toggle-password-btn" type="button" aria-label="Mostrar u ocultar contraseña">
+            <button class="ghost-button" type="button" aria-label="Mostrar u ocultar contraseña">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                 <circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.5" />
@@ -56,15 +55,7 @@
         </div>
 
         <button class="primary-button" type="submit" id="login-button">Acceder</button>
-        
-        <div style="display: flex; flex-direction: column; gap: 10px; text-align: center;">
-            <a class="link-text" href="#">¿Olvidaste tu contraseña?</a>
-            
-            <span style="font-size: 14px; color: var(--neutral-500);">
-                ¿No tienes cuenta? <a href="registro.html" class="link-text">Regístrate aquí</a>
-            </span>
-        </div>
-
+        <a class="link-text" href="#">¿Olvidaste tu contraseña?</a>
       </form>
     </section>
 
@@ -74,7 +65,6 @@
       <a href="#">Privacidad</a>
     </footer>
   </main>
-
   <script>
     (function () {
       const API_BASE = 'http://localhost:3000/api/access-control'
@@ -84,19 +74,6 @@
       const emailError = document.getElementById('email-error')
       const passwordError = document.getElementById('password-error')
       const loginButton = document.getElementById('login-button')
-      
-      // NUEVO: Lógica para el botón del Ojo
-      const toggleBtn = document.querySelector('.toggle-password-btn');
-      
-      if(toggleBtn) {
-          toggleBtn.addEventListener('click', () => {
-              // Alternar entre 'password' y 'text'
-              const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-              passwordInput.setAttribute('type', type);
-              
-              // Opcional: Aquí podrías añadir lógica para cambiar el icono del SVG si quisieras (ojo abierto/tachado)
-          });
-      }
 
       function setError(element, message) {
         if (!element) return
@@ -110,8 +87,6 @@
       }
 
       async function fetchUserByEmail(email) {
-        // Nota: Si no tienes el servidor corriendo, esto dará error.
-        // Para pruebas frontend, el catch de abajo manejará la excepción.
         const response = await fetch(`${API_BASE}/users/email/${encodeURIComponent(email)}`)
         if (response.status === 404) return null
         if (!response.ok) throw new Error('Error al consultar el usuario')
@@ -147,23 +122,20 @@
           }
 
           const storedPassword = user.password_hash || ''
-          const roleId = Number(user.role_id)
+                  const roleId = Number(user.role_id)
 
-          if (password === storedPassword && roleId === 1) {
-            window.location.href = './user-table.html'
-            return
-          }
+                  if (password === storedPassword && roleId === 1) {
+                    window.location.href = './user-table.html'
+                    return
+                  }
 
-          if (password === storedPassword && roleId !== 1) {
-            setError(passwordError, 'No tienes módulo todavía')
-            return
-          }
+                  if (password === storedPassword && roleId !== 1) {
+                    setError(passwordError, 'No tienes módulo todavía')
+                    return
+                  }
 
-          setError(passwordError, 'Contraseña incorrecta')
+                  setError(passwordError, 'Contraseña incorrecta')
         } catch (error) {
-          // Si no hay backend, puedes descomentar la siguiente línea para probar el login forzado:
-          // if (email === 'test@test.com' && password === '123') window.location.href = './user-table.html';
-          
           setError(emailError, 'No se pudo conectar con el servidor')
           console.error('Login error:', error)
         } finally {
