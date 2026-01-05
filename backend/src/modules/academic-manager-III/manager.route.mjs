@@ -8,4 +8,7 @@ router.get('/courses/:studentId', courseController.getCoursesByStudent)
 router.get('/courses/:assignmentId/detail', courseController.getCourseDetail)
 router.post('/courses', courseController.createCourse)
 
+// ===== RUTAS DE HORARIOS =====
+router.get('/schedule/:studentId', courseController.getScheduleByStudent)
+
 export default router
