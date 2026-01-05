@@ -7,6 +7,9 @@ GET http://localhost:5200/api/grades-log/all
 ### Obtener registros de calificaciones por ID de usuario
 GET http://localhost:5200/api/grades-log/user/3
 
+### Obtener las calificaciones de una actividad de una materia específica
+GET http://localhost:5200/api/grades-log/activity/1/subject/1
+
 ### Crear un nuevo registro de calificación
 POST http://localhost:5200/api/grades-log/create
 Content-Type: application/json
@@ -29,3 +32,30 @@ Content-Type: application/json
 
 ### Eliminar un registro de calificación
 DELETE http://localhost:5200/api/grades-log/delete/15
+
+### Obtener el boletin de un estudiante
+GET http://localhost:5200/api/records/boletin/3
+
+### Obtener todos los boletines por año académico
+GET http://localhost:5200/api/records/boletines/academic-year/1
+
+### Crear un nuevo registro académico (Cierre de nota)
+POST http://localhost:5200/api/records/create
+Content-Type: application/json
+
+{
+    "student_user_id": 3,
+    "assignment_id": 1,
+    "final_score": 18.5
+}
+
+### Actualizar un registro académico
+PATCH http://localhost:5200/api/records/update/11
+Content-Type: application/json
+
+{
+    "final_score": 19.0
+}
+
+### Eliminar un registro académico
+DELETE http://localhost:5200/api/records/delete/11

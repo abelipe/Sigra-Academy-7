@@ -7,10 +7,8 @@ const router = Router();
 
 // Definir todas las rutas de los modulos aquí
 export const ListRoutes = {
-    gradesLog: {
-        grades: router.use(`${SETTINGS.BASE_PATH}/grades-log`, GradesLogRoutes)
-    },
-    academicRecords: {
+    grades: {
+        grades: router.use(`${SETTINGS.BASE_PATH}/grades-log`, GradesLogRoutes),
         records: router.use(`${SETTINGS.BASE_PATH}/records`, RecordsRoutes)
     }
 }

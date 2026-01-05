@@ -12,6 +12,8 @@ router.get('/activity/:activityId', gradesController.getGradesLogByActivityId);
 router.get('/all', gradesController.getAllGradesLog);
 // Ruta para obtener los registros de calificaciones por el ID del usuario
 router.get('/user/:userId', gradesController.getGradesLogByUserId);
+// Ruta para obtener las calificaciones de una actividad de una materia especifica
+router.get('/activity/:activityId/subject/:subjectId', gradesController.getGradesLogByActivityAndSubject);
 // Ruta para crear un nuevo registro de calificación
 router.post('/create', gradesController.addGradeLogEntry);
 // Ruta para actualizar un registro de calificación existente

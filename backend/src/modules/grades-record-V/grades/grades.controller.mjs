@@ -62,6 +62,25 @@ export class GradesLogController {
         }
     }
 
+    // Controlador para obtener las calificaciones de una actividad de una materia específica
+    getGradesLogByActivityAndSubject = async (req, res) => {
+        const { activityId, subjectId } = req.params;
+        try{
+            const result = await this.model.getGradesLogByActivityAndSubject(activityId, subjectId);
+            if(result.error) return res.status(404).json({error: result.error});
+            return res.status(200).json({
+                message: result.message,
+                grades: result.grades
+            });
+        }
+        catch(error){
+            console.error('Error en GradesLogController.getGradesLogByActivityAndSubject:', error);
+            return res.status(500).json({
+                error: `Error del servidor al obtener los registros de calificaciones por ID de actividad y materia.`
+            });
+        }
+    }
+
     // Controlador para dar una calificación a un estudainte y registrar la nota
     addGradeLogEntry = async (req, res) => {
         const validation = validateCreateGradeLog(req.body);
