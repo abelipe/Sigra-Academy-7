@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <!-- Inline favicon to avoid browser requesting /favicon.ico (prevents 404 in console) -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext x='1' y='13' font-size='12'%3E%C2%A9%3C/text%3E%3C/svg%3E">
 </head>
+
 <body>
 
     <header class="header">
@@ -42,25 +44,28 @@
 
     <div class="page-header container">
         <div class="breadcrumbs">
-            <i class="fa-solid fa-house"></i> Inicio <span>></span> Asignaturas <span>></span> <span class="current">Prelaciones</span>
+            <i class="fa-solid fa-house"></i> Inicio <span></span> Asignaturas <span></span> <span
+                class="current">Prelaciones</span>
         </div>
         <h1>Gestión de Prelaciones</h1>
-        <p class="subtitle">Defina y actualice los requisitos académicos previos para cada asignatura. Las prelaciones aseguran que los estudiantes sigan el orden lógico del plan de estudios.</p>
+        <p class="subtitle">Defina y actualice los requisitos académicos previos para cada asignatura. Las prelaciones
+            aseguran que los estudiantes sigan el orden lógico del plan de estudios.</p>
     </div>
 
     <main class="container main-grid">
-        
+
         <section class="card config-section">
             <div class="card-header">
                 <h3><i class="fa-solid fa-bars-staggered"></i> Configurar Requisitos</h3>
             </div>
             <div class="card-body">
-                
+
                 <div class="form-group">
                     <label>1. Seleccionar Materia Principal</label>
                     <div class="search-input-group">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" id="materia-search" placeholder="Buscar por código o nombre (ej. MAT-204, Matematica I)" list="materias-list">
+                        <input type="text" id="materia-search"
+                            placeholder="Buscar por código o nombre (ej. MAT-204, Matematica I)" list="materias-list">
                         <datalist id="materias-list">
                             <!-- Se llenará dinámicamente desde la base de datos -->
                         </datalist>
@@ -83,7 +88,8 @@
                             <option>Seleccione una asignatura...</option>
                             <!-- Se llenará dinámicamente con las materias disponibles -->
                         </select>
-                        <button class="btn btn-primary-dark" id="add-prereq-btn"><i class="fa-solid fa-plus"></i> Añadir</button>
+                        <button class="btn btn-primary-dark" id="add-prereq-btn"><i class="fa-solid fa-plus"></i>
+                            Añadir</button>
                     </div>
                     <div id="prereq-message" class="inline-message" aria-live="polite" style="display:none"></div>
                 </div>
@@ -106,7 +112,8 @@
                 <div class="info-title">
                     <i class="fa-solid fa-circle-info"></i> Información
                 </div>
-                <p>Al definir una prelación, el sistema bloqueará la inscripción de la materia principal hasta que el estudiante haya aprobado todas las materias asignadas como requisitos.</p>
+                <p>Al definir una prelación, el sistema bloqueará la inscripción de la materia principal hasta que el
+                    estudiante haya aprobado todas las materias asignadas como requisitos.</p>
                 <ul>
                     <li>Evite crear ciclos infinitos (A requiere B, B requiere A).</li>
                     <li>Puede asignar múltiples materias como requisito.</li>
@@ -130,7 +137,7 @@
                 <!-- Filter/Export removed as requested -->
                 <div class="tools" aria-hidden="true"></div>
             </div>
-            
+
             <table class="data-table">
                 <thead>
                     <tr>
@@ -144,7 +151,7 @@
                     <!-- Tabla de resumen renderizada desde la base de datos -->
                 </tbody>
             </table>
-            
+
             <div class="table-footer">
                 <span id="summary-range">Mostrando 0 a 0 de 0 resultados</span>
                 <div class="pagination">
@@ -193,4 +200,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

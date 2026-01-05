@@ -129,11 +129,6 @@ td { padding: 16px; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 100; }
 .modal-content { background: white; padding: 30px; border-radius: 12px; width: 400px; text-align: center; }
 
-.carga-horaria{
-    padding: auto;
-    text-align: center;
-}
-
 /* --- ESTILOS DE PAGINACIÓN --- */
 .pagination {
     display: flex;
@@ -199,6 +194,10 @@ th, td {
     padding: 16px 12px;
 }
 
+.parameter{
+    color: var(--bg);
+}
+
 /* Esto asegurará que las columnas mantengan proporciones */
 th:nth-child(1), td:nth-child(1) { min-width: 60px; }
 th:nth-child(2), td:nth-child(2) { min-width: 100px; }
@@ -207,3 +206,57 @@ th:nth-child(4), td:nth-child(4) { min-width: 200px; }
 th:nth-child(5), td:nth-child(5) { min-width: 100px; }
 th:nth-child(6), td:nth-child(6) { min-width: 120px; }
 th:nth-child(7), td:nth-child(7) { min-width: 120px; }
+
+/* PAGINACIÓN */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.pagination button {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text-dark);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+    background: var(--primary);
+    color: white;
+}
+
+.pagination button.active {
+    background: var(--primary);
+    color: white;
+    font-weight: bold;
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* BADGES */
+.badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.badge.active {
+    background: var(--success);
+    color: white;
+}
+
+.badge.inactive {
+    background: var(--danger);
+    color: white;
+}

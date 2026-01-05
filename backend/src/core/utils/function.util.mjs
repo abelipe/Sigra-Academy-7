@@ -9,7 +9,7 @@ export async function getSeedFunctionByTable(tableName, mock){
         const columns = Object.keys(item).join(', ');
         const values = Object.values(item);
         const placeholders = values.map(() => '?').join(', ');
-        const insertQuery = `INSERT INTO ${tableName} (${columns}) VALUES (${placeholders})`;
+        const insertQuery = `INSERT IGNORE INTO ${tableName} (${columns}) VALUES (${placeholders})`;
         await db.query(insertQuery, values);
     }
 }

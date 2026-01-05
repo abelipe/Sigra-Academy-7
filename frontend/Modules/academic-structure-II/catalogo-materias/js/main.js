@@ -1,181 +1,66 @@
-/*const viewContainer = document.getElementById('view-container');
-
-function showView(view, id = null) {
-    if (view === 'catalogo') renderCatalogo();
-    if (view === 'crear') renderForm(null);
-    if (view === 'editar') renderForm(materiasOriginales.find(m => m.id === id));
-}
-
-function renderCatalogo() {
-    viewContainer.innerHTML = `
-        <div class="module-header">
-            <div>
-                <h1>Catálogo de Materias</h1>
-                <p>Consulte y gestione el listado completo de asignaturas académicas activas.</p>
-            </div>
-            <button class="btn-primary" onclick="showView('crear')"><i class='bx bx-plus'></i> Nueva Asignatura</button>
-        </div>
-
-        <div class="filter-card">
-            <div class="filter-group">
-                <label>Buscar</label>
-                <div class="input-search-wrapper">
-                    <i class='bx bx-search'></i>
-                    <input type="text" id="q-search" placeholder="Buscar por nombre, código o ID..." onkeyup="if(event.key==='Enter') doSearch()">
-                </div>
-            </div>
-            <button class="btn-reset" onclick="resetSearch()"><i class='bx bx-refresh'></i> Resetear</button>
-            <button class="btn-primary" onclick="doSearch()"><i class='bx bx-search-alt'></i> Buscar</button>
-        </div>
-
-        <div class="table-card">
-            <table>
-                <thead>
-                    <tr><th>ID</th><th>CÓDIGO</th><th>NOMBRE</th><th>DESCRIPCIÓN</th><th>CARGA HORARIA</th><th>ACCIONES</th></tr>
-                </thead>
-                <tbody id="table-body">${renderRows(materias)}</tbody>
-            </table>
-        </div>
-    `;
-}
-
-function renderRows(data) {
-    return data.map(m => `
-        <tr>
-            <td style="color:#94a3b8">${m.id}</td>
-            <td><span class="badge-code">${m.codigo}</span></td>
-            <td><strong>${m.nombre}</strong></td>
-            <td style="color:var(--text-muted); max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${m.descripcion}</td>
-            <td class="carga-horaria"><i class='bx bx-time-five'></i>   ${m.horas}h</td>
-            <td>
-                <button onclick="showView('editar', '${m.id}')" style="border:none; background:none; color:var(--primary); font-size:18px; cursor:pointer;" title="Editar Asignatura"><i class='bx bx-edit-alt'></i></button>
-                <button onclick="openDelete('${m.id}')" style="border:none; background:none; color:var(--danger); font-size:18px; cursor:pointer; margin-left:10px;" title="Eliminar Asignatura"><i class='bx bx-trash'></i></button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-function renderForm(m) {
-    const isEdit = !!m;
-    viewContainer.innerHTML = `
-        <div style="margin-bottom:20px; font-size:13px; color:var(--text-muted);">
-            Inicio / Gestión de Materias / <span style="color:var(--primary); font-weight:700;">${isEdit ? 'Editar' : 'Crear Nueva'}</span>
-        </div>
-        <h1 style="margin-bottom:30px;">${isEdit ? 'Editar Asignatura' : 'Crear Nueva Asignatura'}</h1>
-        
-        <div class="table-card" style="padding:40px; position:relative;">
-            <div style="position:absolute; top:0; left:0; width:100%; height:4px; background:var(--primary);"></div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px;">
-                <div class="filter-group" style="grid-column: span 2;">
-                    <label>Nombre de la Materia *</label>
-                    <div class="input-search-wrapper"><i class='bx bx-book'></i><input id="f-nombre" type="text" value="${isEdit ? m.nombre : ''}"></div>
-                </div>
-                <div class="filter-group">
-                    <label>Código Identificador *</label>
-                    <div class="input-search-wrapper"><i class='bx bx-hash'></i><input id="f-codigo" type="text" value="${isEdit ? m.codigo : ''}"></div>
-                </div>
-                <div class="filter-group">
-                    <label>Estado del Curso</label>
-                    <select id="f-estado" style="padding:11px; border-radius:8px; border:1px solid var(--border);">
-                        <option ${isEdit && m.estado==='Activo'?'selected':''}>Activo</option>
-                        <option ${isEdit && m.estado==='Inactivo'?'selected':''}>Inactivo</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Carga Horaria Semanal *</label>
-                    <div class="input-search-wrapper">
-                        <i class='bx bx-time'></i>
-                        <input id="f-horas" type="number" value="${isEdit ? m.horas : ''}">
-                        <span style="position:absolute; right:15px; color:var(--text-muted); font-size:12px;">Horas</span>
-                    </div>
-                </div>
-                <div class="filter-group">
-                    <label>Créditos Académicos</label>
-                    <div class="input-search-wrapper"><i class='bx bx-star'></i><input id="f-creditos" type="number" value="${isEdit ? m.creditos : '0'}"></div>
-                </div>
-                <div class="filter-group" style="grid-column: span 2;">
-                    <label>Descripción / Síntesis</label>
-                    <textarea id="f-desc" rows="4" style="padding:15px; border-radius:8px; border:1px solid var(--border);">${isEdit ? m.descripcion : ''}</textarea>
-                </div>
-            </div>
-            <div style="display:flex; justify-content:flex-end; gap:15px; margin-top:30px;">
-                <button class="btn-cancel" onclick="showView('catalogo')">Cancelar</button>
-                <button class="btn-save" onclick="saveData('${isEdit ? m.id : ''}')">${isEdit ? 'Guardar Cambios' : 'Crear Asignatura'}</button>
-            </div>
-        </div>
-    `;
-}
-
-// Lógica de Búsqueda
-function doSearch() {
-    const q = document.getElementById('q-search').value.toLowerCase();
-    materias = materiasOriginales.filter(m => m.nombre.toLowerCase().includes(q) || m.codigo.toLowerCase().includes(q) || m.id.includes(q));
-    document.getElementById('table-body').innerHTML = renderRows(materias);
-}
-
-function resetSearch() {
-    document.getElementById('q-search').value = "";
-    materias = [...materiasOriginales];
-    document.getElementById('table-body').innerHTML = renderRows(materias);
-}
-
-// Guardar
-function saveData(id) {
-    const obj = {
-        nombre: document.getElementById('f-nombre').value,
-        codigo: document.getElementById('f-codigo').value,
-        horas: document.getElementById('f-horas').value,
-        creditos: document.getElementById('f-creditos').value,
-        descripcion: document.getElementById('f-desc').value,
-        estado: document.getElementById('f-estado').value
-    };
-
-    if (id) {
-        let idx = materiasOriginales.findIndex(m => m.id === id);
-        materiasOriginales[idx] = { ...materiasOriginales[idx], ...obj };
-    } else {
-        const newId = (materiasOriginales.length + 1).toString().padStart(3, '0');
-        materiasOriginales.push({ id: newId, ...obj, estudiantes: 0, grupos: 0, promedio: '0/100' });
-    }
-    materias = [...materiasOriginales];
-    showView('catalogo');
-}
-
-// Borrar
-let idDel = null;
-function openDelete(id) { idDel = id; document.getElementById('delete-modal').style.display = 'flex'; }
-function closeDel() { document.getElementById('delete-modal').style.display = 'none'; }
-function confirmDel() {
-    materiasOriginales = materiasOriginales.filter(m => m.id !== idDel);
-    materias = [...materiasOriginales];
-    closeDel();
-    renderCatalogo();
-}
-
-window.onload = () => showView('catalogo'); */
 // ==========================================
-// LÓGICA PRINCIPAL CON PAGINACIÓN Y FILTROS
+// LÓGICA PRINCIPAL CON API
 // ==========================================
 
 const viewContainer = document.getElementById('view-container');
+const API_BASE = 'http://localhost:4300/api/subjects'; // Cambiar si es necesario
 
-// --- VARIABLES DE PAGINACIÓN ---
+let materias = []; // Array global para las materias
 let currentPage = 1;
-const itemsPerPage = 5; // Solo 5 resultados por página
+const itemsPerPage = 5;
+let filteredMaterias = [];
 
 function showView(view, id = null) {
     if (view === 'catalogo') {
-        currentPage = 1; // Resetear a pag 1 al entrar
-        renderCatalogo();
+        loadSubjects().then(() => {
+            filteredMaterias = [...materias];
+            currentPage = 1;
+            renderCatalogo();
+        });
     }
     if (view === 'crear') renderForm(null);
-    if (view === 'editar') renderForm(materiasOriginales.find(m => m.id === id));
+    if (view === 'editar') renderForm(materias.find(m => m.id == id));
+}
+
+// Función para cargar materias desde la API
+async function loadSubjects() {
+    try {
+        const response = await fetch(`${API_BASE}/all`);
+        const data = await response.json();
+        if (data.subjects) {
+            materias = data.subjects.map(m => ({
+                id: m.subject_id,
+                codigo: m.code_subject,
+                nombre: m.subject_name,
+                descripcion: m.description,
+                anio: m.anio,
+                is_active: m.is_active
+            }));
+            console.log('Materias cargadas:', materias);
+        } else {
+            console.error('Error al cargar materias:', data.error);
+            materias = [];
+        }
+    } catch (error) {
+        console.error('Error de red:', error);
+        materias = [];
+    }
 }
 
 // ------------------------------------------
 // VISTA: CATÁLOGO
 // ------------------------------------------
 function renderCatalogo() {
+    const totalPages = Math.ceil(filteredMaterias.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const currentItems = filteredMaterias.slice(startIndex, endIndex);
+
+    const paginationButtons = [];
+    for (let i = 1; i <= totalPages; i++) {
+        paginationButtons.push(`<button onclick="changePage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`);
+    }
+
     viewContainer.innerHTML = `
         <div class="module-header">
             <div>
@@ -198,11 +83,11 @@ function renderCatalogo() {
                 <label>Filtrar por Año</label>
                 <select id="f-filter-anio" onchange="doSearch()" style="padding:11px; border-radius:8px; border:1px solid var(--border); width:100%; outline:none;">
                     <option value="">Todos los años</option>
-                    <option value="1er Año">1er Año</option>
-                    <option value="2do Año">2do Año</option>
-                    <option value="3er Año">3er Año</option>
-                    <option value="4to Año">4to Año</option>
-                    <option value="5to Año">5to Año</option>
+                    <option value="1° año">1° año</option>
+                    <option value="2° año">2° año</option>
+                    <option value="3° año">3° año</option>
+                    <option value="4° año">4° año</option>
+                    <option value="5° año">5° año</option>
                 </select>
             </div>
 
@@ -215,31 +100,32 @@ function renderCatalogo() {
                 <thead>
                     <tr>
                         <th>ID</th><th>CÓDIGO</th><th>NOMBRE</th><th>DESCRIPCIÓN</th>
-                        <th>AÑO</th><th>CARGA HORARIA</th><th>ACCIONES</th>
+                        <th>AÑO</th><th>ESTADO</th><th>ACCIONES</th>
                     </tr>
                 </thead>
-                <tbody id="table-body">
-                    </tbody>
+                <tbody id="table-body">${renderRows(currentItems)}</tbody>
             </table>
         </div>
 
-        <div id="pagination-container" class="pagination"></div>
+        ${totalPages > 1 ? `
+        <div class="pagination">
+            <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>Anterior</button>
+            ${paginationButtons.join('')}
+            <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Siguiente</button>
+        </div>
+        ` : ''}
     `;
-    updateTable();
 }
 
 // ------------------------------------------
-// ACTUALIZAR TABLA Y PAGINACIÓN
+// PAGINACIÓN
 // ------------------------------------------
-function updateTable() {
-    const start = (currentPage - 1) * itemsPerPage;
-    const end = start + itemsPerPage;
-    const paginatedData = materias.slice(start, end);
-
-    document.getElementById('table-body').innerHTML = renderRows(paginatedData);
-    renderPaginationControls();
+function changePage(page) {
+    const totalPages = Math.ceil(filteredMaterias.length / itemsPerPage);
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    renderCatalogo();
 }
-
 function renderRows(data) {
     if (data.length === 0) return `<tr><td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">No se encontraron materias.</td></tr>`;
     
@@ -250,7 +136,7 @@ function renderRows(data) {
             <td><strong>${m.nombre}</strong></td>
             <td style="color:var(--text-muted); max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${m.descripcion}</td>
             <td><strong>${m.anio}</strong></td>
-            <td class="carga-horaria"><i class='bx bx-time-five'></i> ${m.horas}h</td>
+            <td><span class="badge ${m.is_active == 1 ? 'active' : 'inactive'}">${m.is_active == 1 ? 'Activo' : 'Inactivo'}</span></td>
             <td>
                 <button onclick="showView('editar', '${m.id}')" class="btn-icon edit"><i class='bx bx-edit-alt'></i></button>
                 <button onclick="openDelete('${m.id}')" class="btn-icon delete"><i class='bx bx-trash'></i></button>
@@ -259,107 +145,163 @@ function renderRows(data) {
     `).join('');
 }
 
-// --- GENERAR BOTONES DE PÁGINA ---
-function renderPaginationControls() {
-    const totalPages = Math.ceil(materias.length / itemsPerPage);
-    const container = document.getElementById('pagination-container');
-    let html = '';
-
-    for (let i = 1; i <= totalPages; i++) {
-        html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
-    }
-    container.innerHTML = html;
-}
-
-function goToPage(page) {
-    currentPage = page;
-    updateTable();
-}
-
 // ------------------------------------------
-// BÚSQUEDA Y FILTRO COMBINADO
+// BÚSQUEDA Y FILTRO
 // ------------------------------------------
 function doSearch() {
     const q = document.getElementById('q-search').value.toLowerCase();
     const filterAnio = document.getElementById('f-filter-anio').value;
 
-    materias = materiasOriginales.filter(m => {
+    filteredMaterias = materias.filter(m => {
         const matchesSearch = m.nombre.toLowerCase().includes(q) || 
                               m.codigo.toLowerCase().includes(q) || 
-                              m.id.includes(q);
+                              m.id.toString().includes(q);
         const matchesAnio = filterAnio === "" || m.anio === filterAnio;
         
         return matchesSearch && matchesAnio;
     });
 
-    currentPage = 1; // Volver a la página 1 tras filtrar
-    updateTable();
+    currentPage = 1;
+    renderCatalogo();
 }
 
 function resetSearch() {
     document.getElementById('q-search').value = "";
-    document.getElementById('f-filter-anio').value = ""; // Resetear dropdown
-    materias = [...materiasOriginales];
+    document.getElementById('f-filter-anio').value = "";
+    filteredMaterias = [...materias];
     currentPage = 1;
-    updateTable();
+    renderCatalogo();
 }
 
-// Resto de funciones (saveData, openDelete, etc.) se mantienen igual...
+// ------------------------------------------
+// FORMULARIO: CREAR / EDITAR
+// ------------------------------------------
+function renderForm(m) {
+    const isEdit = !!m;
+    viewContainer.innerHTML = `
+        <div style="margin-bottom:20px; font-size:13px; color:var(--text-muted);">
+            Inicio / Gestión de Materias / <span style="color:var(--primary); font-weight:700;">${isEdit ? 'Editar' : 'Crear Nueva'}</span>
+        </div>
+        <h1 style="margin-bottom:30px;">${isEdit ? 'Editar Asignatura' : 'Crear Nueva Asignatura'}</h1>
+        
+        <div class="table-card" style="padding:40px; position:relative;">
+            <div style="position:absolute; top:0; left:0; width:100%; height:4px; background:var(--primary);"></div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:25px;">
+                <div class="filter-group" style="grid-column: span 3;">
+                    <label>Nombre de la Materia *</label>
+                    <div class="input-search-wrapper"><i class='bx bx-book'></i><input id="f-nombre" type="text" value="${isEdit ? m.nombre : ''}"></div>
+                </div>
+                <div class="filter-group">
+                    <label>Código Identificador *</label>
+                    <div class="input-search-wrapper"><i class='bx bx-hash'></i><input id="f-codigo" type="text" value="${isEdit ? m.codigo : ''}"></div>
+                </div>
+                <div class="filter-group">
+                    <label>Estado del Curso</label>
+                    <select id="f-estado" style="padding:11px; border-radius:8px; border:1px solid var(--border);">
+                        <option value="Activo" ${isEdit && m.is_active == 1 ?'selected':''}>Activo</option>
+                        <option value="Inactivo" ${isEdit && m.is_active == 0 ?'selected':''}>Inactivo</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Año *</label>
+                    <select id="f-anio" style="padding:11px; border-radius:8px; border:1px solid var(--border);">
+                        <option value="">Seleccionar Año</option>
+                        <option value="1° año" ${isEdit && m.anio === '1° año' ?'selected':''}>1° año</option>
+                        <option value="2° año" ${isEdit && m.anio === '2° año' ?'selected':''}>2° año</option>
+                        <option value="3° año" ${isEdit && m.anio === '3° año' ?'selected':''}>3° año</option>
+                        <option value="4° año" ${isEdit && m.anio === '4° año' ?'selected':''}>4° año</option>
+                        <option value="5° año" ${isEdit && m.anio === '5° año' ?'selected':''}>5° año</option>
+                    </select>
+                </div>
+                <div class="filter-group" style="grid-column: span 3;">
+                    <label>Descripción / Síntesis</label>
+                    <textarea id="f-desc" rows="4" style="padding:15px; border-radius:8px; border:1px solid var(--border);">${isEdit ? m.descripcion : ''}</textarea>
+                </div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:15px; margin-top:30px;">
+                <button class="btn-cancel" onclick="showView('catalogo')">Cancelar</button>
+                <button class="btn-save" onclick="saveData('${isEdit ? m.id : ''}')">${isEdit ? 'Guardar Cambios' : 'Crear Asignatura'}</button>
+            </div>
+        </div>
+    `;
+}
 
 // ------------------------------------------
-// LÓGICA: GUARDAR DATOS (CREAR / EDITAR)
+// GUARDAR DATOS (CREAR / EDITAR)
 // ------------------------------------------
-function saveData(id) {
-    // 1. Validar que se haya seleccionado un año (requerido)
-    const anioSeleccionado = document.getElementById('f-anio').value;
-    if(!anioSeleccionado) {
-        alert("Por favor, seleccione el Año al que pertenece la materia.");
-        return; // Detiene la función si no hay año
+async function saveData(id) {
+    const anio = document.getElementById('f-anio').value.replace(/[^\d]/g, '');
+    if (!anio) {
+        alert("Por favor, seleccione el Año.");
+        return;
     }
 
-    // 2. Crear el objeto con los valores de los inputs
-    const obj = {
-        nombre: document.getElementById('f-nombre').value,
+    const data = {
+        anio: anio,
         codigo: document.getElementById('f-codigo').value,
-        // MODIFICADO: Se captura el valor del nuevo select de año
-        anio: anioSeleccionado, 
-        horas: document.getElementById('f-horas').value,
-        // creditos: document.getElementById('f-creditos').value, // Eliminé créditos ya que no es común en bachillerato
+        nombre: document.getElementById('f-nombre').value,
         descripcion: document.getElementById('f-desc').value,
-        estado: document.getElementById('f-estado').value
+        is_active: document.getElementById('f-estado').value === 'Activo' ? 1 : 0
     };
 
-    // 3. Decidir si es una actualización o una creación
-    if (id) {
-        // MODO EDICIÓN: Buscamos el índice y actualizamos el objeto existente
-        let idx = materiasOriginales.findIndex(m => m.id === id);
-        // Usamos spread syntax (...) para fusionar los datos viejos con los nuevos cambios
-        materiasOriginales[idx] = { ...materiasOriginales[idx], ...obj };
-    } else {
-        // MODO CREACIÓN: Generamos un nuevo ID y agregamos al array
-        const newId = (materiasOriginales.length + 1).toString().padStart(3, '0');
-        // Agregamos propiedades por defecto para datos futuros (estudiantes, promedio)
-        materiasOriginales.push({ id: newId, ...obj, estudiantes: 0, grupos: 0, promedio: '0/100' });
-    }
+    try {
+        let response;
+        if (id) {
+            // Editar
+            console.log('Enviando data para editar:', data);
+            response = await fetch(`${API_BASE}/update/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+        } else {
+            // Crear
+            response = await fetch(`${API_BASE}/create`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+        }
 
-    // 4. Actualizar la vista y volver al catálogo
-    materias = [...materiasOriginales]; // Actualizamos la lista visible
-    showView('catalogo'); // Volvemos a la tabla
+        const result = await response.json();
+        console.log('Respuesta del servidor:', result);
+        if (response.ok) {
+            alert(result.message);
+            showView('catalogo');
+        } else {
+            alert('Error: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error de conexión');
+    }
 }
 
 // ------------------------------------------
-// LÓGICA: BORRAR (MODAL)
+// BORRAR
 // ------------------------------------------
 let idDel = null;
 function openDelete(id) { idDel = id; document.getElementById('delete-modal').style.display = 'flex'; }
 function closeDel() { document.getElementById('delete-modal').style.display = 'none'; }
-function confirmDel() {
-    // Filtramos el array original para excluir el ID seleccionado
-    materiasOriginales = materiasOriginales.filter(m => m.id !== idDel);
-    materias = [...materiasOriginales]; // Actualizamos la lista visible
-    closeDel(); // Cerramos modal
-    renderCatalogo(); // Re-renderizamos la tabla
+
+async function confirmDel() {
+    try {
+        const response = await fetch(`${API_BASE}/delete/${idDel}`, {
+            method: 'DELETE'
+        });
+        const result = await response.json();
+        if (response.ok) {
+            alert(result.message);
+            closeDel();
+            showView('catalogo');
+        } else {
+            alert('Error: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error de conexión');
+    }
 }
 
-// Al cargar la página, mostrar el catálogo por defecto
+// Al cargar la página, mostrar el catálogo
 window.onload = () => showView('catalogo');

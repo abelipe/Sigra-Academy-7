@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SIGRA - Gestión de Materias</title>
+    <link rel="stylesheet" href="./css/base.css" />
+    <link rel="stylesheet" href="./css/materias-por-grado.css" />
+</head>
+
+<body>
+    <header class="barra-superior">
+        <div class="contenedor barra-superior__contenido">
+            <div class="marca">
+                <div class="marca__icono" aria-hidden="true">
+                    <img src="./assets/BLANCO CON FONDO.svg" alt="" width="40" height="40" />
+                </div>
+                <div class="marca__texto">
+                    <div class="marca__titulo">SIGRA</div>
+                </div>
+            </div>
+
+            <nav class="nav nav--principal" aria-label="Navegación principal">
+                <a class="nav__enlace nav__enlace--activo" href="#" aria-current="page">Inicio</a>
+                <a class="nav__enlace" href="#">Usuarios</a>
+                <a class="nav__enlace" href="#">Asignaturas</a>
+                <a class="nav__enlace" href="#">Docentes</a>
+                <a class="nav__enlace" href="#">Reportes</a>
+            </nav>
+
+            <div class="acciones">
+                <button class="accion-icono" type="button" aria-label="Notificaciones">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M18 8a6 6 0 10-12 0c0 7-3 7-3 7h18s-3 0-3-7" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="1.8"
+                            stroke-linecap="round" />
+                    </svg>
+                </button>
+
+                <div class="foto-perfil" aria-label="Foto de perfil">
+                    <img class="foto-perfil__img" src="assets/maxresdefault.jpg" alt="Foto de perfil" />
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="contenedor pagina">
+
+        <section class="cabecera-seccion">
+            <div class="cabecera-seccion__texto">
+                <h1 class="titulo">Gestión de Materias</h1>
+                <p class="subtitulo">Configure el plan de estudios asignando las materias correspondientes a cada año
+                    académico.</p>
+            </div>
+
+            <div class="cabecera-seccion__acciones">
+                <button id="btnCancelar" class="btn btn--secundario" type="button">Cancelar</button>
+                <button id="btnGuardar" class="btn btn--primario" type="button">
+                    <span class="btn__icono" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                            <path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4Z"
+                                stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                            <path d="M7 21V13h10v8" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                            <path d="M7 3v4h8" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
+                        </svg>
+                    </span>
+                    Guardar Cambios
+                </button>
+            </div>
+        </section>
+
+        <section class="tarjeta tarjeta--selector">
+            <div class="selector">
+                <div class="selector__bloque">
+                    <label class="etiqueta" for="selectGrado">Seleccionar Año Académico</label>
+                    <div class="select">
+                        <select id="selectGrado" aria-label="Seleccionar año académico"></select>
+                        <span class="select__chevron" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="resumen">
+                    <div class="mini-tarjeta">
+                        <div class="mini-tarjeta__titulo">Materias en Total</div>
+                        <div class="mini-tarjeta__valor">
+                            <span id="txtTotalMaterias" class="mini-tarjeta__numero">0</span>
+                            <span class="mini-tarjeta__detalle">asignadas</span>
+                        </div>
+                    </div>
+
+                    <div class="mini-tarjeta">
+                        <div class="mini-tarjeta__titulo">Estado del Plan</div>
+                        <div class="estado-plan" id="estadoPlan">
+                            <span class="estado-plan__icono" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                    <path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2.2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                            <span id="txtEstadoPlan" class="estado-plan__texto">Completo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cuadricula">
+            <div class="tarjeta">
+                <div class="tarjeta__cabecera">
+                    <div class="tarjeta__titulo">
+                        <span class="tarjeta__icono" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </span>
+                        Catálogo de Materias Disponibles
+                    </div>
+                </div>
+
+                <div class="catalogo">
+                    <div class="buscador">
+                        <span class="buscador__icono" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" />
+                                <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                        </span>
+                        <input id="inputBuscar" class="buscador__input" type="search"
+                            placeholder="Buscar materia por nombre o por código..." autocomplete="off" />
+                    </div>
+
+                    <div class="filtros" role="tablist" aria-label="Filtros de catálogo">
+                        <button class="chip chip--activo" type="button" data-filtro="todas">Todas</button>
+                        <button class="chip" type="button" data-filtro="exactas_naturales">Ciencias Exactas y
+                            Naturales</button>
+                        <button class="chip" type="button" data-filtro="sociales_humanidades">Ciencias Sociales y
+                            Humanidades</button>
+                        <button class="chip" type="button" data-filtro="tecnologia_expresion">Tecnología y Expresión
+                            Gráfica</button>
+                        <button class="chip" type="button" data-filtro="idiomas_modernos">Idiomas Modernos</button>
+                        <button class="chip" type="button" data-filtro="educacion_fisica_salud">Educación Física y
+                            Salud</button>
+                    </div>
+
+                    <div id="listaCatalogo" class="lista"></div>
+                </div>
+            </div>
+
+            <div class="tarjeta tarjeta--asignadas">
+                <div class="tarjeta__cabecera tarjeta__cabecera--entre">
+                    <div class="tarjeta__titulo">
+                        <span class="tarjeta__icono" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <path d="M8 6h13M8 12h13M8 18h13" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" />
+                                <path d="M3.5 6h1M3.5 12h1M3.5 18h1" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </span>
+                        Materias Asignadas al Año Académico
+                    </div>
+                </div>
+
+                <p class="ayuda">
+                    Estas materias conformarán la carga académica del estudiante.
+                </p>
+
+                <div id="listaAsignadas" class="lista lista--asignadas"></div>
+
+                <div class="nota">
+                    Las modificaciones se reflejarán en el año académico actual.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="./js/main.js"></script>
+</body>
+
+</html>
