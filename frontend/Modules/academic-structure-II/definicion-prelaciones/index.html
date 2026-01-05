@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <header class="header">
@@ -40,25 +42,28 @@
 
     <div class="page-header container">
         <div class="breadcrumbs">
-            <i class="fa-solid fa-house"></i> Inicio <span>></span> Asignaturas <span>></span> <span class="current">Prelaciones</span>
+            <i class="fa-solid fa-house"></i> Inicio <span></span> Asignaturas <span></span> <span
+                class="current">Prelaciones</span>
         </div>
         <h1>Gestión de Prelaciones</h1>
-        <p class="subtitle">Defina y actualice los requisitos académicos previos para cada asignatura. Las prelaciones aseguran que los estudiantes sigan el orden lógico del plan de estudios.</p>
+        <p class="subtitle">Defina y actualice los requisitos académicos previos para cada asignatura. Las prelaciones
+            aseguran que los estudiantes sigan el orden lógico del plan de estudios.</p>
     </div>
 
     <main class="container main-grid">
-        
+
         <section class="card config-section">
             <div class="card-header">
                 <h3><i class="fa-solid fa-bars-staggered"></i> Configurar Requisitos</h3>
             </div>
             <div class="card-body">
-                
+
                 <div class="form-group">
                     <label>1. Seleccionar Materia Principal</label>
                     <div class="search-input-group">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" id="materia-search" placeholder="Buscar por código o nombre (ej. MAT-204, Matematica I)" list="materias-list">
+                        <input type="text" id="materia-search"
+                            placeholder="Buscar por código o nombre (ej. MAT-204, Matematica I)" list="materias-list">
                         <datalist id="materias-list">
                             <!-- Primer Año -->
                             <option value="MAT-204 — Matematica I">MAT-204 — Matematica I</option>
@@ -72,7 +77,7 @@
                             <option value="GEO-301 — Geografía I">GEO-301 — Geografía I</option>
                             <option value="DEP-401 — Deporte I">DEP-401 — Deporte I</option>
                             <option value="ING-601 — Ingles I">ING-601 — Ingles I</option>
-                            
+
                             <!-- Segundo Año -->
                             <option value="MAT-205 — Matematica II">MAT-205 — Matematica II</option>
                             <option value="FIS-202 — Fisica II">FIS-202 — Fisica II</option>
@@ -80,12 +85,13 @@
                             <option value="BIO-502 — Biologia II">BIO-502 — Biologia II</option>
                             <option value="COM-404 — Computacion II">COM-404 — Computacion II</option>
                             <option value="DIB-310 — Dibujo II">DIB-310 — Dibujo II</option>
-                            <option value="LIT-200 — Lenguaje y Literatura II">LIT-200 — Lenguaje y Literatura II</option>
+                            <option value="LIT-200 — Lenguaje y Literatura II">LIT-200 — Lenguaje y Literatura II
+                            </option>
                             <option value="HIS-102 — Historia II">HIS-102 — Historia II</option>
                             <option value="GEO-302 — Geografía II">GEO-302 — Geografía II</option>
                             <option value="DEP-402 — Deporte II">DEP-402 — Deporte II</option>
                             <option value="ING-602 — Ingles II">ING-602 — Ingles II</option>
-                            
+
                             <!-- Tercer Año -->
                             <option value="MAT-206 — Matematica III">MAT-206 — Matematica III</option>
                             <option value="FIS-203 — Fisica III">FIS-203 — Fisica III</option>
@@ -93,12 +99,13 @@
                             <option value="BIO-503 — Biologia III">BIO-503 — Biologia III</option>
                             <option value="COM-405 — Computacion III">COM-405 — Computacion III</option>
                             <option value="DIB-311 — Dibujo III">DIB-311 — Dibujo III</option>
-                            <option value="LIT-201 — Lenguaje y Literatura III">LIT-201 — Lenguaje y Literatura III</option>
+                            <option value="LIT-201 — Lenguaje y Literatura III">LIT-201 — Lenguaje y Literatura III
+                            </option>
                             <option value="HIS-103 — Historia III">HIS-103 — Historia III</option>
                             <option value="GEO-303 — Geografía III">GEO-303 — Geografía III</option>
                             <option value="DEP-403 — Deporte III">DEP-403 — Deporte III</option>
                             <option value="ING-603 — Ingles III">ING-603 — Ingles III</option>
-                            
+
                             <!-- Cuarto Año -->
                             <option value="MAT-207 — Matematica IV">MAT-207 — Matematica IV</option>
                             <option value="FIS-204 — Fisica IV">FIS-204 — Fisica IV</option>
@@ -106,12 +113,13 @@
                             <option value="BIO-504 — Biologia IV">BIO-504 — Biologia IV</option>
                             <option value="COM-406 — Computacion IV">COM-406 — Computacion IV</option>
                             <option value="DIB-312 — Dibujo IV">DIB-312 — Dibujo IV</option>
-                            <option value="LIT-202 — Lenguaje y Literatura IV">LIT-202 — Lenguaje y Literatura IV</option>
+                            <option value="LIT-202 — Lenguaje y Literatura IV">LIT-202 — Lenguaje y Literatura IV
+                            </option>
                             <option value="HIS-104 — Historia IV">HIS-104 — Historia IV</option>
                             <option value="GEO-304 — Geografía IV">GEO-304 — Geografía IV</option>
                             <option value="DEP-404 — Deporte IV">DEP-404 — Deporte IV</option>
                             <option value="ING-604 — Ingles IV">ING-604 — Ingles IV</option>
-                            
+
                             <!-- Quinto Año -->
                             <option value="MAT-208 — Matematica V">MAT-208 — Matematica V</option>
                             <option value="FIS-205 — Fisica V">FIS-205 — Fisica V</option>
@@ -144,7 +152,8 @@
                             <option>Seleccione una asignatura...</option>
                             <!-- Se llenará dinámicamente con las materias disponibles -->
                         </select>
-                        <button class="btn btn-primary-dark" id="add-prereq-btn"><i class="fa-solid fa-plus"></i> Añadir</button>
+                        <button class="btn btn-primary-dark" id="add-prereq-btn"><i class="fa-solid fa-plus"></i>
+                            Añadir</button>
                     </div>
                 </div>
 
@@ -165,7 +174,8 @@
                 <div class="info-title">
                     <i class="fa-solid fa-circle-info"></i> Información
                 </div>
-                <p>Al definir una prelación, el sistema bloqueará la inscripción de la materia principal hasta que el estudiante haya aprobado todas las materias asignadas como requisitos.</p>
+                <p>Al definir una prelación, el sistema bloqueará la inscripción de la materia principal hasta que el
+                    estudiante haya aprobado todas las materias asignadas como requisitos.</p>
                 <ul>
                     <li>Evite crear ciclos infinitos (A requiere B, B requiere A).</li>
                     <li>Puede asignar múltiples materias como requisito.</li>
@@ -184,7 +194,8 @@
                             <span class="time">Hace 2h</span>
                         </div>
                         <h5>Física II</h5>
-                        <p class="arrow-text"><i class="fa-solid fa-arrow-right"></i> Requiere: Fisica I, Matematica I</p>
+                        <p class="arrow-text"><i class="fa-solid fa-arrow-right"></i> Requiere: Fisica I, Matematica I
+                        </p>
                     </div>
                     <div class="activity-item">
                         <div class="act-header">
@@ -214,7 +225,7 @@
                     <button class="btn btn-white"><i class="fa-solid fa-download"></i> Exportar</button>
                 </div>
             </div>
-            
+
             <table class="data-table">
                 <thead>
                     <tr>
@@ -254,7 +265,7 @@
                     </tr>
                 </tbody>
             </table>
-            
+
             <div class="table-footer">
                 <span>Mostrando 1 a 2 de 24 resultados</span>
                 <div class="pagination">
@@ -303,4 +314,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>

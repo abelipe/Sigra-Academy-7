@@ -1,6 +1,7 @@
 import {createConnection} from 'mysql2/promise.js'
 import { SETTINGS } from '../config/settings.config.mjs'
 
+
 // Defino la conexión a la base de datos
 export const db = await createConnection({
     host: SETTINGS.DB_HOST,

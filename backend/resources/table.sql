@@ -83,12 +83,10 @@ CREATE TABLE sections (
 CREATE TABLE subjects (
     subject_id INT AUTO_INCREMENT PRIMARY KEY,
     grade_id INT NOT NULL, -- Pertenece a la malla de un año específico
-    code_subject VARCHAR(20) NOT NULL UNIQUE, -- Código único de la materia
     subject_name VARCHAR(100) NOT NULL, -- "Matemáticas", "Historia"
     code_subject VARCHAR(140) NOT NULL,
     is_active BOOLEAN DEFAULT(TRUE), 
     description TEXT,
-    is_active BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (grade_id) REFERENCES grades(grade_id)
 );
 
