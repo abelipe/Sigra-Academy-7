@@ -19,6 +19,86 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearMateriaBtn = document.getElementById('clear-materia-btn');
     const prereqSelect = document.getElementById('prereq-select');
     const addPrereqBtn = document.getElementById('add-prereq-btn');
+    const messageBox = document.getElementById('prereq-message');
+
+    function showMessage(text, type = 'info', timeout = 4000) {
+        if (!messageBox) {
+            // fallback to console.log when inline message box is not present
+            console.log(text);
+            return;
+        }
+        messageBox.textContent = text;
+        messageBox.className = `inline-message ${type}`;
+        messageBox.style.display = 'inline-block';
+        if (timeout > 0) {
+            clearTimeout(messageBox._hideTimeout);
+            messageBox._hideTimeout = setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, timeout);
+        }
+    }
+
+    // Handle edit/delete actions from the summary table (event delegation)
+    const summaryBody = document.getElementById('summary-body');
+    if (summaryBody) {
+        summaryBody.addEventListener('click', async (e) => {
+            const editBtn = e.target.closest('.summary-edit');
+            const delBtn = e.target.closest('.summary-delete');
+            if (editBtn) {
+                const subjectId = Number(editBtn.dataset.subjectId);
+                if (!subjectId) return;
+                // Load the subject into the main config area for editing
+                try {
+                    const res = await fetch(`${API_BASE}/api/prelacies/${subjectId}/prerequisites`);
+                    if (!res.ok) return;
+                    const data = await res.json();
+                    const materia = data.subject;
+                    if (!materia) return;
+                    // Set selected materia UI
+                    selectedMateriaTitle.textContent = `${materia.code} — ${materia.name}`;
+                    selectedMateriaYear.textContent = materia.grade_name || '';
+                    selectedMateriaContainer.style.display = 'flex';
+                    selectedMateriaContainer.style.opacity = '1';
+                    materiaPrincipalSeleccionada = materia;
+                    // Fill prereq select and current prereq list
+                    await llenarSelectPrerrequisitos(materia);
+                    prereqList.innerHTML = '';
+                    (data.prereqs || []).forEach(p => {
+                        const newItem = document.createElement('div');
+                        newItem.classList.add('prereq-item');
+                        newItem.dataset.id = p.subject_prerequisites_id; // subject id
+                        newItem.dataset.rowId = p.id; // row id in subject_prerequisites
+                        newItem.innerHTML = `
+                            <div class="prereq-code">${p.code}</div>
+                            <div class="prereq-details">
+                                <strong>${p.name}</strong>
+                                <span>${p.grade_name}</span>
+                            </div>
+                            <button class="delete-prereq-btn"><i class="fa-solid fa-trash-can"></i></button>
+                        `;
+                        prereqList.appendChild(newItem);
+                    });
+                    // Scroll to the Configurar Requisitos section and focus the search
+                    const configSection = document.querySelector('.config-section');
+                    if (configSection && typeof configSection.scrollIntoView === 'function') {
+                        configSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    if (materiaSearch && typeof materiaSearch.focus === 'function') {
+                        materiaSearch.focus();
+                    }
+                } catch (err) { console.error(err) }
+            }
+
+            if (delBtn) {
+                const subjectId = Number(delBtn.dataset.subjectId);
+                if (!subjectId) return;
+                // Open the custom confirmation modal and store the subject id for deletion
+                pendingSubjectDelete = subjectId;
+                if (deleteModal) deleteModal.classList.add('active');
+                return;
+            }
+        });
+    }
     
     // Elementos para el modal de prelaciones recientes
     const viewAllBtn = document.getElementById('view-all-prelaciones');
@@ -31,375 +111,372 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let filaAEliminar = null;
     let materiaPrincipalSeleccionada = null;
+    let pendingSubjectDelete = null;
 
-    // Materias completas (1er a 5to año, según el txt)
-    const materias = [
-        // 1er Año
-        { codigo: 'MAT-204', nombre: 'Matematica I', año: '1er Año' },
-        { codigo: 'FIS-201', nombre: 'Fisica I', año: '1er Año' },
-        { codigo: 'QUI-299', nombre: 'Quimica I', año: '1er Año' },
-        { codigo: 'BIO-501', nombre: 'Biologia I', año: '1er Año' },
-        { codigo: 'COM-403', nombre: 'Computacion I', año: '1er Año' },
-        { codigo: 'DIB-309', nombre: 'Dibujo I', año: '1er Año' },
-        { codigo: 'LIT-199', nombre: 'Lenguaje y Literatura I', año: '1er Año' },
-        { codigo: 'HIS-101', nombre: 'Historia General', año: '1er Año' },
-        { codigo: 'GEO-301', nombre: 'Geografia I', año: '1er Año' },
-        { codigo: 'DEP-401', nombre: 'Deporte I', año: '1er Año' },
-        { codigo: 'ING-601', nombre: 'Ingles I', año: '1er Año' },
-        // 2do Año
-        { codigo: 'MAT-205', nombre: 'Matematica II', año: '2do Año' },
-        { codigo: 'FIS-202', nombre: 'Fisica II', año: '2do Año' },
-        { codigo: 'QUI-300', nombre: 'Quimica II', año: '2do Año' },
-        { codigo: 'BIO-502', nombre: 'Biologia II', año: '2do Año' },
-        { codigo: 'COM-404', nombre: 'Computacion II', año: '2do Año' },
-        { codigo: 'DIB-310', nombre: 'Dibujo II', año: '2do Año' },
-        { codigo: 'LIT-200', nombre: 'Lenguaje y Literatura II', año: '2do Año' },
-        { codigo: 'HIS-102', nombre: 'Historia II', año: '2do Año' },
-        { codigo: 'GEO-302', nombre: 'Geografia II', año: '2do Año' },
-        { codigo: 'DEP-402', nombre: 'Deporte II', año: '2do Año' },
-        { codigo: 'ING-602', nombre: 'Ingles II', año: '2do Año' },
-        // 3er Año
-        { codigo: 'MAT-206', nombre: 'Matematica III', año: '3er Año' },
-        { codigo: 'FIS-203', nombre: 'Fisica III', año: '3er Año' },
-        { codigo: 'QUI-301', nombre: 'Quimica III', año: '3er Año' },
-        { codigo: 'BIO-503', nombre: 'Biologia III', año: '3er Año' },
-        { codigo: 'COM-405', nombre: 'Computacion III', año: '3er Año' },
-        { codigo: 'DIB-311', nombre: 'Dibujo III', año: '3er Año' },
-        { codigo: 'LIT-201', nombre: 'Lenguaje y Literatura III', año: '3er Año' },
-        { codigo: 'HIS-103', nombre: 'Historia III', año: '3er Año' },
-        { codigo: 'GEO-303', nombre: 'Geografia III', año: '3er Año' },
-        { codigo: 'DEP-403', nombre: 'Deporte III', año: '3er Año' },
-        { codigo: 'ING-603', nombre: 'Ingles III', año: '3er Año' },
-        // 4to Año
-        { codigo: 'MAT-207', nombre: 'Matematica IV', año: '4to Año' },
-        { codigo: 'FIS-204', nombre: 'Fisica IV', año: '4to Año' },
-        { codigo: 'QUI-302', nombre: 'Quimica IV', año: '4to Año' },
-        { codigo: 'BIO-504', nombre: 'Biologia IV', año: '4to Año' },
-        { codigo: 'COM-406', nombre: 'Computacion IV', año: '4to Año' },
-        { codigo: 'DIB-312', nombre: 'Dibujo IV', año: '4to Año' },
-        { codigo: 'LIT-202', nombre: 'Lenguaje y Literatura IV', año: '4to Año' },
-        { codigo: 'HIS-104', nombre: 'Historia IV', año: '4to Año' },
-        { codigo: 'GEO-304', nombre: 'Geografia IV', año: '4to Año' },
-        { codigo: 'DEP-404', nombre: 'Deporte IV', año: '4to Año' },
-        { codigo: 'ING-604', nombre: 'Ingles IV', año: '4to Año' },
-        // 5to Año
-        { codigo: 'MAT-208', nombre: 'Matematica V', año: '5to Año' },
-        { codigo: 'FIS-205', nombre: 'Fisica V', año: '5to Año' },
-        { codigo: 'QUI-303', nombre: 'Quimica V', año: '5to Año' },
-        { codigo: 'BIO-505', nombre: 'Biologia V', año: '5to Año' },
-        { codigo: 'COM-407', nombre: 'Computacion V', año: '5to Año' },
-        { codigo: 'DIB-313', nombre: 'Dibujo V', año: '5to Año' },
-        { codigo: 'LIT-203', nombre: 'Lenguaje y Literatura V', año: '5to Año' },
-        { codigo: 'HIS-105', nombre: 'Historia V', año: '5to Año' },
-        { codigo: 'GEO-305', nombre: 'Geografia V', año: '5to Año' },
-        { codigo: 'DEP-405', nombre: 'Deporte V', año: '5to Año' },
-        { codigo: 'ING-605', nombre: 'Ingles V', año: '5to Año' }
-    ];
+    // Determine API base URL. We'll probe the current origin to see if it serves the API;
+    // otherwise fall back to the backend at localhost:4300. You can override by setting
+    // `window.API_BASE = 'http://localhost:3000'` in the browser console before reload.
+    let API_BASE = window.API_BASE || 'http://localhost:4300';
 
-    // Datos de ejemplo para prelaciones recientes
-    const todasLasPrelaciones = [
-        {
-            codigo: 'FIS-203',
-            nombre: 'Física II',
-            fecha: 'Hace 2 horas',
-            requisitos: ['FIS-201 Física I', 'MAT-204 Matemática I']
-        },
-        {
-            codigo: 'GEO-302',
-            nombre: 'Geografía II',
-            fecha: 'Ayer',
-            requisitos: ['GEO-301 Geografía I']
-        },
-        {
-            codigo: 'HIS-101',
-            nombre: 'Historia General',
-            fecha: 'Ayer',
-            requisitos: []
-        },
-        {
-            codigo: 'MAT-205',
-            nombre: 'Matemática II',
-            fecha: 'Hace 3 días',
-            requisitos: ['MAT-204 Matemática I']
-        },
-        {
-            codigo: 'QUI-300',
-            nombre: 'Química II',
-            fecha: 'Hace 3 días',
-            requisitos: ['QUI-299 Química I']
-        },
-        {
-            codigo: 'BIO-502',
-            nombre: 'Biología II',
-            fecha: 'Hace 4 días',
-            requisitos: ['BIO-501 Biología I', 'QUI-299 Química I']
-        },
-        {
-            codigo: 'COM-404',
-            nombre: 'Computación II',
-            fecha: 'Hace 5 días',
-            requisitos: ['COM-403 Computación I']
-        },
-        {
-            codigo: 'DIB-310',
-            nombre: 'Dibujo II',
-            fecha: 'Hace 5 días',
-            requisitos: ['DIB-309 Dibujo I']
-        },
-        {
-            codigo: 'LIT-200',
-            nombre: 'Lenguaje y Literatura II',
-            fecha: 'Hace 1 semana',
-            requisitos: ['LIT-199 Lenguaje y Literatura I']
-        },
-        {
-            codigo: 'ING-602',
-            nombre: 'Inglés II',
-            fecha: 'Hace 1 semana',
-            requisitos: ['ING-601 Inglés I']
+    async function resolveApiBase() {
+        const origin = window.location && window.location.origin ? window.location.origin : null;
+        if (!origin) return API_BASE;
+
+        // probe origin/api/prelacies with short timeout
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 1000);
+            const res = await fetch(`${origin}/api/prelacies`, { method: 'GET', signal: controller.signal });
+            clearTimeout(timeout);
+            if (res.ok) return origin;
+        } catch (err) {
+            // ignore - fallback below
         }
-    ];
-
-    // Función robusta para buscar materia por código, nombre o combinación exacta
-    function buscarMateria(texto) {
-        const textoLower = texto.toLowerCase().trim();
-        // 1. Buscar por código exacto (sin espacios)
-        let materia = materias.find(m => m.codigo.toLowerCase() === textoLower.replace(/\s+/g, ''));
-        if (materia) return materia;
-        // 2. Buscar por combinación exacta "CODIGO — Nombre"
-        materia = materias.find(m => `${m.codigo} — ${m.nombre}`.toLowerCase() === textoLower);
-        if (materia) return materia;
-        // 3. Buscar por nombre exacto
-        materia = materias.find(m => m.nombre.toLowerCase() === textoLower);
-        if (materia) return materia;
-        // 4. Buscar por coincidencia parcial única (si solo una materia coincide)
-        const coincidencias = materias.filter(m =>
-            m.codigo.toLowerCase().includes(textoLower) ||
-            m.nombre.toLowerCase().includes(textoLower)
-        );
-        if (coincidencias.length === 1) return coincidencias[0];
-        // 5. Buscar por combinación parcial
-        materia = materias.find(m => `${m.codigo} — ${m.nombre}`.toLowerCase().includes(textoLower));
-        if (materia) return materia;
-        return null;
+        return API_BASE;
     }
 
-    // Mapa de materias principales a sus preladoras (según el txt)
-    const prelaciones = {
-        // 2DO AÑO
-        'MAT-205': ['MAT-204'],
-        'FIS-202': ['FIS-201'],
-        'QUI-300': ['QUI-299'],
-        'BIO-502': ['BIO-501', 'QUI-299'],
-        'COM-404': ['COM-403'],
-        'DIB-310': ['DIB-309'],
-        'LIT-200': ['LIT-199'],
-        'HIS-102': ['HIS-101'],
-        'GEO-302': ['GEO-301'],
-        'DEP-402': ['DEP-401'],
-        'ING-602': ['ING-601'],
-        // 3ER AÑO
-        'MAT-206': ['MAT-205'],
-        'FIS-203': ['FIS-202'],
-        'QUI-301': ['QUI-300'],
-        'BIO-503': ['BIO-502'],
-        'COM-405': ['COM-404'],
-        'DIB-311': ['DIB-310'],
-        'LIT-201': ['LIT-200'],
-        'HIS-103': ['HIS-102'],
-        'GEO-303': ['GEO-302'],
-        'DEP-403': ['DEP-402'],
-        'ING-603': ['ING-602'],
-        // 4TO AÑO
-        'MAT-207': ['MAT-206'],
-        'FIS-204': ['FIS-203'],
-        'QUI-302': ['QUI-301'],
-        'BIO-504': ['BIO-503'],
-        'COM-406': ['COM-405'],
-        'DIB-312': ['DIB-311'],
-        'LIT-202': ['LIT-201'],
-        'HIS-104': ['HIS-103'],
-        'GEO-304': ['GEO-303'],
-        'DEP-404': ['DEP-403'],
-        'ING-604': ['ING-603'],
-        // 5TO AÑO
-        'MAT-208': ['MAT-207'],
-        'FIS-205': ['FIS-204'],
-        'QUI-303': ['QUI-302'],
-        'BIO-505': ['BIO-504'],
-        'COM-407': ['COM-406'],
-        'DIB-313': ['DIB-312'],
-        'LIT-203': ['LIT-202'],
-        'HIS-105': ['HIS-104'],
-        'GEO-305': ['GEO-304'],
-        'DEP-405': ['DEP-404'],
-        'ING-605': ['ING-604'],
-    };
+    // We'll load materias and possible prerequisites from the backend
 
-    // Solo materias que pueden ser preladoras (1er a 4to año)
-    const materiasPreladoras = materias.filter(m => !m.año.includes('5to Año'));
+    // Search subjects via backend
+    async function buscarMateria(texto) {
+        const raw = String(texto || '').trim();
+        if (!raw) return null;
+        // If the value comes from the datalist it may be "CODE — Name".
+        // Extract the code portion before searching to increase match accuracy.
+        let q = raw;
+        if (raw.indexOf('—') !== -1) {
+            q = raw.split('—')[0].trim();
+        } else if (raw.indexOf('-') !== -1) {
+            const parts = raw.split('-');
+            if (parts.length > 1 && parts[0].trim().match(/[A-Za-z]{1,}\d*/)) {
+                q = parts[0].trim() + '-' + parts[1].trim();
+            }
+        }
+        try {
+            const res = await fetch(`${API_BASE}/api/prelacies/search?q=${encodeURIComponent(q)}`);
+            if (!res.ok) return null;
+            const rows = await res.json();
+            return rows && rows.length ? rows[0] : null;
+        } catch (err) {
+            console.error('Search error', err);
+            return null;
+        }
+    }
 
-    // Llena el select solo con materias que prelan a la principal
-    function llenarSelectPrerrequisitos(materiaPrincipal = null) {
+    // Fill prereq select with subjects from backend (exclude 5th year)
+    // If materiaPrincipal provided, request possible prerrequisitos for that subject
+    async function llenarSelectPrerrequisitos(materiaPrincipal = null) {
         prereqSelect.innerHTML = '<option>Seleccione una asignatura...</option>';
-        prereqSelect.disabled = false;
-        addPrereqBtn.disabled = false;
-
-        // Si la materia principal es de 1er año, no tiene preladoras
-        if (materiaPrincipal && materiaPrincipal.año.includes('1er Año')) {
-            prereqSelect.innerHTML = '<option>No tiene prerrequisitos</option>';
-            prereqSelect.disabled = true;
+        addPrereqBtn.disabled = true;
+        try {
+            if (materiaPrincipal && materiaPrincipal.subject_id) {
+                // request possible prerequisites for this subject
+                const res = await fetch(`${API_BASE}/api/prelacies/${materiaPrincipal.subject_id}/prerequisites`);
+                if (!res.ok) return;
+                const data = await res.json();
+                const rows = data.possible || [];
+                // If none available (e.g., subject is 1st year) disable add button
+                if (!rows.length) {
+                    const option = document.createElement('option');
+                    option.textContent = 'No hay prerrequisitos disponibles';
+                    option.disabled = true;
+                    prereqSelect.appendChild(option);
+                    addPrereqBtn.disabled = true;
+                    return;
+                }
+                rows.forEach(materia => {
+                    if (!materiaPrincipal || materia.subject_id !== materiaPrincipal.subject_id) {
+                        const option = document.createElement('option');
+                        option.value = materia.subject_id; // store id
+                        option.textContent = `${materia.code} — ${materia.name}`;
+                        option.dataset.year = materia.grade_name;
+                        prereqSelect.appendChild(option);
+                    }
+                });
+                addPrereqBtn.disabled = false;
+            } else {
+                const res = await fetch(`${API_BASE}/api/prelacies`);
+                if (!res.ok) return;
+                const rows = await res.json();
+                rows.forEach(materia => {
+                    const option = document.createElement('option');
+                    option.value = materia.subject_id; // store id
+                    option.textContent = `${materia.code} — ${materia.name}`;
+                    option.dataset.year = materia.grade_name;
+                    prereqSelect.appendChild(option);
+                });
+                addPrereqBtn.disabled = false;
+            }
+        } catch (err) {
+            console.error('Error loading subjects', err);
             addPrereqBtn.disabled = true;
+        }
+    }
+
+    // Cargar prelaciones modal (intentionally simple: will show no static examples)
+    function cargarPrelacionesModal() {
+        // Load all prelaciones and render grouped by subject
+        prelacionesList.innerHTML = '';
+        fetch(`${API_BASE}/api/prelacies/all`)
+            .then(r => r.ok ? r.json() : Promise.reject(r))
+            .then(rows => {
+                if (!rows || !rows.length) {
+                    prelacionesList.innerHTML = '<div class="prelacion-modal-item">No hay prelaciones registradas.</div>';
+                    return;
+                }
+                // group by subject_id
+                const map = new Map();
+                rows.forEach(r => {
+                    const sid = r.subject_id;
+                    if (!map.has(sid)) map.set(sid, { subject_code: r.subject_code, subject_name: r.subject_name, created_at: r.created_at, prereqs: [], hasNoPrereqs: false });
+                    const entry = map.get(sid);
+                    if (r.prereq_code == null) {
+                        entry.hasNoPrereqs = true;
+                    } else {
+                        entry.prereqs.push({ code: r.prereq_code, name: r.prereq_name });
+                    }
+                    if (!entry.created_at || new Date(r.created_at) > new Date(entry.created_at)) entry.created_at = r.created_at;
+                });
+                // render
+                Array.from(map.values()).forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'prelacion-modal-item';
+                    const requisitosHTML = (item.prereqs && item.prereqs.length && !item.hasNoPrereqs) ? `<div class="prelacion-requisitos">${item.prereqs.map(p => `<span class="requisito-badge"><i class="fa-solid fa-arrow-right"></i> ${p.code} ${p.name}</span>`).join('')}</div>` : `<div class="prelacion-requisitos"><span class="sin-prelaciones-badge"><i class="fa-solid fa-circle-check"></i> Sin prelaciones</span></div>`;
+                    div.innerHTML = `
+                        <div class="prelacion-header">
+                            <span class="prelacion-codigo">${item.subject_code}</span>
+                            <span class="prelacion-fecha">${item.created_at ? new Date(item.created_at).toLocaleString() : ''}</span>
+                        </div>
+                        <div class="prelacion-title">${item.subject_name}</div>
+                        ${requisitosHTML}
+                    `;
+                    prelacionesList.appendChild(div);
+                });
+            })
+            .catch(err => {
+                console.error('Error loading prelaciones', err);
+                prelacionesList.innerHTML = '<div class="prelacion-modal-item">Error al cargar prelaciones.</div>';
+            });
+    }
+
+    // Load subjects into datalist for search input
+    async function loadSubjectsDatalist() {
+        try {
+            // Include 5th year subjects for the primary selection datalist
+            const res = await fetch(`${API_BASE}/api/prelacies?includeFifth=true`);
+            if (!res.ok) return;
+            const rows = await res.json();
+            const datalist = document.getElementById('materias-list');
+            if (!datalist) return;
+            datalist.innerHTML = '';
+            rows.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = `${s.code} — ${s.name}`;
+                datalist.appendChild(opt);
+            });
+        } catch (err) { console.error(err) }
+    }
+
+    // Load recent prelaciones (for the aside widget)
+    async function loadAllPrelacies() {
+        try {
+            const res = await fetch(`${API_BASE}/api/prelacies/all`);
+            if (!res.ok) return;
+            const rows = await res.json();
+            const container = document.getElementById('recent-prelaciones');
+            container.innerHTML = '';
+            if (!rows.length) {
+                container.innerHTML = '<div class="activity-item"><p class="text-gray">No hay prelaciones registradas.</p></div>';
+                return;
+            }
+            // group by subject and pick latest created_at
+            const map = new Map();
+            rows.forEach(r => {
+                const sid = r.subject_id;
+                if (!map.has(sid)) map.set(sid, { subject_code: r.subject_code, subject_name: r.subject_name, created_at: r.created_at, prereqs: [], hasNoPrereqs: false });
+                const entry = map.get(sid);
+                if (r.prereq_code == null) {
+                    entry.hasNoPrereqs = true;
+                } else {
+                    entry.prereqs.push(`${r.prereq_code} ${r.prereq_name}`);
+                }
+                if (!entry.created_at || new Date(r.created_at) > new Date(entry.created_at)) entry.created_at = r.created_at;
+            });
+            // sort by created_at desc
+            const items = Array.from(map.values()).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+            // Only show the two most recent prelaciones in the aside widget; "Ver todas" opens the full modal
+            items.slice(0,2).forEach(it => {
+                const div = document.createElement('div');
+                div.className = 'activity-item';
+                const time = it.created_at ? new Date(it.created_at).toLocaleString() : '';
+                const prereqText = (it.prereqs.length && !it.hasNoPrereqs) ? it.prereqs.join(', ') : 'Sin prelaciones';
+                div.innerHTML = `
+                    <div class="act-header"><span class="badge-gray">${it.subject_code}</span><span class="time">${time}</span></div>
+                    <h5>${it.subject_name}</h5>
+                    <p class="arrow-text"><i class="fa-solid fa-arrow-right"></i> Requiere: ${prereqText}</p>
+                `;
+                container.appendChild(div);
+            });
+        } catch (err) { console.error(err) }
+    }
+
+    // Load summary table (subjects that have prereqs)
+    // Pagination state for summary (carousel of pages showing 2 items each)
+    let summaryRows = [];
+    let summaryPage = 0;
+    const SUMMARY_PAGE_SIZE = 2;
+
+    function renderSummaryPage() {
+        const tbody = document.getElementById('summary-body');
+        const rangeText = document.getElementById('summary-range');
+        const prevBtn = document.getElementById('summary-prev');
+        const nextBtn = document.getElementById('summary-next');
+        tbody.innerHTML = '';
+        if (!summaryRows || !summaryRows.length) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-gray">No hay prelaciones registradas.</td></tr>';
+            if (rangeText) rangeText.textContent = 'Mostrando 0 a 0 de 0 resultados';
+            if (prevBtn) prevBtn.disabled = true;
+            if (nextBtn) nextBtn.disabled = true;
             return;
         }
+        const total = summaryRows.length;
+        const start = summaryPage * SUMMARY_PAGE_SIZE;
+        const end = Math.min(start + SUMMARY_PAGE_SIZE, total);
+        const pageItems = summaryRows.slice(start, end);
 
-        // Si hay materia principal y tiene preladoras según el mapa
-        if (materiaPrincipal && prelaciones[materiaPrincipal.codigo]) {
-            const codigosPreladoras = prelaciones[materiaPrincipal.codigo];
-            materiasPreladoras.forEach(materia => {
-                if (codigosPreladoras.includes(materia.codigo)) {
-                    const option = document.createElement('option');
-                    option.value = materia.codigo;
-                    option.textContent = `${materia.codigo} — ${materia.nombre}`;
-                    option.dataset.año = materia.año;
-                    prereqSelect.appendChild(option);
-                }
-            });
-            // Si no hay preladoras, deshabilitar
-            if (codigosPreladoras.length === 0) {
-                prereqSelect.innerHTML = '<option>No tiene prerrequisitos</option>';
-                prereqSelect.disabled = true;
-                addPrereqBtn.disabled = true;
-            }
-        } else {
-            // Si no hay materia principal, mostrar todas menos 5to año
-            materiasPreladoras.forEach(materia => {
-                const option = document.createElement('option');
-                option.value = materia.codigo;
-                option.textContent = `${materia.codigo} — ${materia.nombre}`;
-                option.dataset.año = materia.año;
-                prereqSelect.appendChild(option);
-            });
-        }
-    }
-
-    // Función para cargar las prelaciones en el modal
-    function cargarPrelacionesModal() {
-        prelacionesList.innerHTML = '';
-        
-        todasLasPrelaciones.forEach(prelacion => {
-            const prelacionItem = document.createElement('div');
-            prelacionItem.className = 'prelacion-modal-item';
-            
-            let requisitosHTML = '';
-            if (prelacion.requisitos.length > 0) {
-                requisitosHTML = `
-                    <div class="prelacion-requisitos">
-                        ${prelacion.requisitos.map(req => `
-                            <span class="requisito-badge">
-                                <i class="fa-solid fa-arrow-right"></i> ${req}
-                            </span>
-                        `).join('')}
-                    </div>
-                `;
+        pageItems.forEach(r => {
+            const tr = document.createElement('tr');
+            let prereqContent = '';
+            if (r.hasNoPrereqs) {
+                prereqContent = `<span class="badge-green">Sin prelaciones</span>`;
+            } else if (r.prereqs && r.prereqs.length) {
+                prereqContent = r.prereqs.map(p => `<span class="badge-blue">${p.code} ${p.name}</span>`).join(' ');
             } else {
-                requisitosHTML = `
-                    <div class="prelacion-requisitos">
-                        <span class="sin-prelaciones-badge">
-                            <i class="fa-solid fa-circle-check"></i> Sin prelaciones
-                        </span>
-                    </div>
-                `;
+                prereqContent = '<span class="text-gray">-</span>';
             }
-            
-            prelacionItem.innerHTML = `
-                <div class="prelacion-header">
-                    <span class="prelacion-codigo">${prelacion.codigo}</span>
-                    <span class="prelacion-fecha">
-                        <i class="fa-solid fa-clock"></i> ${prelacion.fecha}
-                    </span>
-                </div>
-                <div class="prelacion-title">${prelacion.nombre}</div>
-                ${requisitosHTML}
+            tr.setAttribute('data-subject-id', r.subject_id || r.subjectId || r.id);
+            tr.innerHTML = `
+                <td class="code-col">${r.subject_code}</td>
+                <td><strong>${r.subject_name}</strong></td>
+                <td>${prereqContent}</td>
+                <td class="actions">
+                    <button class="icon-btn summary-edit" data-subject-id="${r.subject_id}"><i class="fa-solid fa-pencil"></i></button>
+                    <button class="icon-btn summary-delete" data-subject-id="${r.subject_id}"><i class="fa-solid fa-trash-can"></i></button>
+                </td>
             `;
-            
-            prelacionesList.appendChild(prelacionItem);
+            tbody.appendChild(tr);
         });
+
+        // Update range text and buttons
+        if (rangeText) rangeText.textContent = `Mostrando ${start + 1} a ${end} de ${total} resultados`;
+        if (prevBtn) prevBtn.disabled = summaryPage <= 0;
+        if (nextBtn) nextBtn.disabled = end >= total;
     }
 
-    // Inicializar el select de prerrequisitos
-    llenarSelectPrerrequisitos();
+    async function loadSummary() {
+        try {
+            const res = await fetch(`${API_BASE}/api/prelacies/summary`);
+            if (!res.ok) return;
+            const rows = await res.json();
+            summaryRows = rows || [];
+            summaryPage = 0;
+            renderSummaryPage();
+        } catch (err) { console.error(err) }
+    }
+
+    // Inicializar el select de prerrequisitos y otros datos dinámicos
+    (async () => {
+        API_BASE = await resolveApiBase();
+        await llenarSelectPrerrequisitos();
+        await loadSubjectsDatalist();
+        await loadAllPrelacies();
+        await loadSummary();
+
+        // Wire pagination buttons
+        const prevBtn = document.getElementById('summary-prev');
+        const nextBtn = document.getElementById('summary-next');
+        if (prevBtn) prevBtn.addEventListener('click', (e) => {
+            if (summaryPage > 0) {
+                summaryPage -= 1;
+                renderSummaryPage();
+            }
+        });
+        if (nextBtn) nextBtn.addEventListener('click', (e) => {
+            const maxPage = Math.ceil((summaryRows.length || 0) / SUMMARY_PAGE_SIZE) - 1;
+            if (summaryPage < maxPage) {
+                summaryPage += 1;
+                renderSummaryPage();
+            }
+        });
+    })();
 
     // --- 1. Buscar y Seleccionar Materia Principal ---
     if (materiaSearch) {
-        // Cuando el campo de búsqueda pierde el foco (se sale del campo)
-        materiaSearch.addEventListener('change', function() {
+        // Handler used for both 'input' and 'change' to support datalist selection and typing
+        const handleMateriaSelection = async function() {
             const textoBusqueda = this.value.trim();
-            
-            if (textoBusqueda) {
-                const materia = buscarMateria(textoBusqueda);
-                
-                if (materia) {
-                    // Actualizar la información mostrada
-                    selectedMateriaTitle.textContent = `${materia.codigo} — ${materia.nombre}`;
-                    selectedMateriaYear.textContent = materia.año;
-                    
-                    // Mostrar el contenedor
-                    selectedMateriaContainer.style.display = 'flex';
-                    selectedMateriaContainer.style.opacity = '1';
-                    
-                    // Guardar la materia seleccionada
-                    materiaPrincipalSeleccionada = materia;
-                    
-                    // Actualizar el select de prerrequisitos consultando el backend
-                    // Si el backend responde sin prerrequisitos, se volverá a llenar con todas
-                    fetch(`/api/subjects/prelaciones/prereqs/${materia.codigo}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data && Array.isArray(data.prerequisites) && data.prerequisites.length) {
-                                // llenar el select solo con los prerrequisitos devueltos
-                                prereqSelect.innerHTML = '<option>Seleccione una asignatura...</option>';
-                                prereqSelect.disabled = false;
-                                addPrereqBtn.disabled = false;
-                                data.prerequisites.forEach(s => {
-                                    const option = document.createElement('option');
-                                    option.value = s.code;
-                                    option.textContent = `${s.code} — ${s.name}`;
-                                    option.dataset.año = s.year;
-                                    prereqSelect.appendChild(option);
-                                });
-                            } else {
-                                // Si no hay prerrequisitos configurados, dejar el select vacío y deshabilitado
-                                prereqSelect.innerHTML = '<option>No tiene prerrequisitos</option>';
-                                prereqSelect.disabled = true;
-                                addPrereqBtn.disabled = true;
-                            }
-                        })
-                        .catch(err => {
-                            console.error('Error fetching prerequisites:', err);
-                            // En caso de error, volver al comportamiento por defecto
-                            llenarSelectPrerrequisitos(materia);
-                        });
-                    
-                    // Limpiar el campo de búsqueda
-                    this.value = '';
-                } else {
-                    alert('Materia no encontrada. Por favor, verifique el código o nombre e intente nuevamente.');
-                }
+            if (!textoBusqueda) return;
+            const materia = await buscarMateria(textoBusqueda);
+            if (!materia) {
+                showMessage('Materia no encontrada. Por favor, verifique el código o nombre e intente nuevamente.', 'error');
+                return;
             }
-        });
 
-        // También permitir selección con Enter
+            // Actualizar la información mostrada
+            selectedMateriaTitle.textContent = `${materia.code} — ${materia.name}`;
+            selectedMateriaYear.textContent = materia.grade_name || '';
+
+            // Mostrar el contenedor
+            selectedMateriaContainer.style.display = 'flex';
+            selectedMateriaContainer.style.opacity = '1';
+
+            // Guardar la materia seleccionada
+            materiaPrincipalSeleccionada = materia;
+
+            // Actualizar el select de prerrequisitos desde backend (excluyendo la materia principal)
+            await llenarSelectPrerrequisitos(materia);
+
+            // Load existing prerequisites for this subject
+            try {
+                const res = await fetch(`${API_BASE}/api/prelacies/${materia.subject_id}/prerequisites`);
+                if (res.ok) {
+                    const data = await res.json();
+                    // render existing prerequisites
+                    prereqList.innerHTML = '';
+                    data.prereqs.forEach(p => {
+                        const newItem = document.createElement('div');
+                        newItem.classList.add('prereq-item');
+                        newItem.dataset.id = p.subject_prerequisites_id; // subject id
+                        newItem.dataset.rowId = p.id; // row id in subject_prerequisites
+                        newItem.innerHTML = `
+                            <div class="prereq-code">${p.code}</div>
+                            <div class="prereq-details">
+                                <strong>${p.name}</strong>
+                                <span>${p.grade_name}</span>
+                            </div>
+                            <button class="delete-prereq-btn"><i class="fa-solid fa-trash-can"></i></button>
+                        `;
+                        prereqList.appendChild(newItem);
+                    });
+                }
+            } catch (err) { console.error(err) }
+
+            // Limpiar el campo de búsqueda para evitar re-envíos accidentales
+            this.value = '';
+        };
+
+        materiaSearch.addEventListener('change', handleMateriaSelection);
         materiaSearch.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                this.dispatchEvent(new Event('change'));
+                e.preventDefault();
+                handleMateriaSelection.call(this);
             }
         });
     }
 
     // --- 2. Limpiar Materia Seleccionada ---
     if (clearMateriaBtn) {
-        clearMateriaBtn.addEventListener('click', () => {
+        clearMateriaBtn.addEventListener('click', async () => {
             selectedMateriaContainer.style.opacity = '0';
             setTimeout(() => {
                 selectedMateriaContainer.style.display = 'none';
@@ -408,30 +485,35 @@ document.addEventListener('DOMContentLoaded', () => {
             materiaPrincipalSeleccionada = null;
             
             // Resetear el select de prerrequisitos para incluir todas las materias
-            llenarSelectPrerrequisitos();
+            prereqList.innerHTML = '';
+            await llenarSelectPrerrequisitos();
         });
     }
 
     // --- 3. Añadir Prerrequisito ---
     if (addPrereqBtn) {
         addPrereqBtn.addEventListener('click', () => {
+            if (addPrereqBtn.disabled) return;
             const selectedOption = prereqSelect.options[prereqSelect.selectedIndex];
-            
-            if (selectedOption.value && selectedOption.text !== 'Seleccione una asignatura...') {
+            if (selectedOption && selectedOption.value && selectedOption.text !== 'Seleccione una asignatura...') {
+                // Prevent duplicates in the UI
+                if (prereqList.querySelector(`.prereq-item[data-id="${selectedOption.value}"]`)) {
+                    showMessage('La materia ya está en la lista de prerrequisitos.', 'info');
+                    return;
+                }
                 const newItem = document.createElement('div');
                 newItem.classList.add('prereq-item');
+                newItem.dataset.id = selectedOption.value;
                 newItem.innerHTML = `
-                    <div class="prereq-code">${selectedOption.value}</div>
+                    <div class="prereq-code">${selectedOption.text.split('—')[0].trim()}</div>
                     <div class="prereq-details">
                         <strong>${selectedOption.text.split('—')[1].trim()}</strong>
-                        <span>${selectedOption.dataset.año}</span>
+                        <span>${selectedOption.dataset.year || ''}</span>
                     </div>
                     <button class="delete-prereq-btn"><i class="fa-solid fa-trash-can"></i></button>
                 `;
                 newItem.style.animation = "fadeIn 0.5s";
                 prereqList.appendChild(newItem);
-                
-                // Resetear el select
                 prereqSelect.selectedIndex = 0;
             }
         });
@@ -439,11 +521,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 4. Eliminar Prerrequisitos de la lista pequeña ---
     if (prereqList) {
-        prereqList.addEventListener('click', (e) => {
+        prereqList.addEventListener('click', async (e) => {
             const btn = e.target.closest('.delete-prereq-btn');
             if (btn) {
                 const item = btn.closest('.prereq-item');
-                item.style.opacity = '0';
+                const rowId = item.dataset.rowId;
+                if (rowId) {
+                    // Delete on server if this prereq row exists in DB
+                    try {
+                        const res = await fetch(`${API_BASE}/api/prelacies/${rowId}`, { method: 'DELETE' });
+                        if (!res.ok) {
+                            showMessage('No se pudo eliminar el prerrequisito en el servidor', 'error');
+                            return;
+                        }
+                        // refresh summaries
+                        await loadAllPrelacies();
+                        await loadSummary();
+                    } catch (err) {
+                        console.error(err);
+                        showMessage('Error de red al eliminar', 'error');
+                        return;
+                    }
+                }
                 item.style.transform = 'translateX(20px)';
                 item.style.transition = 'all 0.3s ease';
                 setTimeout(() => item.remove(), 300);
@@ -456,6 +555,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(deleteModal) {
             deleteModal.classList.remove('active');
             filaAEliminar = null;
+            pendingSubjectDelete = null;
         }
     };
 
@@ -469,14 +569,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (confirmDeleteBtn) {
-        confirmDeleteBtn.addEventListener('click', () => {
-            if (filaAEliminar) {
-                // Aplicamos la clase que reduce el tamaño y oculta
+        confirmDeleteBtn.addEventListener('click', async () => {
+            // If a subject delete is pending (from summary trash), perform server delete
+            if (pendingSubjectDelete) {
+                const sid = pendingSubjectDelete;
+                pendingSubjectDelete = null;
+                try {
+                    const res = await fetch(`${API_BASE}/api/prelacies/subject/${sid}`, { method: 'DELETE' });
+                    if (!res.ok) {
+                        showMessage('No se pudo eliminar la prelación.', 'error');
+                        cerrarModal();
+                        return;
+                    }
+                    showMessage('Prelaciones eliminadas.', 'success');
+                    await loadAllPrelacies();
+                    await loadSummary();
+                } catch (err) {
+                    console.error(err);
+                    showMessage('Error de red al eliminar.', 'error');
+                }
+                cerrarModal();
+                return;
+            }
+
+            if (filaAEliminar && typeof filaAEliminar.remove === 'function') {
+                // Try to detect a server-side id on the row and delete remotely if present
+                const rowId = filaAEliminar.dataset && (filaAEliminar.dataset.rowId || filaAEliminar.dataset.id || filaAEliminar.dataset['subjectPrerequisitesId']);
+                if (rowId) {
+                    try {
+                        const res = await fetch(`${API_BASE}/api/prelacies/${rowId}`, { method: 'DELETE' });
+                        if (!res.ok) {
+                            showMessage('No se pudo eliminar en el servidor.', 'error');
+                            cerrarModal();
+                            return;
+                        }
+                        // refresh summaries after remote delete
+                        await loadAllPrelacies();
+                        await loadSummary();
+                    } catch (err) {
+                        console.error(err);
+                        showMessage('Error de red al eliminar.', 'error');
+                        cerrarModal();
+                        return;
+                    }
+                }
+
+                // Remove from DOM with animation
                 filaAEliminar.classList.add('row-collapsing');
-                
-                // Esperamos a que la transición de CSS termine antes de remover
                 setTimeout(() => {
-                    filaAEliminar.remove();
+                    try { filaAEliminar.remove(); } catch (e) { /* ignore */ }
                 }, 300);
             }
             cerrarModal();
@@ -493,32 +634,85 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 6. Simular Guardado ---
+    // --- 6. Guardar prelaciones en backend ---
     if(saveBtn) {
-        saveBtn.addEventListener('click', () => {
-            // Validar que se haya seleccionado una materia principal
+        saveBtn.addEventListener('click', async () => {
             if (!materiaPrincipalSeleccionada) {
-                alert('Por favor, seleccione una materia principal primero.');
+                showMessage('Por favor, seleccione una materia principal primero.', 'error');
                 return;
             }
-            
+
+            const subjectId = materiaPrincipalSeleccionada.subject_id || materiaPrincipalSeleccionada.subjectId || materiaPrincipalSeleccionada.id;
+
+            const items = Array.from(prereqList.querySelectorAll('.prereq-item'));
+            // If there are no prereq items, allow saving only for 1st year subjects (create NULL prereq placeholder)
+            if (!items.length) {
+                const level = materiaPrincipalSeleccionada.level_order || materiaPrincipalSeleccionada.levelOrder || materiaPrincipalSeleccionada.level;
+                if (Number(level) === 1) {
+                    // create placeholder row with NULL prerequisite
+                    try {
+                        const res = await fetch(`${API_BASE}/api/prelacies`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ subject_id: subjectId, prerequisite_id: null })
+                        });
+                        const data = await res.json();
+                        if (res.ok) {
+                            showMessage('Prelación (sin prerrequisitos) guardada correctamente.', 'success');
+                        } else {
+                            showMessage(data && data.message ? data.message : 'No se pudo guardar la prelación.', 'error');
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        showMessage('Error de red al guardar.', 'error');
+                    }
+                    await loadAllPrelacies();
+                    await loadSummary();
+                    return;
+                }
+                showMessage('No hay prerrequisitos para guardar.', 'info');
+                return;
+            }
+
             const originalText = saveBtn.innerHTML;
             saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
             saveBtn.disabled = true;
             
-            setTimeout(() => {
-                saveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Guardado';
-                saveBtn.style.backgroundColor = '#059669';
-                
-                // Mostrar mensaje de éxito
-                alert(`Prelaciones guardadas exitosamente para ${materiaPrincipalSeleccionada.codigo} - ${materiaPrincipalSeleccionada.nombre}`);
-                
-                setTimeout(() => {
-                    saveBtn.innerHTML = originalText;
-                    saveBtn.style.backgroundColor = '';
-                    saveBtn.disabled = false;
-                }, 2000);
-            }, 1500);
+            const results = [];
+            for (const it of items) {
+                // If item already has a rowId it exists in DB
+                if (it.dataset.rowId) continue;
+                const prereqId = it.dataset.id;
+                if (!prereqId) continue;
+                try {
+                    const res = await fetch(`${API_BASE}/api/prelacies`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ subject_id: subjectId, prerequisite_id: Number(prereqId) })
+                    });
+                    const data = await res.json();
+                    if (res.ok && data && data.id) {
+                        it.dataset.rowId = data.id; // mark saved
+                    }
+                    results.push({ ok: res.ok, data });
+                } catch (err) {
+                    results.push({ ok: false, error: err.message });
+                }
+            }
+
+            // Show simple summary
+            const failures = results.filter(r => !r.ok);
+            if (failures.length) {
+                showMessage(`Algunas operaciones fallaron: ${failures.length}`, 'error');
+            } else {
+                showMessage('Prelaciones guardadas correctamente.', 'success');
+            }
+            // Refresh recent and summary views
+            await loadAllPrelacies();
+            await loadSummary();
+
+            saveBtn.innerHTML = originalText;
+            saveBtn.disabled = false;
         });
     }
 

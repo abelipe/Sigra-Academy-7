@@ -5,7 +5,7 @@ import { SETTINGS } from './config/settings.config.mjs';
 import controlRouter from './src/modules/access-control-I/control.route.mjs';
 import { getUser as getUserModel } from './src/modules/access-control-I/control.model.mjs';
 import { subjectRoute } from './src/modules/academic-structure-II/subjects/subjects.route.mjs';
-import prelaciesRoute from './src/modules/academic-structure-II/prelacies/prelacies.route.mjs';
+import { prelaciesRoute } from './src/modules/academic-structure-II/prelacies/prelacies.route.mjs';
 
 // Se inicializan el servidor express
 const app = express();
@@ -41,8 +41,7 @@ app.get('/test/users', async (req, res) => {
 })
 
 app.use('/api/subjects', subjectRoute)
-// Rutas para prelaciones: /api/subjects/prelaciones
-app.use('/api/subjects/prelaciones', prelaciesRoute)
+app.use('/api/prelacies', prelaciesRoute)
 
 // Montamos el servidor
 app.listen(SETTINGS.PORT, () => {

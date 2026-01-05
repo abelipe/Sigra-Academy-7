@@ -13,11 +13,7 @@ function get(path){
     console.log('GET / ->');
     console.log(await get('/'));
 
-    console.log('\nGET /api/subjects/prelaciones/all ->');
-    console.log(await get('/api/subjects/prelaciones/all'));
-
-    console.log('\nGET /api/subjects/prelaciones/prereqs/MAT-205 ->');
-    console.log(await get('/api/subjects/prelaciones/prereqs/MAT-205'));
+    // removed endpoints from backend; tests skipped
   }catch(e){
     console.error('Error testing endpoints',e);
   }

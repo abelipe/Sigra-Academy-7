@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <!-- Inline favicon to avoid browser requesting /favicon.ico (prevents 404 in console) -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext x='1' y='13' font-size='12'%3E%C2%A9%3C/text%3E%3C/svg%3E">
 </head>
 <body>
 
@@ -60,70 +62,7 @@
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input type="text" id="materia-search" placeholder="Buscar por código o nombre (ej. MAT-204, Matematica I)" list="materias-list">
                         <datalist id="materias-list">
-                            <!-- Primer Año -->
-                            <option value="MAT-204 — Matematica I">MAT-204 — Matematica I</option>
-                            <option value="FIS-201 — Fisica I">FIS-201 — Fisica I</option>
-                            <option value="QUI-299 — Quimica I">QUI-299 — Quimica I</option>
-                            <option value="BIO-501 — Biologia I">BIO-501 — Biologia I</option>
-                            <option value="COM-403 — Computacion I">COM-403 — Computacion I</option>
-                            <option value="DIB-309 — Dibujo I">DIB-309 — Dibujo I</option>
-                            <option value="LIT-199 — Lenguaje y Literatura I">LIT-199 — Lenguaje y Literatura I</option>
-                            <option value="HIS-101 — Historia General">HIS-101 — Historia General</option>
-                            <option value="GEO-301 — Geografía I">GEO-301 — Geografía I</option>
-                            <option value="DEP-401 — Deporte I">DEP-401 — Deporte I</option>
-                            <option value="ING-601 — Ingles I">ING-601 — Ingles I</option>
-                            
-                            <!-- Segundo Año -->
-                            <option value="MAT-205 — Matematica II">MAT-205 — Matematica II</option>
-                            <option value="FIS-202 — Fisica II">FIS-202 — Fisica II</option>
-                            <option value="QUI-300 — Quimica II">QUI-300 — Quimica II</option>
-                            <option value="BIO-502 — Biologia II">BIO-502 — Biologia II</option>
-                            <option value="COM-404 — Computacion II">COM-404 — Computacion II</option>
-                            <option value="DIB-310 — Dibujo II">DIB-310 — Dibujo II</option>
-                            <option value="LIT-200 — Lenguaje y Literatura II">LIT-200 — Lenguaje y Literatura II</option>
-                            <option value="HIS-102 — Historia II">HIS-102 — Historia II</option>
-                            <option value="GEO-302 — Geografía II">GEO-302 — Geografía II</option>
-                            <option value="DEP-402 — Deporte II">DEP-402 — Deporte II</option>
-                            <option value="ING-602 — Ingles II">ING-602 — Ingles II</option>
-                            
-                            <!-- Tercer Año -->
-                            <option value="MAT-206 — Matematica III">MAT-206 — Matematica III</option>
-                            <option value="FIS-203 — Fisica III">FIS-203 — Fisica III</option>
-                            <option value="QUI-301 — Quimica III">QUI-301 — Quimica III</option>
-                            <option value="BIO-503 — Biologia III">BIO-503 — Biologia III</option>
-                            <option value="COM-405 — Computacion III">COM-405 — Computacion III</option>
-                            <option value="DIB-311 — Dibujo III">DIB-311 — Dibujo III</option>
-                            <option value="LIT-201 — Lenguaje y Literatura III">LIT-201 — Lenguaje y Literatura III</option>
-                            <option value="HIS-103 — Historia III">HIS-103 — Historia III</option>
-                            <option value="GEO-303 — Geografía III">GEO-303 — Geografía III</option>
-                            <option value="DEP-403 — Deporte III">DEP-403 — Deporte III</option>
-                            <option value="ING-603 — Ingles III">ING-603 — Ingles III</option>
-                            
-                            <!-- Cuarto Año -->
-                            <option value="MAT-207 — Matematica IV">MAT-207 — Matematica IV</option>
-                            <option value="FIS-204 — Fisica IV">FIS-204 — Fisica IV</option>
-                            <option value="QUI-302 — Quimica IV">QUI-302 — Quimica IV</option>
-                            <option value="BIO-504 — Biologia IV">BIO-504 — Biologia IV</option>
-                            <option value="COM-406 — Computacion IV">COM-406 — Computacion IV</option>
-                            <option value="DIB-312 — Dibujo IV">DIB-312 — Dibujo IV</option>
-                            <option value="LIT-202 — Lenguaje y Literatura IV">LIT-202 — Lenguaje y Literatura IV</option>
-                            <option value="HIS-104 — Historia IV">HIS-104 — Historia IV</option>
-                            <option value="GEO-304 — Geografía IV">GEO-304 — Geografía IV</option>
-                            <option value="DEP-404 — Deporte IV">DEP-404 — Deporte IV</option>
-                            <option value="ING-604 — Ingles IV">ING-604 — Ingles IV</option>
-                            
-                            <!-- Quinto Año -->
-                            <option value="MAT-208 — Matematica V">MAT-208 — Matematica V</option>
-                            <option value="FIS-205 — Fisica V">FIS-205 — Fisica V</option>
-                            <option value="QUI-303 — Quimica V">QUI-303 — Quimica V</option>
-                            <option value="BIO-505 — Biologia V">BIO-505 — Biologia V</option>
-                            <option value="COM-407 — Computacion V">COM-407 — Computacion V</option>
-                            <option value="DIB-313 — Dibujo V">DIB-313 — Dibujo V</option>
-                            <option value="LIT-203 — Lenguaje y Literatura V">LIT-203 — Lenguaje y Literatura V</option>
-                            <option value="HIS-105 — Historia V">HIS-105 — Historia V</option>
-                            <option value="GEO-305 — Geografía V">GEO-305 — Geografía V</option>
-                            <option value="DEP-405 — Deporte V">DEP-405 — Deporte V</option>
-                            <option value="ING-605 — Ingles V">ING-605 — Ingles V</option>
+                            <!-- Se llenará dinámicamente desde la base de datos -->
                         </datalist>
                     </div>
 
@@ -146,9 +85,11 @@
                         </select>
                         <button class="btn btn-primary-dark" id="add-prereq-btn"><i class="fa-solid fa-plus"></i> Añadir</button>
                     </div>
+                    <div id="prereq-message" class="inline-message" aria-live="polite" style="display:none"></div>
                 </div>
 
                 <div class="prerequisites-list" id="prereq-list">
+                    <!-- Lista dinámica de prerrequisitos para la materia seleccionada -->
                 </div>
             </div>
 
@@ -172,36 +113,13 @@
                 </ul>
             </div>
 
-            <div class="card recent-activity">
+                <div class="card recent-activity">
                 <div class="card-header-flex">
                     <h4>Prelaciones Recientes</h4>
                     <a href="#" id="view-all-prelaciones">Ver todas</a>
                 </div>
-                <div class="activity-list">
-                    <div class="activity-item">
-                        <div class="act-header">
-                            <span class="badge-gray">FIS-203</span>
-                            <span class="time">Hace 2h</span>
-                        </div>
-                        <h5>Física II</h5>
-                        <p class="arrow-text"><i class="fa-solid fa-arrow-right"></i> Requiere: Fisica I, Matematica I</p>
-                    </div>
-                    <div class="activity-item">
-                        <div class="act-header">
-                            <span class="badge-gray">GEO-302</span>
-                            <span class="time">Ayer</span>
-                        </div>
-                        <h5>Geografia II</h5>
-                        <p class="arrow-text"><i class="fa-solid fa-arrow-right"></i> Requiere: Geografia I</p>
-                    </div>
-                    <div class="activity-item">
-                        <div class="act-header">
-                            <span class="badge-gray">HIS-101</span>
-                            <span class="time">Ayer</span>
-                        </div>
-                        <h5>Historia General</h5>
-                        <p class="success-text"><i class="fa-solid fa-circle-check"></i> Sin prelaciones</p>
-                    </div>
+                <div class="activity-list" id="recent-prelaciones">
+                    <!-- Se cargará dinámicamente desde la base de datos (subject_prerequisites) -->
                 </div>
             </div>
         </aside>
@@ -209,10 +127,8 @@
         <section class="card table-section full-width">
             <div class="table-header-tools">
                 <h3>Resumen de Prelaciones - SIGRA</h3>
-                <div class="tools">
-                    <button class="btn btn-white"><i class="fa-solid fa-filter"></i> Filtrar</button>
-                    <button class="btn btn-white"><i class="fa-solid fa-download"></i> Exportar</button>
-                </div>
+                <!-- Filter/Export removed as requested -->
+                <div class="tools" aria-hidden="true"></div>
             </div>
             
             <table class="data-table">
@@ -220,47 +136,21 @@
                     <tr>
                         <th>CÓDIGO</th>
                         <th>MATERIA PRINCIPAL</th>
-                        <th>BACHILLERATO</th>
                         <th>PRERREQUISITOS ACTIVOS</th>
                         <th>ACCIONES</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td class="code-col">MAT-206</td>
-                        <td><strong>Matematica II</strong></td>
-                        <td class="text-gray">2do Año</td>
-                        <td>
-                            <span class="badge-blue">FIS-202 Física I</span>
-                            <span class="badge-blue">MAT-205 Matemática I</span>
-                        </td>
-                        <td class="actions">
-                            <i class="fa-solid fa-pencil"></i>
-                            <i class="fa-solid fa-trash-can"></i>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="code-col">BIO-502</td>
-                        <td><strong>Biologia II</strong></td>
-                        <td class="text-gray">2do Año</td>
-                        <td>
-                            <span class="badge-blue">QUI-301 Quimica I</span>
-                            <span class="badge-blue">BIO-501 Biologia I</span>
-                        </td>
-                        <td class="actions">
-                            <i class="fa-solid fa-pencil"></i>
-                            <i class="fa-solid fa-trash-can"></i>
-                        </td>
-                    </tr>
+                <tbody id="summary-body">
+                    <!-- Tabla de resumen renderizada desde la base de datos -->
                 </tbody>
             </table>
             
             <div class="table-footer">
-                <span>Mostrando 1 a 2 de 24 resultados</span>
+                <span id="summary-range">Mostrando 0 a 0 de 0 resultados</span>
                 <div class="pagination">
-                    <button class="page-btn">Anterior</button>
+                    <button class="page-btn" id="summary-prev">Anterior</button>
                     <span class="pagination-separator">—</span>
-                    <button class="page-btn">Siguiente</button>
+                    <button class="page-btn" id="summary-next">Siguiente</button>
                 </div>
             </div>
         </section>
