@@ -5,19 +5,14 @@ import { SETTINGS } from "./config/settings.config.mjs";
 import controlRouter from "./src/modules/access-control-I/control.route.mjs";
 import { getUser as getUserModel } from "./src/modules/access-control-I/control.model.mjs";
 import { subjectRoute } from "./src/modules/academic-structure-II/subjects/subjects.route.mjs";
-import prelaciesRoute from "./src/modules/academic-structure-II/prelacies/prelacies.route.mjs";
+import { prelaciesRoute } from "./src/modules/academic-structure-II/prelacies/prelacies.route.mjs";
 import managementRoute from "./src/modules/academic-structure-II/management/management.route.mjs";
 
 const app = express();
 
 // ===== CORS (Live Server) =====
 const CORS_OPCIONES = {
-	origin: [
-		"http://127.0.0.1:5503",
-		"http://localhost:5503",
-		"http://127.0.0.1:5500",
-		"http://localhost:5500",
-	],
+	origin: true, // Allow all origins
 	methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 	allowedHeaders: ["Content-Type", "Authorization"],
 };
