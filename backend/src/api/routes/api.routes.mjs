@@ -2,12 +2,9 @@ import { Router } from "express";
 import { subjectRoute } from "../../modules/academic-structure-II/subjects/subjects.route.mjs";
 import prelaciesRoute from "../../modules/academic-structure-II/prelacies/prelacies.route.mjs";
 import academicStructureRoutes from "../../modules/academic-structure-II/structure.route.mjs";
-import { Router } from 'express';
 import { GradesLogRoutes } from '../../modules/grades-record-V/grades/grades.route.mjs';
+import { RecordsRoutes } from '../../modules/grades-record-V/records/records.route.mjs';
 import { SETTINGS } from '../../../config/settings.config.mjs';
-import { RecordsRoutes } from '../../modules/grades-record-V/records/records.route.mjs'; 
-import {Router} from 'express';
-import { subjectRoute } from '../../modules/academic-structure-II/subjects/subjects.route.mjs';
 
 const router = Router();
 
@@ -19,18 +16,19 @@ const router = Router();
 // Montar las rutas de materias
 router.use("/subjects", subjectRoute);
 
-// (module removed)
+// Montar rutas de prelaciones si aplica
+router.use("/prelacies", prelaciesRoute);
 
 // Montar las rutas de la estructura académica
 router.use("/academic-structure", academicStructureRoutes);
 
-export const ListRoutes = {
-	subject: router,
+// Crear routers para el módulo de grades-record-V
+const gradesRoutes = {
+    grades: Router().use(`${SETTINGS.BASE_PATH}/grades-log`, GradesLogRoutes),
+    records: Router().use(`${SETTINGS.BASE_PATH}/records`, RecordsRoutes),
 };
-    grades: {
-        grades: router.use(`${SETTINGS.BASE_PATH}/grades-log`, GradesLogRoutes),
-        records: router.use(`${SETTINGS.BASE_PATH}/records`, RecordsRoutes)
-    }
-    subject: router.use("/subjects",subjectRoute)
-    
-}
+
+export const ListRoutes = {
+    subject: router,
+    grades: gradesRoutes,
+};
