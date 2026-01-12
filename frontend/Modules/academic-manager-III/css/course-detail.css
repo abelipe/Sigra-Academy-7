@@ -1,0 +1,157 @@
+:root {
+    --primary-color: #005DFF; /* Azul principal */
+    --primary-dark: #003EAB;
+    --background-color: #F8F9FA;
+    --border-color: #DADCE0;
+    --text-primary: #202124;
+    --text-secondary: #5F6368;
+    --font-family: 'Roboto', 'Google Sans', sans-serif;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-primary);
+}
+
+.course-container {
+    max-width: 900px;
+    margin: 24px auto;
+    padding: 0 16px;
+}
+
+/* --- Banner Superior --- */
+.course-banner {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 8px;
+    padding: 32px;
+    margin-bottom: 16px;
+    background-image: url('../../../Public/resources/Modulo-3/user-logo.png'); /* Imagen genérica de Classroom */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.course-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 62, 171, 0.7); /* Superposición para legibilidad */
+    border-radius: 8px;
+}
+
+.banner-content {
+    position: relative;
+    z-index: 1;
+}
+
+.banner-content h1 {
+    margin: 0 0 8px 0;
+    font-size: 2.25rem;
+}
+
+.banner-content p {
+    margin: 0;
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+/* --- Pestañas de Navegación --- */
+.course-nav {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.nav-tab {
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 16px 24px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.nav-tab:hover {
+    color: var(--text-primary);
+    background-color: #f1f3f4;
+}
+
+.nav-tab.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+/* --- Paneles de Contenido --- */
+.course-content {
+    padding-top: 24px;
+}
+
+.content-panel {
+    display: none; /* Ocultos por defecto */
+}
+
+.content-panel.active {
+    display: block; /* Visible el activo */
+}
+
+/* Estilo para "Trabajo de clase" */
+#classwork-container .activity-item {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+}
+
+#classwork-container .activity-item:hover {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.activity-item .material-symbols-outlined {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    padding: 8px;
+    margin-right: 16px;
+}
+
+.activity-item-content h3 {
+    margin: 0 0 4px 0;
+    font-size: 1rem;
+}
+
+.activity-item-content p, .activity-item-content small {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+}
+
+/* Estilo para placeholders de otras pestañas */
+.panel-placeholder {
+    text-align: center;
+    padding: 64px 32px;
+    color: var(--text-secondary);
+}
+
+.panel-placeholder .material-symbols-outlined {
+    font-size: 4rem;
+    margin-bottom: 16px;
+}
+
+.panel-placeholder h2 {
+    font-size: 1.2rem;
+    color: var(--text-primary);
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Detalle de Materia - SIGRA</title>
+        <link rel="stylesheet" href="../css/course-detail.css">
+        <link rel="stylesheet" href="../css/schedule.css">
+        <!-- Iconos de Google Fonts para la interfaz -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    </head>
+    <body>
+        <nav class="navbar"></nav>
+
+        <main class="course-container">
+            <!-- Banner superior con el nombre de la materia -->
+            <header class="course-banner">
+                <div class="banner-content">
+                    <h1 id="course-name">Cargando materia...</h1>
+                    <p id="course-section">Cargando sección...</p>
+                </div>
+            </header>
+
+            <!-- Pestañas de navegación del curso -->
+            <nav class="course-nav">
+                <button class="nav-tab active" data-tab="stream">Tablón</button>
+                <button class="nav-tab" data-tab="classwork">Trabajo de clase</button>
+                <button class="nav-tab" data-tab="people">Personas</button>
+                <button class="nav-tab" data-tab="grades">Calificaciones</button>
+            </nav>
+
+            <!-- Contenido principal que cambia según la pestaña -->
+            <section class="course-content">
+                <!-- Contenido para "Tablón" -->
+                <div id="tab-stream" class="content-panel active">
+                    <div class="panel-placeholder">
+                        <span class="material-symbols-outlined">campaign</span>
+                        <h2>El tablón de anuncios estará disponible próximamente.</h2>
+                        <p>Aquí verás los anuncios del profesor y las actividades recientes.</p>
+                    </div>
+                </div>
+
+                <!-- Contenido para "Trabajo de clase" -->
+                <div id="tab-classwork" class="content-panel">
+                    <div id="classwork-container">
+                        <!-- Las actividades se cargarán aquí desde course-detail.js -->
+                        <p>Cargando actividades...</p>
+                    </div>
+                </div>
+
+                <!-- Contenido para "Personas" -->
+                <div id="tab-people" class="content-panel">
+                    <div class="panel-placeholder">
+                        <span class="material-symbols-outlined">groups</span>
+                        <h2>La lista de personas estará disponible próximamente.</h2>
+                    </div>
+                </div>
+
+                <!-- Contenido para "Calificaciones" -->
+                <div id="tab-grades" class="content-panel">
+                    <div class="panel-placeholder">
+                        <span class="material-symbols-outlined">grading</span>
+                        <h2>Tus calificaciones estarán disponibles próximamente.</h2>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <script src="../components/nav.js" defer></script>
+        <script src="../js/course-detail.controller.js" defer></script>
+    </body>
+</html>

@@ -9,6 +9,9 @@ import { SectionRoutes } from "../../modules/academic-structure-II/sections/sect
 import { GradeRoutes } from "../../modules/academic-structure-II/grades/grade.route.mjs";
 import { YearRoutes } from "../../modules/academic-structure-II/years/year.route.mjs";
 import { NotificationRoutes } from "../../modules/notifications-VII/notification.route.mjs";
+import { AssignmentRouter } from "../../modules/academic-manager-III/assignments/assignment.route.mjs";
+import { SchedulesRoutes } from "../../modules/academic-manager-III/schedules/schedules.route.mjs";
+
 const router = Router();
 
 
@@ -30,4 +33,9 @@ export const ListRoutes = {
     notifications: {
         notifications: router.use(`${SETTINGS.BASE_PATH}/notifications`, NotificationRoutes)
     }
+}
+    academicManager: {
+        assignments: router.use(`${SETTINGS.BASE_PATH}/assignments`, AssignmentRouter),
+        schedules: router.use(`${SETTINGS.BASE_PATH}/schedules`, SchedulesRoutes)
+    }  
 }
