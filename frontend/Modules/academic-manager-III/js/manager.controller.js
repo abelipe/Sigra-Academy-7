@@ -36,32 +36,26 @@ async function loadCourses() {
 // Función para renderizar los cursos en el HTML
 function renderCourses(courses) {
   const container = document.querySelector('.cursosDisponibles')
-  
-  // Limpiar contenido actual
   container.innerHTML = ''
-  
-  // Generar una carta por cada curso
   courses.forEach(course => {
     const article = document.createElement('article')
     article.className = 'cartaDeCurso'
 
-    // Obtener imagen según materia o usar default
     const imageUrl = courseImages[course.subject_name] || '../../Public/resources/Modulo-3/default-course.jpg'
-    
+
     article.innerHTML = `
       <div class="infoDeCurso">
-        <p class="gradoDelCurso">${course.grade_name} - Sección ${course.section_name}</p>
+        <p class="gradoDelCurso">${course.grade_name} · Sección ${course.section_name}</p>
         <h2 class="CursoNombre">${course.subject_name}</h2>
-        <p class="CursoProfesor">Periodo: ${course.academic_year}</p>
+        <p class="CursoProfesor">Profesor: <span class="prof-name">${course.teacher_name || '—'}</span></p>
+        <p class="CursoPeriodo small">Periodo: ${course.academic_year || ''}</p>
       </div>
       <div class="ImagenDelCurso">
         <img class="img-rounded" src="${imageUrl}" alt="${course.subject_name}">
       </div>
     `
-    
-    // Agregar evento click para ver detalles
+
     article.addEventListener('click', () => viewCourseDetail(course.assignment_id))
-    
     container.appendChild(article)
   })
 }
@@ -83,3 +77,10 @@ async function viewCourseDetail(assignmentId) {
 
 // Cargar cursos al iniciar la página
 document.addEventListener('DOMContentLoaded', loadCourses)
+
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) {
+    // cuando el navegador restaura desde cache, recargamos los cursos frescos
+    loadCourses().catch(err => console.warn('Reload courses on pageshow failed', err));
+  }
+});

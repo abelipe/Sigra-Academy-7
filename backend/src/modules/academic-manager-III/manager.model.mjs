@@ -7,12 +7,20 @@ import { db } from '../../../database/db.database.mjs'
 export const getCoursesByStudentId = async (studentId) => {
     try {
         const [rows] = await db.query(
-        `SELECT ta.assignment_id, s.subject_name, sec.section_name, g.grade_name, ay.name AS academic_year
-            FROM enrollments e
-            JOIN sections sec ON e.section_id = sec.section_id
-            JOIN grades g ON sec.grade_id = g.grade_id
-            JOIN academic_years ay ON sec.academic_year_id = ay.year_id JOIN teacher_assignments ta ON ta.section_id = sec.section_id JOIN subjects s ON ta.subject_id = s.subject_id
-            WHERE e.student_user_id = ?`,
+        `SELECT ta.assignment_id,
+                s.subject_name,
+                sec.section_name,
+                g.grade_name,
+                ay.name AS academic_year,
+                CONCAT(u.first_name, ' ', u.last_name) AS teacher_name
+         FROM enrollments e
+         JOIN sections sec ON e.section_id = sec.section_id
+         JOIN grades g ON sec.grade_id = g.grade_id
+         JOIN academic_years ay ON sec.academic_year_id = ay.year_id
+         JOIN teacher_assignments ta ON ta.section_id = sec.section_id
+         JOIN subjects s ON ta.subject_id = s.subject_id
+         LEFT JOIN users u ON ta.teacher_user_id = u.user_id
+         WHERE e.student_user_id = ?`,
         [studentId])
 
         return rows
@@ -104,6 +112,7 @@ export const getActivitiesByAssignmentId = async (assignmentId) => {
        ORDER BY due_date DESC`,
       [assignmentId]
     );
+
     return rows;
   } catch (error) {
     throw new Error(`Error fetching activities: ${error.message}`);
@@ -152,6 +161,7 @@ export const createCourse = async (courseData) => {
             'INSERT INTO teacher_assignments (teacher_user_id, subject_id, section_id) VALUES (?, ?, ?)',
             [teacher_user_id, subject_id, section_id]
         )
+
         return result
 
         /* OBSOLET CODE -- AC 02/01/2026

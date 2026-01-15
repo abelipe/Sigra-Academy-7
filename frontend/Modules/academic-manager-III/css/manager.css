@@ -135,7 +135,6 @@ body {
 
 .infoDeCurso{
     padding: 18px 26px;
-    transform: translateY(-39px); 
 }
 
 .gradoDelCurso{
@@ -145,17 +144,36 @@ body {
 }
 
 .CursoNombre{
-    font-family: sans-serif, Helvetica, sans-serif;
-    margin: 0;
-    font-size: 0.9rem;
-    margin-top: 5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0 0 6px 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0b3a8a;
 }
 
 .CursoProfesor{
-    color: #5c7cfa;
-    font-size: 0.9rem; 
-    margin: 5px; /* Margen Inferior*/
-    cursor: pointer;
+    margin: 0 0 6px 0;
+    font-size: 0.95rem;
+    color: #344054;
+}
+
+/* Profesor como pequeño tag */
+.prof-name{
+    display: inline-block;
+    background: #e6f0ff;
+    color: #003366;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 600;
+    margin-left: 6px;
+    font-size: 0.9rem;
+}
+
+
+
+.CursoPeriodo.small{
+    color: #6b7280;
+    font-size: 0.85rem;
 }
 
 .ImagenDelCurso img{
@@ -182,17 +200,28 @@ body {
 
 .cartaDeCurso{
     cursor: pointer;
-    transition: all 0.3s ease;
-    border-left: 4px solid transparent;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    padding:14px;
+    border-radius:8px;
+    background:#ffffff; /* blanco por defecto */
+    border-left: 0;
+    margin-bottom:12px;
+    transition: background-color .15s ease, box-shadow .15s ease, transform .12s ease;
 }
 
 .cartaDeCurso:hover{
     background-color: #E8F0FF;
-    box-shadow: 0 4px 12px rgba(0, 47, 135, 0.15);
-    border-left: 4px solid #002F87;
-    transform: translateX(8px);
+    box-shadow: 0 4px 12px rgba(0, 47, 135, 0.08);
+    border-left: 6px solid #0b63b3;
+    transform: translateX(4px);
 }
 
-.cartaDeCurso:nth-child(odd):hover{
-    background-color: #E8F0FF;
+/* Estado seleccionado (solo si se aplica explícitamente) */
+.cartaDeCurso.selected{
+    background:#f3f8ff;
+    border-left:6px solid #0b63b3;
+    box-shadow: 0 6px 18px rgba(0,47,135,0.08);
 }
