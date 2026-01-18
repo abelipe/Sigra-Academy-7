@@ -115,6 +115,19 @@
         return `<span class="${cls}">${text}</span>`
       }
 
+      function ensureRoleOption(selectEl, roleId) {
+        if (!selectEl || roleId === undefined || roleId === null) return
+        const roleValue = String(roleId)
+        const exists = Array.from(selectEl.options).some((opt) => opt.value === roleValue)
+        if (!exists) {
+          const opt = document.createElement('option')
+          opt.value = roleValue
+          opt.textContent = ROLE_LABELS[roleId] || `Rol ${roleValue}`
+          if (roleValue === '1') opt.disabled = true // Admin solo lectura
+          selectEl.appendChild(opt)
+        }
+      }
+
       function renderUsers(users = []) {
         if (!users.length) {
           tbody.innerHTML = '<tr><td colspan="5">No hay usuarios registrados.</td></tr>'
@@ -149,7 +162,7 @@
                     <path d="M13.5 6.5 17.5 10.5" stroke="currentColor" stroke-width="1.6" />
                   </svg>
                 </button>
-                <button class="icon-link danger" type="button" aria-label="Eliminar usuario">
+                <button class="icon-link danger" type="button" data-action="delete" data-user="${encodedUser}" aria-label="Eliminar usuario">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M5.5 7h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
                     <path d="M10 10v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
@@ -166,12 +179,41 @@
         tbody.innerHTML = rows.join('')
       }
 
+      function getDisplayName(user) {
+        const name = [user.first_name, user.last_name].filter(Boolean).join(' ').trim()
+        return name || user.email || `Usuario #${user.user_id}`
+      }
+
+      async function deleteUser(user) {
+        const nombre = getDisplayName(user)
+        const ok = window.confirm(`¿Estás seguro que quieres eliminar a "${nombre}"?`)
+        if (!ok) return
+        try {
+          const response = await fetch(`${API_BASE}/delete/${user.user_id}`, {
+            method: 'DELETE',
+            headers: { ...getAuthHeaders() }
+          })
+          if (!response.ok) {
+            const err = await response.json().catch(() => ({}))
+            throw new Error(err.error || 'No se pudo eliminar el usuario')
+          }
+          await loadUsers()
+        } catch (error) {
+          alert(error.message)
+          console.error('Error eliminando usuario:', error)
+        }
+      }
+
       function attachActions() {
         tbody.addEventListener('click', (event) => {
           const btn = event.target.closest('button[data-action]')
           if (!btn) return
           const action = btn.dataset.action
           const user = JSON.parse(decodeURIComponent(btn.dataset.user || '%7B%7D'))
+          if (action === 'delete') {
+            deleteUser(user)
+            return
+          }
           openModal(user, action)
         })
       }
@@ -252,10 +294,16 @@
           const value = user[field]
           if (input.type === 'checkbox') {
             input.checked = Boolean(value ?? true)
+            input.disabled = mode === 'view'
+          } else if (input.tagName === 'SELECT') {
+            ensureRoleOption(input, value)
+            input.value = value ?? ''
+            const isAdmin = Number(value) === 1
+            input.disabled = mode === 'view' || isAdmin
           } else {
             input.value = value ?? ''
+            input.disabled = mode === 'view'
           }
-          input.disabled = mode === 'view'
         })
 
         modal.dataset.mode = mode
@@ -283,6 +331,10 @@
           role_id: Number(document.getElementById('modal-role_id').value) || currentUser.role_id,
           is_active: document.getElementById('modal-is_active').checked
         }
+
+        const nombre = getDisplayName(currentUser)
+        const ok = window.confirm(`¿Estás seguro que quieres editar a "${nombre}"?`)
+        if (!ok) return
 
         try {
           const response = await fetch(`${API_BASE}/update/${currentUser.user_id}`, {
@@ -391,8 +443,12 @@
         <input id="modal-phone" type="tel" />
       </label>
       <label>
-        Rol (ID)
-        <input id="modal-role_id" type="number" min="1" />
+        Rol
+        <select id="modal-role_id">
+          <option value="2">Profesor</option>
+          <option value="3">Estudiante</option>
+          <option value="1" disabled>Administrador (solo lectura)</option>
+        </select>
       </label>
       <label class="switch-line">
         <span>Activo</span>

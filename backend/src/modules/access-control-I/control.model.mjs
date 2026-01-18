@@ -92,9 +92,18 @@ export class UserModel {
 			[email]
 		);
 		if(existingUser.length === 0) return {error: 'Usuario no encontrado'};
-		// TEMP: contraseñas en DB no están hasheadas; se compara texto plano.
-		// const passwordMatch = await bcrypt.compare(password_hash, existingUser[0].password_hash);
-		const passwordMatch = password_hash === existingUser[0].password_hash;
+		// Comparar la contraseña ingresada contra el hash almacenado.
+		// Se agrega un fallback para filas antiguas con contraseña sin hash.
+		let passwordMatch = false;
+		const storedHash = existingUser[0].password_hash || '';
+		try{
+			passwordMatch = await bcrypt.compare(password_hash, storedHash);
+		}catch(_err){
+			passwordMatch = false;
+		}
+		if(!passwordMatch){
+			passwordMatch = (password_hash === storedHash);
+		}
 		if(!passwordMatch) return {error: 'Contraseña incorrecta'};
 		// Si es correcta, se asigna el token de sesión
 		const token = await assignTokenToSession(existingUser[0].user_id);
