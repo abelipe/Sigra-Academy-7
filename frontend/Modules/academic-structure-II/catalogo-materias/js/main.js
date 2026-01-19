@@ -10,6 +10,53 @@ let currentPage = 1;
 const itemsPerPage = 5;
 let filteredMaterias = [];
 
+// ==========================================
+// TOAST NOTIFICATION SYSTEM
+// ==========================================
+function showToast(message, type = 'info', duration = 4000) {
+    const container = document.getElementById('toast-container');
+
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+
+    // Icon based on type
+    const icons = {
+        success: 'bx-check-circle',
+        error: 'bx-error-circle',
+        warning: 'bx-error',
+        info: 'bx-info-circle'
+    };
+
+    const titles = {
+        success: '¡Éxito!',
+        error: 'Error',
+        warning: 'Advertencia',
+        info: 'Información'
+    };
+
+    toast.innerHTML = `
+        <div class="toast-icon">
+            <i class='bx ${icons[type]}'></i>
+        </div>
+        <div class="toast-content">
+            <div class="toast-title">${titles[type]}</div>
+            <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">
+            <i class='bx bx-x'></i>
+        </button>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after duration
+    setTimeout(() => {
+        toast.classList.add('removing');
+        setTimeout(() => toast.remove(), 300);
+    }, duration);
+}
+
 function showView(view, id = null) {
     if (view === 'catalogo') {
         loadSubjects().then(() => {
@@ -128,7 +175,7 @@ function changePage(page) {
 }
 function renderRows(data) {
     if (data.length === 0) return `<tr><td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">No se encontraron materias.</td></tr>`;
-    
+
     return data.map(m => `
         <tr>
             <td style="color:#94a3b8">${m.id}</td>
@@ -153,11 +200,11 @@ function doSearch() {
     const filterAnio = document.getElementById('f-filter-anio').value;
 
     filteredMaterias = materias.filter(m => {
-        const matchesSearch = m.nombre.toLowerCase().includes(q) || 
-                              m.codigo.toLowerCase().includes(q) || 
-                              m.id.toString().includes(q);
+        const matchesSearch = m.nombre.toLowerCase().includes(q) ||
+            m.codigo.toLowerCase().includes(q) ||
+            m.id.toString().includes(q);
         const matchesAnio = filterAnio === "" || m.anio === filterAnio;
-        
+
         return matchesSearch && matchesAnio;
     });
 
@@ -198,19 +245,19 @@ function renderForm(m) {
                 <div class="filter-group">
                     <label>Estado del Curso</label>
                     <select id="f-estado" style="padding:11px; border-radius:8px; border:1px solid var(--border);">
-                        <option value="Activo" ${isEdit && m.is_active == 1 ?'selected':''}>Activo</option>
-                        <option value="Inactivo" ${isEdit && m.is_active == 0 ?'selected':''}>Inactivo</option>
+                        <option value="Activo" ${isEdit && m.is_active == 1 ? 'selected' : ''}>Activo</option>
+                        <option value="Inactivo" ${isEdit && m.is_active == 0 ? 'selected' : ''}>Inactivo</option>
                     </select>
                 </div>
                 <div class="filter-group">
                     <label>Año *</label>
                     <select id="f-anio" style="padding:11px; border-radius:8px; border:1px solid var(--border);">
                         <option value="">Seleccionar Año</option>
-                        <option value="1° año" ${isEdit && m.anio === '1° año' ?'selected':''}>1° año</option>
-                        <option value="2° año" ${isEdit && m.anio === '2° año' ?'selected':''}>2° año</option>
-                        <option value="3° año" ${isEdit && m.anio === '3° año' ?'selected':''}>3° año</option>
-                        <option value="4° año" ${isEdit && m.anio === '4° año' ?'selected':''}>4° año</option>
-                        <option value="5° año" ${isEdit && m.anio === '5° año' ?'selected':''}>5° año</option>
+                        <option value="1° año" ${isEdit && m.anio === '1° año' ? 'selected' : ''}>1° año</option>
+                        <option value="2° año" ${isEdit && m.anio === '2° año' ? 'selected' : ''}>2° año</option>
+                        <option value="3° año" ${isEdit && m.anio === '3° año' ? 'selected' : ''}>3° año</option>
+                        <option value="4° año" ${isEdit && m.anio === '4° año' ? 'selected' : ''}>4° año</option>
+                        <option value="5° año" ${isEdit && m.anio === '5° año' ? 'selected' : ''}>5° año</option>
                     </select>
                 </div>
                 <div class="filter-group" style="grid-column: span 3;">
@@ -232,7 +279,7 @@ function renderForm(m) {
 async function saveData(id) {
     const anio = document.getElementById('f-anio').value.replace(/[^\d]/g, '');
     if (!anio) {
-        alert("Por favor, seleccione el Año.");
+        showToast("Por favor, seleccione el Año.", "warning");
         return;
     }
 
@@ -266,14 +313,14 @@ async function saveData(id) {
         const result = await response.json();
         console.log('Respuesta del servidor:', result);
         if (response.ok) {
-            alert(result.message);
+            showToast(result.message, "success");
             showView('catalogo');
         } else {
-            alert('Error: ' + result.error);
+            showToast(result.error || 'Error al guardar', "error");
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error de conexión');
+        showToast('Error de conexión con el servidor', "error");
     }
 }
 
@@ -291,15 +338,15 @@ async function confirmDel() {
         });
         const result = await response.json();
         if (response.ok) {
-            alert(result.message);
+            showToast(result.message, "success");
             closeDel();
             showView('catalogo');
         } else {
-            alert('Error: ' + result.error);
+            showToast(result.error || 'Error al eliminar', "error");
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error de conexión');
+        showToast('Error de conexión con el servidor', "error");
     }
 }
 

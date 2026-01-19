@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     const closeBtn = document.querySelector('.close-btn');
     const selectedItem = document.querySelector('.selected-item');
-    const addBtn = document.querySelector('.btn-primary-dark'); 
+    const addBtn = document.querySelector('.btn-primary-dark');
     const prereqList = document.getElementById('prereq-list');
     const saveBtn = document.querySelector('.btn-primary');
     const tableBody = document.querySelector('.data-table tbody');
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const deleteModal = document.getElementById('delete-modal');
     const confirmDeleteBtn = document.getElementById('confirm-delete');
     const cancelDeleteBtn = document.getElementById('cancel-delete');
-    
+
     // Elementos para la búsqueda de materias
     const materiaSearch = document.getElementById('materia-search');
     const selectedMateriaContainer = document.getElementById('selected-materia-container');
@@ -99,16 +99,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+
     // Elementos para el modal de prelaciones recientes
     const viewAllBtn = document.getElementById('view-all-prelaciones');
     const prelacionesModal = document.getElementById('prelaciones-modal');
     const closePrelacionesModal = document.getElementById('close-prelaciones-modal');
     const prelacionesList = document.getElementById('prelaciones-list');
-    
+
     // Botón Cancelar de la configuración
     const cancelConfigBtn = document.getElementById('cancel-config-btn');
-    
+
     let filaAEliminar = null;
     let materiaPrincipalSeleccionada = null;
     let pendingSubjectDelete = null;
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function resolveApiBase() {
         const origin = window.location && window.location.origin ? window.location.origin : null;
-        if (!origin) return API_BASE;
+        if (!origin || origin === 'null' || window.location.protocol === 'file:') return API_BASE;
 
         // probe origin/api/prelacies with short timeout
         try {
@@ -303,9 +303,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!entry.created_at || new Date(r.created_at) > new Date(entry.created_at)) entry.created_at = r.created_at;
             });
             // sort by created_at desc
-            const items = Array.from(map.values()).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+            const items = Array.from(map.values()).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
             // Only show the two most recent prelaciones in the aside widget; "Ver todas" opens the full modal
-            items.slice(0,2).forEach(it => {
+            items.slice(0, 2).forEach(it => {
                 const div = document.createElement('div');
                 div.className = 'activity-item';
                 const time = it.created_at ? new Date(it.created_at).toLocaleString() : '';
@@ -413,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 1. Buscar y Seleccionar Materia Principal ---
     if (materiaSearch) {
         // Handler used for both 'input' and 'change' to support datalist selection and typing
-        const handleMateriaSelection = async function() {
+        const handleMateriaSelection = async function () {
             const textoBusqueda = this.value.trim();
             if (!textoBusqueda) return;
             const materia = await buscarMateria(textoBusqueda);
@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         materiaSearch.addEventListener('change', handleMateriaSelection);
-        materiaSearch.addEventListener('keypress', function(e) {
+        materiaSearch.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 handleMateriaSelection.call(this);
@@ -481,9 +481,9 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 selectedMateriaContainer.style.display = 'none';
             }, 300);
-            
+
             materiaPrincipalSeleccionada = null;
-            
+
             // Resetear el select de prerrequisitos para incluir todas las materias
             prereqList.innerHTML = '';
             await llenarSelectPrerrequisitos();
@@ -552,7 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 5. Eliminar de la Tabla con Modal y Efecto de Contracción ---
     const cerrarModal = () => {
-        if(deleteModal) {
+        if (deleteModal) {
             deleteModal.classList.remove('active');
             filaAEliminar = null;
             pendingSubjectDelete = null;
@@ -563,7 +563,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBody.addEventListener('click', (e) => {
             if (e.target.classList.contains('fa-trash-can')) {
                 filaAEliminar = e.target.closest('tr');
-                if(deleteModal) deleteModal.classList.add('active');
+                if (deleteModal) deleteModal.classList.add('active');
             }
         });
     }
@@ -635,7 +635,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 6. Guardar prelaciones en backend ---
-    if(saveBtn) {
+    if (saveBtn) {
         saveBtn.addEventListener('click', async () => {
             if (!materiaPrincipalSeleccionada) {
                 showMessage('Por favor, seleccione una materia principal primero.', 'error');
@@ -677,7 +677,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const originalText = saveBtn.innerHTML;
             saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
             saveBtn.disabled = true;
-            
+
             const results = [];
             for (const it of items) {
                 // If item already has a rowId it exists in DB
@@ -759,15 +759,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     selectedMateriaContainer.style.display = 'none';
                 }, 300);
             }
-            
+
             // 2. Restablecer el campo de búsqueda de materia principal
             if (materiaSearch) {
                 materiaSearch.value = '';
             }
-            
+
             // 3. Restablecer variable de materia seleccionada
             materiaPrincipalSeleccionada = null;
-            
+
             // 4. Limpiar la lista de prerrequisitos añadidos con animación
             const prereqItems = prereqList.querySelectorAll('.prereq-item');
             prereqItems.forEach(item => {
@@ -776,25 +776,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.style.transition = 'all 0.3s ease';
                 setTimeout(() => item.remove(), 300);
             });
-            
+
             // Limpiar después de las animaciones
             setTimeout(() => {
                 prereqList.innerHTML = '';
             }, 350);
-            
+
             // 5. Restablecer el select de prerrequisitos
             prereqSelect.selectedIndex = 0;
-            
+
             // 6. Llenar el select con todas las materias nuevamente
             llenarSelectPrerrequisitos();
-            
+
             // 7. Si el botón Guardar estaba en estado "Guardado", restablecerlo
             if (saveBtn) {
                 saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Guardar Prelaciones';
                 saveBtn.style.backgroundColor = '';
                 saveBtn.disabled = false;
             }
-            
+
             // 8. Mensaje de confirmación (opcional)
             console.log('Configuración cancelada. Todos los campos han sido restablecidos.');
         });

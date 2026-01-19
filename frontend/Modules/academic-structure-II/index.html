@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Inscripción de Estudiantes en Sección - SIGRA</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#002F87",
+                        "success": "#10B981",
+                        "error": "#C52B3D",
+                        "background-light": "#F3F4F6",
+                        "background-dark": "#1a1c20",
+                        "content-card": "#FFFFFF",
+                        "text-main": "#1F2937",
+                        "nav-gray": "#64748B"
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-text-main antialiased min-h-screen flex flex-col">
+    <header
+        class="sticky top-0 z-50 bg-white dark:bg-background-dark border-b border-gray-200 dark:border-gray-800 px-8 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="size-10 flex items-center justify-center">
+                    <img src="assets/logo.png" alt="Logo de la escuela" class="w-full h-full object-contain" />
+                </div>
+                <h2 class="text-primary text-2xl font-black tracking-tight">SIGRA</h2>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <nav class="hidden md:flex items-center gap-6">
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors" href="#">Inicio</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors" href="#">Usuarios</a>
+                    <a class="text-primary text-base font-bold transition-colors border-b-2 border-primary pb-1"
+                        href="index.html">Nueva Inscripción</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="gestionar-asignacion.html">Gestión de Asignación</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors" href="#">Reportes</a>
+                </nav>
+                
+                <div class="flex items-center gap-4">
+                    <button
+                        class="size-10 flex items-center justify-center rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                    <div
+                        class="size-10 rounded-full bg-gray-200 overflow-hidden border-2 border-transparent hover:border-primary transition-all cursor-pointer">
+                        <img alt="Profile avatar" class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuADIAQNBOIhz8AgCJ4DVy8EvGEOtmBnmnGZ0YuFkSgoGk3FsiRM7HvL-ZsWuROht5F95KmOr4EbF94VN9LevPicOwahD_k-7hSMKTiXTGkglji04V35VjTZt7DdBYZKI0p6hd_kbx4ZOrwcGPwBE-OKjtSX7S0eMpvLRrwNIENK3l1MTGCEC-U-2NQFD7qBGimKZP7-iCg6Via2oOS3gcIWYoNGw2qTpJN9RW3LvyyM2KDfOo--lJGH043TvsKdYBlWavR6R87PamfY" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="flex-1 max-w-7xl mx-auto w-full p-6 space-y-8">
+        <div class="space-y-4">
+            <nav class="flex items-center gap-2 text-sm text-gray-500">
+                <span class="material-symbols-outlined text-xs">chevron_right</span>
+                <span class="text-text-main font-medium">Inscripción</span>
+            </nav>
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 pb-6">
+                <div>
+                    <h1 class="text-4xl font-black text-text-main tracking-tight text-primary">Inscripción de
+                        Estudiantes en Sección</h1>
+                    <p class="text-gray-500 mt-2 text-lg">Administre el alta de nuevos usuarios en el período académico
+                        actual.</p>
+                </div>
+                <div class="hidden md:block">
+                    <span
+                        class="bg-blue-50 text-primary text-xs font-bold px-3 py-1 rounded-full border border-blue-100 uppercase tracking-wide">
+                        Período 2025-I
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            <div
+                class="lg:col-span-3 bg-white dark:bg-background-dark rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                <div class="p-8 space-y-8">
+                    <div class="flex items-center gap-3 pb-2 border-b border-gray-100">
+                        <div class="bg-primary/10 p-2 rounded-lg">
+                            <span class="material-symbols-outlined text-primary">person_add</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-text-main">Datos del Estudiante</h3>
+                    </div>
+                    <form class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="md:col-span-2 space-y-2">
+                                <label class="block text-sm font-bold text-gray-700">Nombre del Alumno</label>
+                                <input
+                                    class="w-full border-gray-300 rounded-lg shadow-sm bg-gray-50 cursor-not-allowed py-2.5 px-4"
+                                    placeholder="Nombre generado automáticamente" type="text" readonly />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-bold text-gray-700">Año</label>
+                                <div class="relative">
+                                    <input id="yearInput"
+                                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-primary focus:ring-primary py-2.5 px-4 pl-10"
+                                        placeholder="Ingrese el grado (1, 2, 3...)" type="number" min="1" max="12" />
+                                    <span
+                                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">calendar_month</span>
+                                </div>
+                            </div>
+                            <div id="sectionsContainer" class="md:col-span-2 space-y-2 hidden">
+                                <label class="block text-sm font-bold text-gray-700 flex justify-between">
+                                    Secciones Disponibles
+                                    <span
+                                        class="text-xs text-error font-normal bg-red-50 px-2 rounded-full border border-red-100">Seleccione
+                                        una *</span>
+                                </label>
+                                <div id="noSectionsMessage"
+                                    class="hidden p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">
+                                    <p>No hay secciones disponibles para este grado.</p>
+                                </div>
+                                <div id="sectionsTable"
+                                    class="overflow-hidden border border-gray-200 rounded-lg shadow-sm">
+                                    <table class="min-w-full divide-y divide-gray-200">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th scope="col"
+                                                    class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-10">
+                                                </th>
+                                                <th scope="col"
+                                                    class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                    Grado</th>
+                                                <th scope="col"
+                                                    class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                    Sección</th>
+
+                                                <th scope="col"
+                                                    class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
+                                                    Cupos Disponibles</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="sectionsTableBody" class="bg-white divide-y divide-gray-200">
+                                            <tr class="section-row hover:bg-gray-50 cursor-pointer" data-grade="1"
+                                                onclick="this.querySelector('input').click()">
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <input type="radio" name="seccion"
+                                                        class="focus:ring-primary h-4 w-4 text-primary border-gray-300">
+                                                </td>
+                                                <td
+                                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-main">
+                                                    1er Grado</td>
+                                                <td
+                                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold bg-gray-50 rounded-lg text-center">
+                                                    A</td>
+
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <span
+                                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                        15 cupos
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr class="section-row hover:bg-gray-50 cursor-pointer" data-grade="1"
+                                                onclick="this.querySelector('input').click()">
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <input type="radio" name="seccion"
+                                                        class="focus:ring-primary h-4 w-4 text-primary border-gray-300">
+                                                </td>
+                                                <td
+                                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-main">
+                                                    1er Grado</td>
+                                                <td
+                                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold bg-gray-50 rounded-lg text-center">
+                                                    B</td>
+
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <span
+                                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                        3 cupos
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr class="section-row hover:bg-gray-50 cursor-pointer" data-grade="2"
+                                                onclick="this.querySelector('input').click()">
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <input type="radio" name="seccion"
+                                                        class="focus:ring-primary h-4 w-4 text-primary border-gray-300">
+                                                </td>
+                                                <td
+                                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-main">
+                                                    2do Grado</td>
+                                                <td
+                                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold bg-gray-50 rounded-lg text-center">
+                                                    A</td>
+
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <span
+                                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                        0 cupos
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr class="section-row hover:bg-gray-50 cursor-pointer" data-grade="2"
+                                                onclick="this.querySelector('input').click()">
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <input type="radio" name="seccion"
+                                                        class="focus:ring-primary h-4 w-4 text-primary border-gray-300">
+                                                </td>
+                                                <td
+                                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-main">
+                                                    2do Grado</td>
+                                                <td
+                                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold bg-gray-50 rounded-lg text-center">
+                                                    B</td>
+
+                                                <td class="px-6 py-4 whitespace-nowrap">
+                                                    <span
+                                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                        8 cupos
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="bg-blue-50/50 rounded-lg p-4 border border-blue-100 flex gap-3 text-sm text-primary/80">
+                            <span class="material-symbols-outlined text-primary shrink-0">info</span>
+                            <p>Asegúrese de verificar que el estudiante haya completado el proceso de admisión antes de
+                                finalizar la inscripción en la sección.</p>
+                        </div>
+                    </form>
+                </div>
+                <div class="bg-gray-50 px-8 py-5 border-t border-gray-200 flex justify-end gap-3 items-center">
+                    <button
+                        class="px-6 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-white hover:text-error hover:shadow-sm border border-transparent hover:border-gray-200 transition-all">
+                        Cancelar
+                    </button>
+                    <button
+                        class="px-6 py-2.5 bg-success text-white rounded-lg font-bold text-sm shadow-md shadow-success/20 hover:bg-emerald-600 hover:shadow-lg transition-all flex items-center gap-2">
+                        <span class="material-symbols-outlined text-xl">check_circle</span>
+                        Finalizar Inscripción de Estudiante
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <button
+        class="fixed bottom-6 right-6 size-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:rotate-12 hover:scale-110 transition-all active:scale-95 z-[60]">
+        <span class="material-symbols-outlined text-3xl">question_mark</span>
+    </button>
+
+    <script>
+        // Dynamic section filtering based on year/grade input
+        document.addEventListener('DOMContentLoaded', function () {
+            const yearInput = document.getElementById('yearInput');
+            const sectionsContainer = document.getElementById('sectionsContainer');
+            const sectionsTable = document.getElementById('sectionsTable');
+            const noSectionsMessage = document.getElementById('noSectionsMessage');
+            const sectionRows = document.querySelectorAll('.section-row');
+
+            yearInput.addEventListener('input', function () {
+                const grade = parseInt(this.value);
+
+                // If input is empty or invalid, hide sections
+                if (!grade || grade < 1) {
+                    sectionsContainer.classList.add('hidden');
+                    return;
+                }
+
+                // Show sections container
+                sectionsContainer.classList.remove('hidden');
+
+                // Filter sections based on grade
+                let visibleCount = 0;
+                sectionRows.forEach(row => {
+                    const rowGrade = parseInt(row.getAttribute('data-grade'));
+                    if (rowGrade === grade) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                // Show/hide table and message based on results
+                if (visibleCount > 0) {
+                    sectionsTable.classList.remove('hidden');
+                    noSectionsMessage.classList.add('hidden');
+                } else {
+                    sectionsTable.classList.add('hidden');
+                    noSectionsMessage.classList.remove('hidden');
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

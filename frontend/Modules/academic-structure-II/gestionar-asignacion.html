@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Gestión de Tablas de Asignación SIGRA</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#002F87",
+                        "background-light": "#F3F4F6",
+                        "background-dark": "#111827",
+                        "card-light": "#FFFFFF",
+                        "card-dark": "#1F2937",
+                        "text-main-light": "#1F2937",
+                        "text-main-dark": "#F9FAFB",
+                        "text-sub-light": "#6B7280",
+                        "text-sub-dark": "#9CA3AF",
+                        "nav-gray": "#64748B",
+                        "success": "#10B981",
+                        "error": "#C52B3D",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark transition-colors duration-200 min-h-screen relative pb-20">
+    <header
+        class="sticky top-0 z-50 bg-white dark:bg-background-dark border-b border-gray-200 dark:border-gray-800 px-8 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="size-10 flex items-center justify-center">
+                    <img src="assets/logo.png" alt="Logo de la escuela" class="w-full h-full object-contain" />
+                </div>
+                <h2 class="text-primary text-2xl font-black tracking-tight">SIGRA</h2>
+            </div>
+
+            <div class="flex items-center gap-6">
+                <nav class="hidden md:flex items-center gap-6">
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors" href="#">Inicio</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors" href="#">Usuarios</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors" href="index.html">
+                        Nueva Inscripción
+                    </a>
+                    <a class="text-primary text-base font-bold transition-colors border-b-2 border-primary pb-1"
+                       href="gestionar-asignacion.html">
+                        Gestión de Asignación
+                    </a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors" href="#">
+                        Reportes
+                    </a>
+                </nav>
+                
+                <div class="flex items-center gap-4">
+                    <button class="size-10 flex items-center justify-center rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors">
+                        <span class="material-icons">notifications</span>
+                    </button>
+                    <div class="size-10 rounded-full bg-gray-200 overflow-hidden border-2 border-transparent hover:border-primary transition-all cursor-pointer">
+                        <img alt="Profile avatar" class="w-full h-full object-cover"
+                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuADIAQNBOIhz8AgCJ4DVy8EvGEOtmBnmnGZ0YuFkSgoGk3FsiRM7HvL-ZsWuROht5F95KmOr4EbF94VN9LevPicOwahD_k-7hSMKTiXTGkglji04V35VjTZt7DdBYZKI0p6hd_kbx4ZOrwcGPwBE-OKjtSX7S0eMpvLRrwNIENK3l1MTGCEC-U-2NQFD7qBGimKZP7-iCg6Via2oOS3gcIWYoNGw2qTpJN9RW3LvyyM2KDfOo--lJGH043TvsKdYBlWavR6R87PamfY" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="sm:flex sm:items-center sm:justify-between mb-8">
+            <div>
+                <h1 class="text-3xl font-bold leading-tight text-text-main-light dark:text-text-main-dark">
+                    Inscripción
+                </h1>
+                <p class="mt-2 text-sm text-primary font-medium">
+                    Gestión de Tablas de Asignación - Módulo 2
+                </p>
+            </div>
+            <div class="mt-4 sm:mt-0 flex items-center bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
+                <button
+                    class="relative bg-white dark:bg-gray-600 shadow-sm rounded-md py-1.5 px-4 text-sm font-semibold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-primary"
+                    type="button">
+                    Estudiantes
+                </button>
+                <button
+                    class="ml-0.5 relative border border-transparent rounded-md py-1.5 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-primary"
+                    type="button">
+                    Profesores
+                </button>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-250px)] min-h-[600px]">
+            <div
+                class="bg-card-light dark:bg-card-dark shadow-sm rounded-xl flex flex-col overflow-hidden border border-gray-100 dark:border-gray-700">
+                <div
+                    class="p-6 border-b border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <h2 class="text-lg font-bold text-text-main-light dark:text-text-main-dark flex items-center">
+                        <span class="material-icons mr-2 text-gray-400">person_add</span>
+                        Personas No Asignadas
+                    </h2>
+                    <div class="relative rounded-md shadow-sm w-full sm:w-auto flex-grow max-w-xs">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <span class="material-icons text-gray-400 text-sm">search</span>
+                        </div>
+                        <input
+                            class="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md h-10"
+                            id="search" name="search" placeholder="Buscar..." type="text" />
+                    </div>
+                </div>
+                <div class="flex-1 overflow-y-auto p-4 space-y-3 hide-scrollbar">
+                    <div
+                        class="group flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-150">
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-700 dark:text-blue-200 font-bold text-sm">
+                                AR
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-gray-900 dark:text-white">Ana Rodríguez</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">ID: 2023-0145 <span
+                                        class="text-gray-300 mx-1">•</span> Ing. Sistemas</p>
+                            </div>
+                        </div>
+                        <button
+                            class="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-300 transition-colors">
+                            <span class="material-icons text-lg">add</span>
+                        </button>
+                    </div>
+                    <div
+                        class="group flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-150">
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="h-10 w-10 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-700 dark:text-purple-200 font-bold text-sm">
+                                CM
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-gray-900 dark:text-white">Carlos Méndez</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">ID: 2023-0882 <span
+                                        class="text-gray-300 mx-1">•</span> Ing. Sistemas</p>
+                            </div>
+                        </div>
+                        <button
+                            class="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-300 transition-colors">
+                            <span class="material-icons text-lg">add</span>
+                        </button>
+                    </div>
+                    <div
+                        class="group flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-150">
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="h-10 w-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-700 dark:text-indigo-200 font-bold text-sm">
+                                LP
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-gray-900 dark:text-white">Lucia Perez</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">ID: 2023-1102 <span
+                                        class="text-gray-300 mx-1">•</span> Ing. Industrial</p>
+                            </div>
+                        </div>
+                        <button
+                            class="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-300 transition-colors">
+                            <span class="material-icons text-lg">add</span>
+                        </button>
+                    </div>
+                    <div
+                        class="group flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-150">
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="h-10 w-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-200 font-bold text-sm">
+                                FR
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-gray-900 dark:text-white">Fernando Ruiz</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">ID: 2022-9983 <span
+                                        class="text-gray-300 mx-1">•</span> Lic. Matemáticas</p>
+                            </div>
+                        </div>
+                        <button
+                            class="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-300 transition-colors">
+                            <span class="material-icons text-lg">add</span>
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="p-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 text-center text-xs text-gray-500 dark:text-gray-400 font-medium">
+                    Mostrando 4 de 128 estudiantes disponibles
+                </div>
+            </div>
+            <div
+                class="bg-card-light dark:bg-card-dark shadow-sm rounded-xl flex flex-col overflow-hidden border border-gray-100 dark:border-gray-700 relative">
+                <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-primary flex items-center">
+                        <span class="material-icons mr-2">how_to_reg</span>
+                        Asignados a la Sección
+                    </h2>
+                    <span
+                        class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
+                        24 Estudiantes
+                    </span>
+                </div>
+                <div class="flex-1 overflow-y-auto p-4 space-y-4 hide-scrollbar">
+                    <div
+                        class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="relative">
+                                    <img alt="Juan Pérez" class="h-12 w-12 rounded-full object-cover"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8M2B_j1z-BJ3EB37uJTTjwFggrAmauCZGm-sntx39RuyFIJdsSQgevGBiMuDhbI-9mn7ULPVV_jQTyA8fI7emVClpSLbxk7RjTEM5IS2NeK1m13FoD3n2K4vs_YzPsFYK9V03O_BEPjelroh3gJvkiXYbkIXSVxmC_3aAiLyO-wolDT6VoH5zFs1q28dbdnS4olHqUgLHmNW5Raq-QJg2D1Vo2Mu02svgAQi4Lm8vC4UH76xD2EzFI3qWIVkJSE51dTD1bUmQ9Lcg" />
+                                    <span
+                                        class="absolute bottom-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white dark:ring-gray-800 bg-success"></span>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Juan Pérez</h3>
+                                    <div class="flex items-center mt-1">
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 font-mono mr-2">ID:
+                                            2023-0012</span>
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                            REGULAR
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="text-gray-400 hover:text-primary dark:hover:text-blue-400 transition-colors">
+                                <span class="material-icons">edit</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div
+                                    class="relative flex items-center justify-center h-12 w-12 rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-200 font-bold text-lg">
+                                    MG
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Maria Gonzales</h3>
+                                    <div class="flex items-center mt-1">
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 font-mono mr-2">ID:
+                                            2023-0441</span>
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                            BECADO
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="text-gray-400 hover:text-primary dark:hover:text-blue-400 transition-colors">
+                                <span class="material-icons">edit</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="relative">
+                                    <img alt="Sofia Torres" class="h-12 w-12 rounded-full object-cover"
+                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCItK4q04yNt8IElL8nYU12bBrRynXDgV6AmhsnuN9ZI72YoazneD-HDQ7arlcwFfGn7JYTn4yjGa_reuk8GMVpLI-HKqVJc8j4Px0_odgqUOY-qKBiBwt8GUBu4fKcK-b2ivmtpPunH-GKo6PsyUsmpSMeMwm8ZXRoizbY9YBQnldwkWd_M5Z_t-HoTfIbVqzzvS9gC2baAbr2zkgijQjjLwWnB6fVBNYqEvufcJDy9rwastxbcnxsTb55tSTLBjf9OONHGgvaqM9V" />
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Sofia Torres</h3>
+                                    <div class="flex items-center mt-1">
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 font-mono mr-2">ID:
+                                            2022-1205</span>
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                            REGULAR
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="text-gray-400 hover:text-primary dark:hover:text-blue-400 transition-colors">
+                                <span class="material-icons">edit</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div
+                                    class="relative flex items-center justify-center h-12 w-12 rounded-full bg-pink-100 text-pink-600 dark:bg-pink-900 dark:text-pink-200 font-bold text-lg">
+                                    JV
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Jorge Villalobos</h3>
+                                    <div class="flex items-center mt-1">
+                                        <span class="text-xs text-gray-500 dark:text-gray-400 font-mono mr-2">ID:
+                                            2021-0099</span>
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                                            CONDICIONAL
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="text-gray-400 hover:text-primary dark:hover:text-blue-400 transition-colors">
+                                <span class="material-icons">edit</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

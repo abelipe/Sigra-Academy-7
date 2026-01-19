@@ -5,18 +5,32 @@ import { PrelaciesController } from './prelacies.controller.mjs';
 const router = Router();
 const controller = new PrelaciesController({ ModelPrelacy: ModelPrelacy });
 
-// Ruta para obtener todas las materias (Ya existe en su respectivo modelo)
-router.get('/subjects', controller.getAllSubjects);
-// Ruta para obtener una materia por su ID (Ya existe en su respectivo modelo)
-router.get('/subjects/:subjectId', controller.getSubjectById);
-// Ruta para obtener todas las prelaturas
+// Base route - get all subjects (frontend calls GET /api/prelacies)
+router.get('/', controller.getAllSubjects);
+
+// Search subjects by query (frontend calls GET /api/prelacies/search?q=...)
+router.get('/search', controller.searchSubjects);
+
+// Get summary of all prelacies grouped by subject
+router.get('/summary', controller.getSummary);
+
+// Get all prelacies
 router.get('/all', controller.getAllPrelacies);
-// Ruta para obtener las prelaturas de una materia en especifico
-router.get('/subjects/:subjectId/prerequisites', controller.getPrelaciesBySubjectId);
-// Ruta para crear una prelatura
-router.post('/create', controller.createPrelacy);
-// Ruta para eliminar una prelatura
-router.delete('/delete/:prelacyId', controller.deletePrelacy);
+
+// Get subject's prerequisites (frontend calls GET /api/prelacies/:subjectId/prerequisites)
+router.get('/:subjectId/prerequisites', controller.getPrelaciesBySubjectId);
+
+// Get subject by ID
+router.get('/subjects/:subjectId', controller.getSubjectById);
+
+// Create a prelacy (frontend calls POST /api/prelacies - not /create)
+router.post('/', controller.createPrelacy);
+
+// Delete all prerequisites for a subject (frontend calls DELETE /api/prelacies/subject/:subjectId)
+router.delete('/subject/:subjectId', controller.deletePrelaciesBySubject);
+
+// Delete a specific prelacy (frontend calls DELETE /api/prelacies/:prelacyId)
+router.delete('/:prelacyId', controller.deletePrelacy);
 
 export const prelaciesRoute = router;
 
