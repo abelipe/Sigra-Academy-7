@@ -3,14 +3,14 @@ import { db } from "../../../../database/db.database.mjs";
 // Modelo que interactúa con la tabla teacher_assignments (cursos asignados a profesores)
 export class TeacherAssignmentModel {
     // Obtener cursos asignados a un estudiante
-    static async getCoursesByStudentId(studentId){
-        if(!studentId) return {error: 'El ID del estudiante es requerido'};
+    static async getCoursesByStudentId(studentId) {
+        if (!studentId) return { error: 'El ID del estudiante es requerido' };
         // Se verifica que el estudiante exista
         const [existingStudent] = await db.query(
             `SELECT * FROM users WHERE user_id = ?`,
             [studentId]
         );
-        if(existingStudent.length === 0) return {error: 'Estudiante no encontrado'};
+        if (existingStudent.length === 0) return { error: 'Estudiante no encontrado' };
         // Si existe, se obtienen los cursos asignados
         const [courses] = await db.query(
             `SELECT ta.assignment_id, s.subject_name, sec.section_name, g.grade_name,
@@ -22,7 +22,7 @@ export class TeacherAssignmentModel {
             WHERE e.student_user_id = ?`,
             [studentId]
         );
-        if(courses.length === 0) return {error: 'No se encontraron cursos asignados para este estudiante'};
+        if (courses.length === 0) return { error: 'No se encontraron cursos asignados para este estudiante' };
         return {
             message: 'Cursos asignados obtenidos exitosamente',
             courses: courses
@@ -30,15 +30,15 @@ export class TeacherAssignmentModel {
     }
 
     // Método para obtener todos los cursos asignados a un profesor
-    static async getCourseByTeacherId(teacherId){
-        if(!teacherId) return {error: 'El ID del profesor es requerido'};
+    static async getCourseByTeacherId(teacherId) {
+        if (!teacherId) return { error: 'El ID del profesor es requerido' };
         // Se verifica que el profesor exista
         const [existingTeacher] = await db.query(
             `SELECT u.* FROM users u JOIN roles r ON u.role_id = r.role_id
-            WHERE u.user_id = ? AND r.role_name = 'teacher'`,
+            WHERE u.user_id = ? AND r.role_name = 'Docente'`,
             [teacherId]
         );
-        if(existingTeacher.length === 0) return {error: 'Profesor no encontrado'};
+        if (existingTeacher.length === 0) return { error: 'Profesor no encontrado' };
         // Si existe, se obtienen los cursos asignados
         const [courses] = await db.query(
             `SELECT ta.assignment_id, s.subject_name, sec.section_name, g.grade_name,
@@ -52,7 +52,7 @@ export class TeacherAssignmentModel {
             WHERE ta.teacher_user_id = ?`,
             [teacherId]
         );
-        if(courses.length === 0) return {error: 'No se encontraron cursos asignados para este profesor'};
+        if (courses.length === 0) return { error: 'No se encontraron cursos asignados para este profesor' };
         return {
             message: 'Cursos asignados obtenidos exitosamente',
             courses: courses
@@ -60,14 +60,14 @@ export class TeacherAssignmentModel {
     }
 
     // Método para obtener todos los cursos asignados a una sección
-    static async getCoursesBySectionId(sectionId){
-        if(!sectionId) return {error: 'El ID de la sección es requerido'};
+    static async getCoursesBySectionId(sectionId) {
+        if (!sectionId) return { error: 'El ID de la sección es requerido' };
         // Se verifica que la sección exista
         const [existingSection] = await db.query(
             `SELECT * FROM sections WHERE section_id = ?`,
             [sectionId]
         );
-        if(existingSection.length === 0) return {error: 'Sección no encontrada'};
+        if (existingSection.length === 0) return { error: 'Sección no encontrada' };
         // Si existe, se obtienen los cursos asignados
         const [courses] = await db.query(
             `SELECT ta.assignment_id, s.subject_name, sec.section_name, g.grade_name,
@@ -80,7 +80,7 @@ export class TeacherAssignmentModel {
             WHERE ta.section_id = ?`,
             [sectionId]
         );
-        if(courses.length === 0) return {error: 'No se encontraron cursos asignados para esta sección'};
+        if (courses.length === 0) return { error: 'No se encontraron cursos asignados para esta sección' };
         return {
             message: 'Cursos asignados obtenidos exitosamente',
             courses: courses
@@ -88,8 +88,8 @@ export class TeacherAssignmentModel {
     }
 
     // Método para obtener detalles de un curso asignado por su ID
-    static async getCourseByID(assignmentId){
-        if(!assignmentId) return {error: 'El ID de la asignación es requerido'};
+    static async getCourseByID(assignmentId) {
+        if (!assignmentId) return { error: 'El ID de la asignación es requerido' };
         const [courseDetails] = await db.query(
             `SELECT ta.assignment_id, s.subject_name,sec.section_id, sec.section_name, g.grade_name,
             ay.name AS academic_year, CONCAT(u.first_name, ' ', u.last_name) AS teacher_name,
@@ -115,7 +115,7 @@ export class TeacherAssignmentModel {
             `SELECT * FROM activities WHERE assignment_id = ? AND is_visible = 1`,
             [assignmentId]
         );
-        if(courseDetails.length === 0) return {error: 'No se encontraron detalles para esta asignación'};
+        if (courseDetails.length === 0) return { error: 'No se encontraron detalles para esta asignación' };
         return {
             message: 'Detalles de la asignación obtenidos exitosamente',
             course: {
@@ -127,21 +127,21 @@ export class TeacherAssignmentModel {
     }
 
     // Método para obtener todas las actividades de una asignación
-    static async getActivitiesByAssignmentID(assignmentId){
-        if(!assignmentId) return {error: 'El ID de la asignación es requerido'};
+    static async getActivitiesByAssignmentID(assignmentId) {
+        if (!assignmentId) return { error: 'El ID de la asignación es requerido' };
         // Se verifica que la asignación exista
         const [existingAssignment] = await db.query(
             `SELECT * FROM teacher_assignments WHERE assignment_id = ?`,
             [assignmentId]
         );
-        if(existingAssignment.length === 0) return {error: 'Asignación no encontrada'};
+        if (existingAssignment.length === 0) return { error: 'Asignación no encontrada' };
         // Si existe, se obtienen las actividades asociadas
         const [activities] = await db.query(
             `SELECT * FROM activities WHERE assignment_id = ? AND is_active = 1
             ORDER BY due_date DESC`,
             [assignmentId]
         );
-        if(activities.length === 0) return {error: 'No se encontraron actividades para esta asignación'};
+        if (activities.length === 0) return { error: 'No se encontraron actividades para esta asignación' };
         return {
             message: 'Actividades obtenidas exitosamente',
             activities: activities
@@ -149,30 +149,30 @@ export class TeacherAssignmentModel {
     }
 
     // Método para obtener las personas relacionadas a una asignación (profesor y estudiantes)
-    static async getPeopleByAssignmentID(assignmentId){
-        if(!assignmentId) return {error: 'El ID de la asignación es requerido'};
+    static async getPeopleByAssignmentID(assignmentId) {
+        if (!assignmentId) return { error: 'El ID de la asignación es requerido' };
         // Se verifica que la asignación exista
         const [existingAssignment] = await db.query(
             `SELECT * FROM teacher_assignments WHERE assignment_id = ?`,
             [assignmentId]
         );
-        if(existingAssignment.length === 0) return {error: 'Asignación no encontrada'};
+        if (existingAssignment.length === 0) return { error: 'Asignación no encontrada' };
         // Si existe, se obtiene el profesor y la asignación
         const [assignment] = await db.query(
-            `SELECT ta.section_id, u.user_id, CONCAT(u.first_name, ' ', u.last_name) as name, 'teacher' as role
+            `SELECT ta.section_id, u.user_id, CONCAT(u.first_name, ' ', u.last_name) as name, 'Docente' as role
             FROM teacher_assignments ta JOIN users u ON ta.teacher_user_id = u.user_id
             WHERE ta.assignment_id = ?`,
             [assignmentId]
         );
-        if(assignment.length === 0) return {error: 'No se encontró el profesor para esta asignación'};
+        if (assignment.length === 0) return { error: 'No se encontró el profesor para esta asignación' };
         // A su vez se obtienen los estudiantes de esa sección
         const [students] = await db.query(
-            `SELECT u.user_id, CONCAT(u.first_name, ' ', u.last_name) as name, 'student' as role
+            `SELECT u.user_id, CONCAT(u.first_name, ' ', u.last_name) as name, 'Estudiante' as role
             FROM enrollments e JOIN users u ON e.student_user_id = u.user_id
             WHERE e.section_id = ?`,
             [assignment[0].section_id]
         );
-        if(students.length === 0) return {error: 'No se encontraron estudiantes para esta asignación'};
+        if (students.length === 0) return { error: 'No se encontraron estudiantes para esta asignación' };
         return {
             message: 'Personas relacionadas obtenidas exitosamente',
             people: {
@@ -183,14 +183,14 @@ export class TeacherAssignmentModel {
     }
 
     // Método para crear un nuevo curso asignado
-    static async createAssignement(data){
-        if(!data) return {error: 'Los datos de la asignación son requeridos'};
-        const {teacher_user_id, subject_id, section_id} = data;
+    static async createAssignement(data) {
+        if (!data) return { error: 'Los datos de la asignación son requeridos' };
+        const { teacher_user_id, subject_id, section_id } = data;
         // Se verifica que el profesor, la materia y la sección existan
         const [existingTeacher] = await db.query(
             `SELECT u.*, r.role_name FROM users u
             JOIN roles r ON u.role_id = r.role_id
-            WHERE u.user_id = ? AND r.role_name = 'teacher'`,
+            WHERE u.user_id = ? AND r.role_name = 'Docente'`,
             [teacher_user_id]
         );
         const [existingSubject] = await db.query(
@@ -201,9 +201,9 @@ export class TeacherAssignmentModel {
             `SELECT * FROM sections WHERE section_id = ?`,
             [section_id]
         );
-        if(existingTeacher.length === 0) return {error: 'Profesor no encontrado'};
-        if(existingSubject.length === 0) return {error: 'Materia no encontrada'};
-        if(existingSection.length === 0) return {error: 'Sección no encontrada'};
+        if (existingTeacher.length === 0) return { error: 'Profesor no encontrado' };
+        if (existingSubject.length === 0) return { error: 'Materia no encontrada' };
+        if (existingSection.length === 0) return { error: 'Sección no encontrada' };
         // Si todo es válido, se procede a crear la asignación
         const [result] = await db.query(
             `INSERT INTO teacher_assignments (teacher_user_id, subject_id, section_id)
@@ -228,12 +228,12 @@ export class TeacherAssignmentModel {
     }
 
     // Método para actualizar una asignación por su ID
-    static async updateAssignmentByID(assignmentId, data){
-        if(!assignmentId || !data) return {error: 'El ID de la asignación y los datos son requeridos'};
+    static async updateAssignmentByID(assignmentId, data) {
+        if (!assignmentId || !data) return { error: 'El ID de la asignación y los datos son requeridos' };
         const allowedFields = ['teacher_user_id', 'subject_id', 'section_id'];
         const fieldsToupdate = {};
-        for(const field of allowedFields){
-            if(data[field] !== undefined){
+        for (const field of allowedFields) {
+            if (data[field] !== undefined) {
                 fieldsToupdate[field] = data[field];
             }
         }
@@ -242,7 +242,7 @@ export class TeacherAssignmentModel {
             `SELECT * FROM teacher_assignments WHERE assignment_id = ?`,
             [assignmentId]
         );
-        if(existingAssignment.length === 0) return {error: 'Asignación no encontrada'};
+        if (existingAssignment.length === 0) return { error: 'Asignación no encontrada' };
         // Si existe, se procede a actualizarla
         const fields = [];
         const values = [];
@@ -266,7 +266,7 @@ export class TeacherAssignmentModel {
             WHERE ta.assignment_id = ?`,
             [assignmentId]
         );
-        if(assignmentDetails.length === 0) return {error: 'Error al obtener los detalles de la asignación actualizada'};
+        if (assignmentDetails.length === 0) return { error: 'Error al obtener los detalles de la asignación actualizada' };
         return {
             message: 'Asignación actualizada exitosamente',
             assignment: assignmentDetails[0]
@@ -274,14 +274,14 @@ export class TeacherAssignmentModel {
     }
 
     // Método para eliminar una asignación por su ID
-    static async deleteAssignmentByID(assignmentId){
-        if(!assignmentId) return {error: 'El ID de la asignación es requerido'};
+    static async deleteAssignmentByID(assignmentId) {
+        if (!assignmentId) return { error: 'El ID de la asignación es requerido' };
         // Se verifica que la asiganación exista
         const [existingAssignment] = await db.query(
             `SELECT * FROM teacher_assignments WHERE assignment_id = ?`,
             [assignmentId]
         );
-        if(existingAssignment.length === 0) return {error: 'Asignación no encontrada'};
+        if (existingAssignment.length === 0) return { error: 'Asignación no encontrada' };
         // Si existe, se procede a eliminarla
         await db.query(
             `DELETE FROM teacher_assignments WHERE assignment_id = ?`,

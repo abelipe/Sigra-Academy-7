@@ -66,22 +66,27 @@
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="size-10 flex items-center justify-center">
-                    <img src="assets/logo.png" alt="Logo de la escuela" class="w-full h-full object-contain" />
+                    <img src="assets/sigra-logo.svg" alt="Logo de SIGRA" class="w-full h-full object-contain" />
                 </div>
                 <h2 class="text-primary text-2xl font-black tracking-tight">SIGRA</h2>
             </div>
-            
+
             <div class="flex items-center gap-6">
                 <nav class="hidden md:flex items-center gap-6">
-                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors" href="#">Inicio</a>
-                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors" href="#">Usuarios</a>
-                    <a class="text-primary text-base font-bold transition-colors border-b-2 border-primary pb-1"
-                        href="index.html">Nueva Inscripción</a>
                     <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
-                        href="gestionar-asignacion.html">Gestión de Asignación</a>
-                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors" href="#">Reportes</a>
+                        href="../landing/index.html">Inicio</a>
+                    <a class="text-primary text-base font-bold transition-colors border-b-2 border-primary pb-1"
+                        href="index.html">Inscripciones</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="gestionar-asignacion.html">Asignaciones</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="catalogo-materias/index.html">Catálogo</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="gestion-materias/index.html">Materias</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="definicion-prelaciones/index.html">Prelaciones</a>
                 </nav>
-                
+
                 <div class="flex items-center gap-4">
                     <button
                         class="size-10 flex items-center justify-center rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors">
@@ -130,13 +135,20 @@
                     <form class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="md:col-span-2 space-y-2">
-                                <label class="block text-sm font-bold text-gray-700">Nombre del Alumno</label>
-                                <input
-                                    class="w-full border-gray-300 rounded-lg shadow-sm bg-gray-50 cursor-not-allowed py-2.5 px-4"
-                                    placeholder="Nombre generado automáticamente" type="text" readonly />
+                                <label class="block text-sm font-bold text-gray-700">Buscar Estudiante</label>
+                                <div class="flex gap-2">
+                                    <select id="studentSelector"
+                                        class="flex-1 border-gray-300 rounded-lg shadow-sm focus:border-primary focus:ring-primary py-2.5 px-4">
+                                        <option value="">Cargando estudiantes no inscritos...</option>
+                                    </select>
+                                    <button id="refreshStudents" type="button"
+                                        class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                                        <span class="material-symbols-outlined">refresh</span>
+                                    </button>
+                                </div>
                             </div>
                             <div class="space-y-2">
-                                <label class="block text-sm font-bold text-gray-700">Año</label>
+                                <label class="block text-sm font-bold text-gray-700">Año / Grado</label>
                                 <div class="relative">
                                     <input id="yearInput"
                                         class="w-full border-gray-300 rounded-lg shadow-sm focus:border-primary focus:ring-primary py-2.5 px-4 pl-10"
@@ -290,50 +302,155 @@
     </button>
 
     <script>
-        // Dynamic section filtering based on year/grade input
-        document.addEventListener('DOMContentLoaded', function () {
+        const API_BASE = 'http://localhost:3000/api';
+        let currentAcademicYearId = null;
+
+        document.addEventListener('DOMContentLoaded', async function () {
             const yearInput = document.getElementById('yearInput');
+            const studentSelector = document.getElementById('studentSelector');
             const sectionsContainer = document.getElementById('sectionsContainer');
             const sectionsTable = document.getElementById('sectionsTable');
+            const sectionsTableBody = document.getElementById('sectionsTableBody');
             const noSectionsMessage = document.getElementById('noSectionsMessage');
-            const sectionRows = document.querySelectorAll('.section-row');
+            const submitBtn = document.querySelector('button.bg-success');
+            const refreshBtn = document.getElementById('refreshStudents');
 
-            yearInput.addEventListener('input', function () {
-                const grade = parseInt(this.value);
+            // 1. Load Active Year and Students
+            await loadInitialData();
 
-                // If input is empty or invalid, hide sections
+            async function loadInitialData() {
+                try {
+                    const resYears = await fetch(`${API_BASE}/years/all`);
+                    const dataYears = await resYears.json();
+                    const activeYear = dataYears.years?.find(y => y.is_active) || dataYears.years?.[0];
+                    if (activeYear) {
+                        currentAcademicYearId = activeYear.year_id;
+                        document.querySelector('.bg-blue-50').textContent = activeYear.name;
+                        loadStudents();
+                    }
+                } catch (error) {
+                    console.error('Error initialization:', error);
+                }
+            }
+
+            async function loadStudents() {
+                if (!currentAcademicYearId) return;
+                studentSelector.innerHTML = '<option value="">Cargando...</option>';
+                try {
+                    const res = await fetch(`${API_BASE}/academic-assignments/unassigned-students/${currentAcademicYearId}`);
+                    const data = await res.json();
+                    studentSelector.innerHTML = '<option value="">Seleccione un estudiante...</option>';
+                    if (data.students) {
+                        data.students.forEach(s => {
+                            const opt = document.createElement('option');
+                            opt.value = s.user_id;
+                            opt.textContent = `${s.name} (${s.email})`;
+                            studentSelector.appendChild(opt);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error loading students:', error);
+                }
+            }
+
+            refreshBtn.addEventListener('click', loadStudents);
+
+            // 2. Load Sections by Grade
+            yearInput.addEventListener('input', async function () {
+                const grade = this.value;
                 if (!grade || grade < 1) {
                     sectionsContainer.classList.add('hidden');
                     return;
                 }
 
-                // Show sections container
                 sectionsContainer.classList.remove('hidden');
+                sectionsTableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center">Cargando secciones...</td></tr>';
 
-                // Filter sections based on grade
-                let visibleCount = 0;
-                sectionRows.forEach(row => {
-                    const rowGrade = parseInt(row.getAttribute('data-grade'));
-                    if (rowGrade === grade) {
-                        row.style.display = '';
-                        visibleCount++;
+                try {
+                    const res = await fetch(`${API_BASE}/sections/grade/${grade}`);
+                    const data = await res.json();
+
+                    if (data.sections && data.sections.length > 0) {
+                        sectionsTable.classList.remove('hidden');
+                        noSectionsMessage.classList.add('hidden');
+                        renderSections(data.sections);
                     } else {
-                        row.style.display = 'none';
+                        sectionsTable.classList.add('hidden');
+                        noSectionsMessage.classList.remove('hidden');
                     }
-                });
-
-                // Show/hide table and message based on results
-                if (visibleCount > 0) {
-                    sectionsTable.classList.remove('hidden');
-                    noSectionsMessage.classList.add('hidden');
-                } else {
+                } catch (error) {
                     sectionsTable.classList.add('hidden');
                     noSectionsMessage.classList.remove('hidden');
+                    noSectionsMessage.querySelector('p').textContent = 'Error al cargar secciones.';
+                }
+            });
+
+            function renderSections(sections) {
+                sectionsTableBody.innerHTML = '';
+                sections.forEach(sec => {
+                    const available = sec.capacity - sec.number_of_students;
+                    const statusClass = available > 10 ? 'bg-green-100 text-green-800' : (available > 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800');
+
+                    const tr = document.createElement('tr');
+                    tr.className = 'section-row hover:bg-gray-50 cursor-pointer';
+                    tr.onclick = () => tr.querySelector('input').checked = true;
+                    tr.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="radio" name="seccion" value="${sec.section_id}" ${available <= 0 ? 'disabled' : ''}
+                                class="focus:ring-primary h-4 w-4 text-primary border-gray-300">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-main">${sec.grade_name}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold bg-gray-50 rounded-lg text-center">${sec.section_name}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusClass}">
+                                ${available} cupos disponibles
+                            </span>
+                        </td>
+                    `;
+                    sectionsTableBody.appendChild(tr);
+                });
+            }
+
+            // 3. Complete Enrollment
+            submitBtn.addEventListener('click', async () => {
+                const studentId = studentSelector.value;
+                const sectionInput = document.querySelector('input[name="seccion"]:checked');
+
+                if (!studentId || !sectionInput) {
+                    alert('Por favor seleccione un estudiante y una sección.');
+                    return;
+                }
+
+                const sectionId = sectionInput.value;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Procesando...';
+
+                try {
+                    const response = await fetch(`${API_BASE}/enrollments/create`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            student_user_id: parseInt(studentId),
+                            section_id: parseInt(sectionId)
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                    } else {
+                        alert('¡Estudiante inscrito exitosamente!');
+                        window.location.reload();
+                    }
+                } catch (error) {
+                    alert('Error en el servidor al procesar la inscripción.');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<span class="material-symbols-outlined text-xl">check_circle</span> Finalizar Inscripción de Estudiante';
                 }
             });
         });
     </script>
-
 </body>
 
 </html>

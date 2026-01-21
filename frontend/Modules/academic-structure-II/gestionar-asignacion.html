@@ -4,49 +4,50 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>Gestión de Tablas de Asignación SIGRA</title>
+    <title>Gestión de Asignación - SIGRA</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;display=swap"
         rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        primary: "#002F87",
+                        "primary": "#002F87",
+                        "success": "#10B981",
+                        "error": "#C52B3D",
                         "background-light": "#F3F4F6",
-                        "background-dark": "#111827",
+                        "background-dark": "#1a1c20",
                         "card-light": "#FFFFFF",
                         "card-dark": "#1F2937",
                         "text-main-light": "#1F2937",
                         "text-main-dark": "#F9FAFB",
-                        "text-sub-light": "#6B7280",
-                        "text-sub-dark": "#9CA3AF",
-                        "nav-gray": "#64748B",
-                        "success": "#10B981",
-                        "error": "#C52B3D",
+                        "nav-gray": "#64748B"
                     },
                     fontFamily: {
-                        display: ["Inter", "sans-serif"],
+                        "display": ["Lexend", "sans-serif"]
                     },
                     borderRadius: {
-                        DEFAULT: "0.5rem",
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
                     },
                 },
             },
-        };
-    </script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
         }
-
+    </script>
+    <style type="text/tailwindcss">
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
         }
-
         .hide-scrollbar {
             -ms-overflow-style: none;
             scrollbar-width: none;
@@ -55,40 +56,42 @@
 </head>
 
 <body
-    class="bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark transition-colors duration-200 min-h-screen relative pb-20">
+    class="bg-background-light dark:bg-background-dark font-display text-text-main-light dark:text-text-main-dark antialiased min-h-screen flex flex-col transition-colors duration-200">
     <header
         class="sticky top-0 z-50 bg-white dark:bg-background-dark border-b border-gray-200 dark:border-gray-800 px-8 py-4">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="size-10 flex items-center justify-center">
-                    <img src="assets/logo.png" alt="Logo de la escuela" class="w-full h-full object-contain" />
+                    <img src="assets/sigra-logo.svg" alt="Logo de SIGRA" class="w-full h-full object-contain" />
                 </div>
                 <h2 class="text-primary text-2xl font-black tracking-tight">SIGRA</h2>
             </div>
 
             <div class="flex items-center gap-6">
                 <nav class="hidden md:flex items-center gap-6">
-                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors" href="#">Inicio</a>
-                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors" href="#">Usuarios</a>
-                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors" href="index.html">
-                        Nueva Inscripción
-                    </a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="../landing/index.html">Inicio</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="index.html">Inscripciones</a>
                     <a class="text-primary text-base font-bold transition-colors border-b-2 border-primary pb-1"
-                       href="gestionar-asignacion.html">
-                        Gestión de Asignación
-                    </a>
-                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors" href="#">
-                        Reportes
-                    </a>
+                        href="gestionar-asignacion.html">Asignaciones</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="catalogo-materias/index.html">Catálogo</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="gestion-materias/index.html">Materias</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="definicion-prelaciones/index.html">Prelaciones</a>
                 </nav>
-                
+
                 <div class="flex items-center gap-4">
-                    <button class="size-10 flex items-center justify-center rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors">
-                        <span class="material-icons">notifications</span>
+                    <button
+                        class="size-10 flex items-center justify-center rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors">
+                        <span class="material-symbols-outlined">notifications</span>
                     </button>
-                    <div class="size-10 rounded-full bg-gray-200 overflow-hidden border-2 border-transparent hover:border-primary transition-all cursor-pointer">
+                    <div
+                        class="size-10 rounded-full bg-gray-200 overflow-hidden border-2 border-transparent hover:border-primary transition-all cursor-pointer">
                         <img alt="Profile avatar" class="w-full h-full object-cover"
-                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuADIAQNBOIhz8AgCJ4DVy8EvGEOtmBnmnGZ0YuFkSgoGk3FsiRM7HvL-ZsWuROht5F95KmOr4EbF94VN9LevPicOwahD_k-7hSMKTiXTGkglji04V35VjTZt7DdBYZKI0p6hd_kbx4ZOrwcGPwBE-OKjtSX7S0eMpvLRrwNIENK3l1MTGCEC-U-2NQFD7qBGimKZP7-iCg6Via2oOS3gcIWYoNGw2qTpJN9RW3LvyyM2KDfOo--lJGH043TvsKdYBlWavR6R87PamfY" />
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuADIAQNBOIhz8AgCJ4DVy8EvGEOtmBnmnGZ0YuFkSgoGk3FsiRM7HvL-ZsWuROht5F95KmOr4EbF94VN9LevPicOwahD_k-7hSMKTiXTGkglji04V35VjTZt7DdBYZKI0p6hd_kbx4ZOrwcGPwBE-OKjtSX7S0eMpvLRrwNIENK3l1MTGCEC-U-2NQFD7qBGimKZP7-iCg6Via2oOS3gcIWYoNGw2qTpJN9RW3LvyyM2KDfOo--lJGH043TvsKdYBlWavR6R87PamfY" />
                     </div>
                 </div>
             </div>
@@ -104,17 +107,26 @@
                     Gestión de Tablas de Asignación - Módulo 2
                 </p>
             </div>
-            <div class="mt-4 sm:mt-0 flex items-center bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
-                <button
-                    class="relative bg-white dark:bg-gray-600 shadow-sm rounded-md py-1.5 px-4 text-sm font-semibold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-primary"
-                    type="button">
-                    Estudiantes
-                </button>
-                <button
-                    class="ml-0.5 relative border border-transparent rounded-md py-1.5 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-primary"
-                    type="button">
-                    Profesores
-                </button>
+            <div class="mt-4 sm:mt-0 flex flex-col sm:flex-row gap-4">
+                <div class="relative min-w-[200px]">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Seleccionar Sección</label>
+                    <select id="sectionSelector"
+                        class="w-full bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-primary focus:border-primary">
+                        <option value="">Cargando secciones...</option>
+                    </select>
+                </div>
+                <div class="flex items-center bg-gray-200 dark:bg-gray-700 rounded-lg p-1 h-fit self-end">
+                    <button id="toggleStudents"
+                        class="relative bg-white dark:bg-gray-600 shadow-sm rounded-md py-1.5 px-4 text-sm font-semibold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-primary"
+                        type="button">
+                        Estudiantes
+                    </button>
+                    <button id="toggleTeachers"
+                        class="ml-0.5 relative border border-transparent rounded-md py-1.5 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-primary"
+                        type="button">
+                        Profesores
+                    </button>
+                </div>
             </div>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-250px)] min-h-[600px]">
@@ -123,216 +135,394 @@
                 <div
                     class="p-6 border-b border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <h2 class="text-lg font-bold text-text-main-light dark:text-text-main-dark flex items-center">
-                        <span class="material-icons mr-2 text-gray-400">person_add</span>
+                        <span class="material-symbols-outlined mr-2 text-gray-400">person_add</span>
                         Personas No Asignadas
                     </h2>
                     <div class="relative rounded-md shadow-sm w-full sm:w-auto flex-grow max-w-xs">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <span class="material-icons text-gray-400 text-sm">search</span>
+                            <span class="material-symbols-outlined text-gray-400 text-sm">search</span>
                         </div>
                         <input
                             class="focus:ring-primary focus:border-primary block w-full pl-10 sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-md h-10"
                             id="search" name="search" placeholder="Buscar..." type="text" />
                     </div>
                 </div>
-                <div class="flex-1 overflow-y-auto p-4 space-y-3 hide-scrollbar">
-                    <div
-                        class="group flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-150">
-                        <div class="flex items-center space-x-4">
-                            <div
-                                class="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-700 dark:text-blue-200 font-bold text-sm">
-                                AR
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-gray-900 dark:text-white">Ana Rodríguez</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">ID: 2023-0145 <span
-                                        class="text-gray-300 mx-1">•</span> Ing. Sistemas</p>
-                            </div>
-                        </div>
-                        <button
-                            class="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-300 transition-colors">
-                            <span class="material-icons text-lg">add</span>
-                        </button>
-                    </div>
-                    <div
-                        class="group flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-150">
-                        <div class="flex items-center space-x-4">
-                            <div
-                                class="h-10 w-10 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center text-purple-700 dark:text-purple-200 font-bold text-sm">
-                                CM
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-gray-900 dark:text-white">Carlos Méndez</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">ID: 2023-0882 <span
-                                        class="text-gray-300 mx-1">•</span> Ing. Sistemas</p>
-                            </div>
-                        </div>
-                        <button
-                            class="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-300 transition-colors">
-                            <span class="material-icons text-lg">add</span>
-                        </button>
-                    </div>
-                    <div
-                        class="group flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-150">
-                        <div class="flex items-center space-x-4">
-                            <div
-                                class="h-10 w-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-700 dark:text-indigo-200 font-bold text-sm">
-                                LP
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-gray-900 dark:text-white">Lucia Perez</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">ID: 2023-1102 <span
-                                        class="text-gray-300 mx-1">•</span> Ing. Industrial</p>
-                            </div>
-                        </div>
-                        <button
-                            class="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-300 transition-colors">
-                            <span class="material-icons text-lg">add</span>
-                        </button>
-                    </div>
-                    <div
-                        class="group flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-150">
-                        <div class="flex items-center space-x-4">
-                            <div
-                                class="h-10 w-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center text-emerald-700 dark:text-emerald-200 font-bold text-sm">
-                                FR
-                            </div>
-                            <div>
-                                <p class="text-sm font-bold text-gray-900 dark:text-white">Fernando Ruiz</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">ID: 2022-9983 <span
-                                        class="text-gray-300 mx-1">•</span> Lic. Matemáticas</p>
-                            </div>
-                        </div>
-                        <button
-                            class="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-300 transition-colors">
-                            <span class="material-icons text-lg">add</span>
-                        </button>
-                    </div>
+                <div id="unassignedList" class="flex-1 overflow-y-auto p-4 space-y-3 hide-scrollbar">
+                    <p class="text-center text-gray-400 py-10">Seleccione una sección para ver los estudiantes
+                        disponibles.</p>
                 </div>
-                <div
+                <div id="unassignedFooter"
                     class="p-4 bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 text-center text-xs text-gray-500 dark:text-gray-400 font-medium">
-                    Mostrando 4 de 128 estudiantes disponibles
+                    --
                 </div>
             </div>
             <div
                 class="bg-card-light dark:bg-card-dark shadow-sm rounded-xl flex flex-col overflow-hidden border border-gray-100 dark:border-gray-700 relative">
                 <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between">
                     <h2 class="text-lg font-bold text-primary flex items-center">
-                        <span class="material-icons mr-2">how_to_reg</span>
+                        <span class="material-symbols-outlined mr-2">how_to_reg</span>
                         Asignados a la Sección
                     </h2>
-                    <span
+                    <span id="assignedCount"
                         class="inline-flex items-center px-3 py-1 rounded-md text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">
-                        24 Estudiantes
+                        0 seleccionados
                     </span>
                 </div>
-                <div class="flex-1 overflow-y-auto p-4 space-y-4 hide-scrollbar">
-                    <div
-                        class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-4">
-                                <div class="relative">
-                                    <img alt="Juan Pérez" class="h-12 w-12 rounded-full object-cover"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8M2B_j1z-BJ3EB37uJTTjwFggrAmauCZGm-sntx39RuyFIJdsSQgevGBiMuDhbI-9mn7ULPVV_jQTyA8fI7emVClpSLbxk7RjTEM5IS2NeK1m13FoD3n2K4vs_YzPsFYK9V03O_BEPjelroh3gJvkiXYbkIXSVxmC_3aAiLyO-wolDT6VoH5zFs1q28dbdnS4olHqUgLHmNW5Raq-QJg2D1Vo2Mu02svgAQi4Lm8vC4UH76xD2EzFI3qWIVkJSE51dTD1bUmQ9Lcg" />
-                                    <span
-                                        class="absolute bottom-0 right-0 block h-3 w-3 rounded-full ring-2 ring-white dark:ring-gray-800 bg-success"></span>
-                                </div>
-                                <div>
-                                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Juan Pérez</h3>
-                                    <div class="flex items-center mt-1">
-                                        <span class="text-xs text-gray-500 dark:text-gray-400 font-mono mr-2">ID:
-                                            2023-0012</span>
-                                        <span
-                                            class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                            REGULAR
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="text-gray-400 hover:text-primary dark:hover:text-blue-400 transition-colors">
-                                <span class="material-icons">edit</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-4">
-                                <div
-                                    class="relative flex items-center justify-center h-12 w-12 rounded-full bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-200 font-bold text-lg">
-                                    MG
-                                </div>
-                                <div>
-                                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Maria Gonzales</h3>
-                                    <div class="flex items-center mt-1">
-                                        <span class="text-xs text-gray-500 dark:text-gray-400 font-mono mr-2">ID:
-                                            2023-0441</span>
-                                        <span
-                                            class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                                            BECADO
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="text-gray-400 hover:text-primary dark:hover:text-blue-400 transition-colors">
-                                <span class="material-icons">edit</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-4">
-                                <div class="relative">
-                                    <img alt="Sofia Torres" class="h-12 w-12 rounded-full object-cover"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuCItK4q04yNt8IElL8nYU12bBrRynXDgV6AmhsnuN9ZI72YoazneD-HDQ7arlcwFfGn7JYTn4yjGa_reuk8GMVpLI-HKqVJc8j4Px0_odgqUOY-qKBiBwt8GUBu4fKcK-b2ivmtpPunH-GKo6PsyUsmpSMeMwm8ZXRoizbY9YBQnldwkWd_M5Z_t-HoTfIbVqzzvS9gC2baAbr2zkgijQjjLwWnB6fVBNYqEvufcJDy9rwastxbcnxsTb55tSTLBjf9OONHGgvaqM9V" />
-                                </div>
-                                <div>
-                                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Sofia Torres</h3>
-                                    <div class="flex items-center mt-1">
-                                        <span class="text-xs text-gray-500 dark:text-gray-400 font-mono mr-2">ID:
-                                            2022-1205</span>
-                                        <span
-                                            class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                            REGULAR
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="text-gray-400 hover:text-primary dark:hover:text-blue-400 transition-colors">
-                                <span class="material-icons">edit</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-4">
-                                <div
-                                    class="relative flex items-center justify-center h-12 w-12 rounded-full bg-pink-100 text-pink-600 dark:bg-pink-900 dark:text-pink-200 font-bold text-lg">
-                                    JV
-                                </div>
-                                <div>
-                                    <h3 class="text-sm font-bold text-gray-900 dark:text-white">Jorge Villalobos</h3>
-                                    <div class="flex items-center mt-1">
-                                        <span class="text-xs text-gray-500 dark:text-gray-400 font-mono mr-2">ID:
-                                            2021-0099</span>
-                                        <span
-                                            class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                                            CONDICIONAL
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <button class="text-gray-400 hover:text-primary dark:hover:text-blue-400 transition-colors">
-                                <span class="material-icons">edit</span>
-                            </button>
-                        </div>
-                    </div>
+                <div id="assignedList" class="flex-1 overflow-y-auto p-4 space-y-4 hide-scrollbar">
+                    <p class="text-center text-gray-400 py-10">Ningún elemento asignado aún.</p>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- Modal para seleccionar materia -->
+    <div id="subjectModal"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div
+            class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all">
+            <div
+                class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50/50 dark:bg-gray-900/50">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center">
+                    <span class="material-symbols-outlined mr-2 text-primary">book</span>
+                    Asignar Materia
+                </h3>
+                <button onclick="closeSubjectModal()"
+                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Seleccione la materia que impartirá el profesor
+                    en esta sección:</p>
+                <div id="subjectList" class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                    <p class="text-center text-gray-400 py-4">Cargando materias...</p>
+                </div>
+            </div>
+            <div class="p-4 bg-gray-50 dark:bg-gray-900/50 flex justify-end">
+                <button onclick="closeSubjectModal()"
+                    class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+    </style>
+
+    <script>
+        const API_BASE = 'http://localhost:3000/api';
+        let currentSectionId = null;
+        let currentAcademicYearId = null;
+        let currentGradeId = null;
+        let currentTeacherToAssign = null;
+        let viewMode = 'students'; // 'students' or 'teachers'
+
+        const sectionSelector = document.getElementById('sectionSelector');
+        const unassignedList = document.getElementById('unassignedList');
+        const assignedList = document.getElementById('assignedList');
+        const unassignedFooter = document.getElementById('unassignedFooter');
+        const assignedCount = document.getElementById('assignedCount');
+        const toggleStudents = document.getElementById('toggleStudents');
+        const toggleTeachers = document.getElementById('toggleTeachers');
+        const searchInput = document.getElementById('search');
+
+        // Initial Load
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchSections();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            sectionSelector.addEventListener('change', (e) => {
+                currentSectionId = e.target.value;
+                if (currentSectionId) {
+                    const selectedOption = e.target.options[e.target.selectedIndex];
+                    currentAcademicYearId = selectedOption.dataset.yearId;
+                    currentGradeId = selectedOption.dataset.gradeId;
+                    loadData();
+                } else {
+                    resetLists();
+                }
+            });
+
+            toggleStudents.addEventListener('click', () => {
+                viewMode = 'students';
+                updateToggleStyles();
+                loadData();
+            });
+
+            toggleTeachers.addEventListener('click', () => {
+                viewMode = 'teachers';
+                updateToggleStyles();
+                loadData();
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                filterLists(e.target.value.toLowerCase());
+            });
+        }
+
+        function updateToggleStyles() {
+            if (viewMode === 'students') {
+                toggleStudents.classList.add('bg-white', 'dark:bg-gray-600', 'shadow-sm', 'font-semibold');
+                toggleStudents.classList.remove('border-transparent', 'font-medium');
+                toggleTeachers.classList.remove('bg-white', 'dark:bg-gray-600', 'shadow-sm', 'font-semibold');
+                toggleTeachers.classList.add('border-transparent', 'font-medium');
+            } else {
+                toggleTeachers.classList.add('bg-white', 'dark:bg-gray-600', 'shadow-sm', 'font-semibold');
+                toggleTeachers.classList.remove('border-transparent', 'font-medium');
+                toggleStudents.classList.remove('bg-white', 'dark:bg-gray-600', 'shadow-sm', 'font-semibold');
+                toggleStudents.classList.add('border-transparent', 'font-medium');
+            }
+        }
+
+        async function fetchSections() {
+            try {
+                const response = await fetch(`${API_BASE}/sections/all`);
+                const data = await response.json();
+                if (data.sections) {
+                    sectionSelector.innerHTML = '<option value="">Seleccione una sección...</option>';
+                    data.sections.forEach(sec => {
+                        const option = document.createElement('option');
+                        option.value = sec.section_id;
+                        option.textContent = `${sec.grade_name} - Sección ${sec.section_name}`;
+                        option.dataset.yearId = sec.academic_year_id;
+                        option.dataset.gradeId = sec.grade_id;
+                        sectionSelector.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching sections:', error);
+                sectionSelector.innerHTML = '<option value="">Error al cargar</option>';
+            }
+        }
+
+        function resetLists() {
+            unassignedList.innerHTML = '<p class="text-center text-gray-400 py-10">Seleccione una sección para ver los disponibles.</p>';
+            assignedList.innerHTML = '<p class="text-center text-gray-400 py-10">Ningún elemento asignado aún.</p>';
+            unassignedFooter.textContent = '--';
+            assignedCount.textContent = '0 seleccionados';
+        }
+
+        async function loadData() {
+            if (!currentSectionId) return;
+
+            unassignedList.innerHTML = '<p class="text-center text-gray-400 py-10">Cargando...</p>';
+            assignedList.innerHTML = '<p class="text-center text-gray-400 py-10">Cargando...</p>';
+
+            if (viewMode === 'students') {
+                await loadStudents();
+            } else {
+                await loadTeachers();
+            }
+        }
+
+        async function loadStudents() {
+            try {
+                // Fetch unassigned for the year
+                const resUn = await fetch(`${API_BASE}/academic-assignments/unassigned-students/${currentAcademicYearId}`);
+                const dataUn = await resUn.json();
+
+                // Fetch assigned for the section
+                const resAs = await fetch(`${API_BASE}/academic-assignments/assigned-students/${currentSectionId}`);
+                const dataAs = await resAs.json();
+
+                renderList(unassignedList, dataUn.students || [], true, 'student');
+                renderList(assignedList, dataAs.students || [], false, 'student');
+
+                unassignedFooter.textContent = `Mostrando ${dataUn.students?.length || 0} estudiantes disponibles`;
+                assignedCount.textContent = `${dataAs.students?.length || 0} Estudiantes`;
+            } catch (error) {
+                console.error('Error loading students:', error);
+            }
+        }
+
+        async function loadTeachers() {
+            try {
+                const resUn = await fetch(`${API_BASE}/academic-assignments/unassigned-teachers/${currentSectionId}`);
+                const dataUn = await resUn.json();
+
+                const resAs = await fetch(`${API_BASE}/academic-assignments/assigned-teachers/${currentSectionId}`);
+                const dataAs = await resAs.json();
+
+                renderList(unassignedList, dataUn.teachers || [], true, 'teacher');
+                renderList(assignedList, dataAs.teachers || [], false, 'teacher');
+
+                unassignedFooter.textContent = `Mostrando ${dataUn.teachers?.length || 0} profesores disponibles`;
+                assignedCount.textContent = `${dataAs.teachers?.length || 0} Profesores`;
+            } catch (error) {
+                console.error('Error loading teachers:', error);
+            }
+        }
+
+        function renderList(container, items, isUnassigned, type) {
+            container.innerHTML = '';
+            if (items.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-400 py-10">${isUnassigned ? 'No hay elementos pendientes' : 'Sin asignaciones'}</p>`;
+                return;
+            }
+
+            items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'group flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors duration-150 border border-transparent hover:border-gray-200 dark:hover:border-gray-600';
+
+                const initials = item.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                const colorClass = isUnassigned ? 'bg-gray-100 text-gray-700' : 'bg-primary/10 text-primary';
+
+                const subtitle = type === 'teacher' && item.subject_name
+                    ? `<span class="inline-flex items-center text-primary font-semibold bg-primary/5 px-2 py-0.5 rounded text-[10px] uppercase tracking-wider mb-1">${item.subject_name}</span>`
+                    : `<p class="text-xs text-gray-500 dark:text-gray-400 font-mono">${item.email}</p>`;
+
+                div.innerHTML = `
+    <div class="flex items-center space-x-4">
+        <div class="h-10 w-10 rounded-full ${colorClass} flex items-center justify-center font-bold text-sm">
+            ${initials}
+        </div>
+        <div>
+            ${type === 'teacher' && item.subject_name ? subtitle : ''}
+            <p class="text-sm font-bold text-gray-900 dark:text-white">${item.name}</p>
+            ${type === 'teacher' && item.subject_name ? `<p class="text-[10px] text-gray-400 font-mono">${item.email}</p>` : subtitle}
+        </div>
+    </div>
+    <button
+        onclick="${isUnassigned ? 'assign' : 'unassign'}('${type}', ${item.user_id}, ${item.enrollment_id || item.assignment_id || 'null'})"
+        class="h-8 w-8 rounded-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center text-gray-500 dark:text-gray-300 transition-colors">
+        <span class="material-symbols-outlined text-lg">${isUnassigned ? 'add' : 'close'}</span>
+    </button>
+    `;
+                container.appendChild(div);
+            });
+        }
+
+        async function assign(type, userId) {
+            try {
+                if (type === 'student') {
+                    const url = `${API_BASE}/enrollments/create`;
+                    const body = { student_user_id: userId, section_id: parseInt(currentSectionId) };
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(body)
+                    });
+                    const data = await response.json();
+                    if (data.error) alert(data.error);
+                    else loadData();
+                } else {
+                    // Open Subject Selector Modal
+                    currentTeacherToAssign = userId;
+                    openSubjectModal();
+                }
+            } catch (error) {
+                console.error('Error assigning:', error);
+            }
+        }
+
+        function openSubjectModal() {
+            const modal = document.getElementById('subjectModal');
+            const list = document.getElementById('subjectList');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            list.innerHTML = '<p class="text-center text-gray-400 py-4">Cargando materias...</p>';
+
+            fetch(`${API_BASE}/subjects/grade/${currentGradeId}`)
+                .then(res => res.json())
+                .then(data => {
+                    list.innerHTML = '';
+                    if (!data.subjects || data.subjects.length === 0) {
+                        list.innerHTML = '<p class="text-center text-gray-400 py-4">No hay materias registradas para este grado.</p>';
+                        return;
+                    }
+                    data.subjects.forEach(sub => {
+                        const btn = document.createElement('button');
+                        btn.className = 'w-full flex items-center justify-between p-4 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all text-left group';
+                        btn.onclick = () => confirmAssignTeacher(sub.subject_id);
+                        btn.innerHTML = `
+                            <div>
+                                <p class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-primary transition-colors">${sub.subject_name}</p>
+                                <p class="text-xs text-gray-500 font-mono uppercase">${sub.code_subject}</p>
+                            </div>
+                            <span class="material-symbols-outlined text-gray-300 group-hover:text-primary transition-colors">add_circle</span>
+                        `;
+                        list.appendChild(btn);
+                    });
+                });
+        }
+
+        async function confirmAssignTeacher(subjectId) {
+            try {
+                const response = await fetch(`${API_BASE}/academic-assignments/assign-teacher`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        teacher_user_id: currentTeacherToAssign,
+                        section_id: parseInt(currentSectionId),
+                        subject_id: parseInt(subjectId)
+                    })
+                });
+                const data = await response.json();
+                if (data.error) alert(data.error);
+                else {
+                    closeSubjectModal();
+                    loadData();
+                }
+            } catch (error) {
+                console.error('Error in teacher assignment:', error);
+            }
+        }
+
+        function closeSubjectModal() {
+            const modal = document.getElementById('subjectModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            currentTeacherToAssign = null;
+        }
+
+        async function unassign(type, userId, id) {
+            if (!confirm("¿Seguro que desea eliminar esta asignación?")) return;
+            try {
+                let url;
+                if (type === 'student') {
+                    url = `${API_BASE}/enrollments/delete/${id}`;
+                } else {
+                    url = `${API_BASE}/academic-assignments/unassign-teacher/${id}`;
+                }
+
+                const response = await fetch(url, { method: 'DELETE' });
+                const data = await response.json();
+                if (data.error) alert(data.error);
+                else loadData();
+            } catch (error) {
+                console.error('Error unassigning:', error);
+            }
+        }
+
+        function filterLists(query) {
+            const allItems = [...unassignedList.children, ...assignedList.children];
+            allItems.forEach(item => {
+                if (item.tagName === 'P') return;
+                const text = item.innerText.toLowerCase();
+                item.style.display = text.includes(query) ? 'flex' : 'none';
+            });
+        }
+    </script>
 </body>
 
 </html>

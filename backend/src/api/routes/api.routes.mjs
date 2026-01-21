@@ -16,6 +16,7 @@ import { SubmissionRoute } from "../../modules/teaching-manager-IV/submissions/s
 import { ResourceRoute } from "../../modules/teaching-manager-IV/courseResources/resources.route.mjs";
 import { EnrollmentRouter } from "../../modules/academic-structure-II/enrollments/enrollment.route.mjs";
 import { AssistanceRouter } from "../../modules/teaching-manager-IV/assistance/assistance.route.mjs";
+import { academicAssignmentRoute } from "../../modules/academic-structure-II/assignments/assignment.route.mjs";
 
 const router = Router();
 
@@ -30,7 +31,8 @@ export const ListRoutes = {
         sections: router.use(`${SETTINGS.BASE_PATH}/sections`, SectionRoutes),
         gradeAcademic: router.use(`${SETTINGS.BASE_PATH}/grades`, GradeRoutes),
         years: router.use(`${SETTINGS.BASE_PATH}/years`, YearRoutes),
-        enrollments: router.use(`${SETTINGS.BASE_PATH}/enrollments`, EnrollmentRouter)
+        enrollments: router.use(`${SETTINGS.BASE_PATH}/enrollments`, EnrollmentRouter),
+        academicAssignments: router.use(`${SETTINGS.BASE_PATH}/academic-assignments`, academicAssignmentRoute)
     },
     grades: {
         grades: router.use(`${SETTINGS.BASE_PATH}/grades-log`, GradesLogRoutes)
