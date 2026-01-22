@@ -2,42 +2,90 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGRA - Gestión de Prelaciones</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Gestión de Prelaciones - SIGRA</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#002F87",
+                        "success": "#10B981",
+                        "error": "#C52B3D",
+                        "background-light": "#F3F4F6",
+                        "background-dark": "#1a1c20",
+                        "content-card": "#FFFFFF",
+                        "text-main": "#1F2937",
+                        "nav-gray": "#64748B"
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
     <link rel="stylesheet" href="style.css">
-    <!-- Inline favicon to avoid browser requesting /favicon.ico (prevents 404 in console) -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext x='1' y='13' font-size='12'%3E%C2%A9%3C/text%3E%3C/svg%3E">
 </head>
 
-<body>
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-text-main antialiased min-h-screen flex flex-col">
+    <header
+        class="sticky top-0 z-50 bg-white dark:bg-background-dark border-b border-gray-200 dark:border-gray-800 px-8 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="size-10 flex items-center justify-center">
+                    <img src="../assets/sigra-logo.svg" alt="Logo de SIGRA" class="w-full h-full object-contain" />
+                </div>
+                <h2 class="text-primary text-2xl font-black tracking-tight">SIGRA</h2>
+            </div>
 
-    <header class="header">
-        <div class="header-left">
-            <div class="logo">
-                <img src="Adobe Express - file.png" alt="Colegio Monte del Mar" class="logo-img">
-                <span class="logo-text">SIGRA</span>
-            </div>
-            <nav class="nav-links">
-                <a href="#">Inicio</a>
-                <a href="#" class="active">Asignaturas</a>
-                <a href="#">Docentes</a>
-                <a href="#">Reportes</a>
-            </nav>
-        </div>
-        <div class="header-right">
-            <div class="search-bar">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Buscar...">
-            </div>
-            <div class="notifications">
-                <i class="fa-solid fa-bell"></i>
-                <span class="dot"></span>
-            </div>
-            <div class="profile">
-                <img src="https://i.pravatar.cc/150?img=11" alt="Profile">
+            <div class="flex items-center gap-6">
+                <nav class="hidden md:flex items-center gap-6">
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="../../access-control-I/user-table.html">Inicio</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="../Gestionar Asignaciones/index.html">Inscripciones</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="../Gestionar Asignaciones/gestionar-asignacion.html">Asignaciones</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="../catalogo-materias/index.html">Catálogo</a>
+                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
+                        href="../gestion-materias/index.html">Materias</a>
+                    <a class="text-primary text-base font-bold transition-colors border-b-2 border-primary pb-1"
+                        href="index.html">Prelaciones</a>
+                </nav>
+
+                <div class="flex items-center gap-4">
+                    <button
+                        class="size-10 flex items-center justify-center rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors">
+                        <span class="material-symbols-outlined">notifications</span>
+                    </button>
+                    <div
+                        class="size-10 rounded-full bg-gray-200 overflow-hidden border-2 border-transparent hover:border-primary transition-all cursor-pointer">
+                        <img alt="Profile avatar" class="w-full h-full object-cover"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuADIAQNBOIhz8AgCJ4DVy8EvGEOtmBnmnGZ0YuFkSgoGk3FsiRM7HvL-ZsWuROht5F95KmOr4EbF94VN9LevPicOwahD_k-7hSMKTiXTGkglji04V35VjTZt7DdBYZKI0p6hd_kbx4ZOrwcGPwBE-OKjtSX7S0eMpvLRrwNIENK3l1MTGCEC-U-2NQFD7qBGimKZP7-iCg6Via2oOS3gcIWYoNGw2qTpJN9RW3LvyyM2KDfOo--lJGH043TvsKdYBlWavR6R87PamfY" />
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -120,7 +168,7 @@
                 </ul>
             </div>
 
-                <div class="card recent-activity">
+            <div class="card recent-activity">
                 <div class="card-header-flex">
                     <h4>Prelaciones Recientes</h4>
                     <a href="#" id="view-all-prelaciones">Ver todas</a>
