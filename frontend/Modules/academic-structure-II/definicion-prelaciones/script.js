@@ -259,22 +259,70 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // Load subjects into datalist for search input
-    async function loadSubjectsDatalist() {
+    // Store all subjects for autocomplete
+    let allSubjects = [];
+    const autocompleteDropdown = document.getElementById('autocomplete-dropdown');
+    const autocompleteResults = document.getElementById('autocomplete-results');
+
+    // Load subjects for autocomplete
+    async function loadSubjectsForAutocomplete() {
         try {
-            // Include 5th year subjects for the primary selection datalist
+            // Include 5th year subjects for the primary selection
             const res = await fetch(`${API_BASE}/api/prelacies?includeFifth=true`);
             if (!res.ok) return;
-            const rows = await res.json();
-            const datalist = document.getElementById('materias-list');
-            if (!datalist) return;
-            datalist.innerHTML = '';
-            rows.forEach(s => {
-                const opt = document.createElement('option');
-                opt.value = `${s.code} — ${s.name}`;
-                datalist.appendChild(opt);
-            });
+            allSubjects = await res.json();
         } catch (err) { console.error(err) }
+    }
+
+    // Render autocomplete results
+    function renderAutocompleteResults(subjects) {
+        if (!autocompleteResults) return;
+
+        if (!subjects || subjects.length === 0) {
+            autocompleteResults.innerHTML = `
+                <div class="autocomplete-empty">
+                    <i class="fa-solid fa-search"></i>
+                    No se encontraron materias
+                </div>
+            `;
+            return;
+        }
+
+        autocompleteResults.innerHTML = subjects.map(s => `
+            <div class="autocomplete-item" data-subject-id="${s.subject_id}" data-code="${s.code}" data-name="${s.name}" data-grade="${s.grade_name}" data-level="${s.level_order}">
+                <div class="autocomplete-item-code">${s.code}</div>
+                <div class="autocomplete-item-info">
+                    <span class="autocomplete-item-name">${s.name}</span>
+                    <span class="autocomplete-item-year"><i class="fa-solid fa-graduation-cap"></i> ${s.grade_name}</span>
+                </div>
+                <i class="fa-solid fa-chevron-right autocomplete-item-arrow"></i>
+            </div>
+        `).join('');
+    }
+
+    // Filter subjects based on search query
+    function filterSubjects(query) {
+        if (!query || query.trim() === '') {
+            return allSubjects.slice(0, 10); // Show first 10 if no query
+        }
+        const q = query.toLowerCase().trim();
+        return allSubjects.filter(s =>
+            s.code.toLowerCase().includes(q) ||
+            s.name.toLowerCase().includes(q)
+        ).slice(0, 15); // Limit to 15 results
+    }
+
+    // Show/hide autocomplete dropdown
+    function showAutocomplete() {
+        if (autocompleteDropdown) {
+            autocompleteDropdown.classList.add('active');
+        }
+    }
+
+    function hideAutocomplete() {
+        if (autocompleteDropdown) {
+            autocompleteDropdown.classList.remove('active');
+        }
     }
 
     // Load recent prelaciones (for the aside widget)
@@ -388,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
     (async () => {
         API_BASE = await resolveApiBase();
         await llenarSelectPrerrequisitos();
-        await loadSubjectsDatalist();
+        await loadSubjectsForAutocomplete();
         await loadAllPrelacies();
         await loadSummary();
 
@@ -412,15 +460,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 1. Buscar y Seleccionar Materia Principal ---
     if (materiaSearch) {
-        // Handler used for both 'input' and 'change' to support datalist selection and typing
-        const handleMateriaSelection = async function () {
-            const textoBusqueda = this.value.trim();
-            if (!textoBusqueda) return;
-            const materia = await buscarMateria(textoBusqueda);
-            if (!materia) {
-                showMessage('Materia no encontrada. Por favor, verifique el código o nombre e intente nuevamente.', 'error');
-                return;
-            }
+        // Handler to select a subject from autocomplete
+        const selectSubject = async function (materia) {
+            if (!materia) return;
 
             // Actualizar la información mostrada
             selectedMateriaTitle.textContent = `${materia.code} — ${materia.name}`;
@@ -446,8 +488,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     data.prereqs.forEach(p => {
                         const newItem = document.createElement('div');
                         newItem.classList.add('prereq-item');
-                        newItem.dataset.id = p.subject_prerequisites_id; // subject id
-                        newItem.dataset.rowId = p.id; // row id in subject_prerequisites
+                        newItem.dataset.id = p.subject_prerequisites_id;
+                        newItem.dataset.rowId = p.id;
                         newItem.innerHTML = `
                             <div class="prereq-code">${p.code}</div>
                             <div class="prereq-details">
@@ -461,15 +503,69 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (err) { console.error(err) }
 
-            // Limpiar el campo de búsqueda para evitar re-envíos accidentales
-            this.value = '';
+            // Limpiar el campo de búsqueda y cerrar dropdown
+            materiaSearch.value = '';
+            hideAutocomplete();
         };
 
-        materiaSearch.addEventListener('change', handleMateriaSelection);
-        materiaSearch.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
+        // Input event - filter subjects as user types
+        materiaSearch.addEventListener('input', function () {
+            const query = this.value.trim();
+            const filtered = filterSubjects(query);
+            renderAutocompleteResults(filtered);
+            if (query.length > 0 || document.activeElement === materiaSearch) {
+                showAutocomplete();
+            }
+        });
+
+        // Focus event - show dropdown
+        materiaSearch.addEventListener('focus', function () {
+            const filtered = filterSubjects(this.value.trim());
+            renderAutocompleteResults(filtered);
+            showAutocomplete();
+        });
+
+        // Click on autocomplete item
+        if (autocompleteResults) {
+            autocompleteResults.addEventListener('click', function (e) {
+                const item = e.target.closest('.autocomplete-item');
+                if (item) {
+                    const materia = {
+                        subject_id: parseInt(item.dataset.subjectId),
+                        code: item.dataset.code,
+                        name: item.dataset.name,
+                        grade_name: item.dataset.grade,
+                        level_order: parseInt(item.dataset.level)
+                    };
+                    selectSubject(materia);
+                }
+            });
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.autocomplete-wrapper')) {
+                hideAutocomplete();
+            }
+        });
+
+        // Keyboard navigation
+        materiaSearch.addEventListener('keydown', async function (e) {
+            if (e.key === 'Escape') {
+                hideAutocomplete();
+            } else if (e.key === 'Enter') {
                 e.preventDefault();
-                handleMateriaSelection.call(this);
+                const firstItem = autocompleteResults?.querySelector('.autocomplete-item');
+                if (firstItem) {
+                    const materia = {
+                        subject_id: parseInt(firstItem.dataset.subjectId),
+                        code: firstItem.dataset.code,
+                        name: firstItem.dataset.name,
+                        grade_name: firstItem.dataset.grade,
+                        level_order: parseInt(firstItem.dataset.level)
+                    };
+                    await selectSubject(materia);
+                }
             }
         });
     }
