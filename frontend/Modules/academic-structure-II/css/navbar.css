@@ -1,0 +1,193 @@
+:root {
+    --bg-page: #e5e7eb;
+    --bg-surface: #ffffff;
+    --border: #cbd5e1;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --link: #2563eb;
+    --badge: #f3f4f6;
+    --badge-muted: #e5e7eb;
+}
+
+/* Scoped reset for navbar */
+.navbar,
+.navbar * {
+    box-sizing: border-box;
+}
+
+header {
+    background: var(--bg-surface);
+    border-bottom: 2px solid var(--border);
+    width: 100%;
+}
+
+.navbar {
+    font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif !important;
+    max-width: 1180px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 12px 18px 12px 6px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-decoration: none;
+}
+
+.brand-logo {
+    height: 60px;
+    width: auto;
+    display: block;
+}
+
+.brand span {
+    font-size: 1.25rem;
+    color: #2563eb;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-weight: 500;
+    font-size: 0.98rem;
+    margin-left: auto;
+}
+
+.nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    padding: 6px 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.nav-links a:hover {
+    color: var(--text);
+}
+
+.nav-links .active {
+    color: var(--text);
+    border-color: var(--text);
+}
+
+.profile-menu {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    padding: 10px 12px;
+    min-width: 190px;
+    display: none;
+    z-index: 10;
+}
+
+.profile-dropdown.open {
+    display: block;
+}
+
+.profile-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-info {
+    font-weight: 700;
+    color: var(--text);
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2px;
+    list-style: none;
+}
+
+.profile-item {
+    width: 100%;
+    text-align: left;
+    background: #f9fafb;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.profile-item:hover {
+    background: var(--badge);
+    border-color: #d1d5db;
+}
+
+.profile-item:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+.profile-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    padding: 0;
+}
+
+.profile-button:hover {
+    background: #eef2ff;
+    border-color: #d1d5db;
+}
+
+.profile-avatar {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #1f2937;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 14px 18px;
+        gap: 18px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+}

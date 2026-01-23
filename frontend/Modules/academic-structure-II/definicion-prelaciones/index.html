@@ -45,49 +45,47 @@
         }
     </style>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../css/navbar.css" />
 </head>
 
 <body
     class="bg-background-light dark:bg-background-dark font-display text-text-main antialiased min-h-screen flex flex-col">
-    <header
-        class="sticky top-0 z-50 bg-white dark:bg-background-dark border-b border-gray-200 dark:border-gray-800 px-8 py-4">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="size-10 flex items-center justify-center">
-                    <img src="../assets/sigra-logo.svg" alt="Logo de SIGRA" class="w-full h-full object-contain" />
-                </div>
-                <h2 class="text-primary text-2xl font-black tracking-tight">SIGRA</h2>
+    <header>
+        <nav class="navbar" aria-label="Barra de navegación principal">
+            <a class="brand" aria-label="SIGRA" href="../../access-control-I/user-table.html">
+                <img class="brand-logo" src="../../../Public/resources/Modulo-1/logo.png" alt="Logo SIGRA" />
+                <span>SIGRA</span>
+            </a>
+
+            <div class="nav-links" role="list">
+                <a href="../../access-control-I/user-table.html" role="listitem">Inicio</a>
+                <a href="../catalogo-materias/index.html" role="listitem">Catalogo</a>
+                <a href="../gestion-materias/index.html" role="listitem">Materias</a>
+                <a class="active" href="../definicion-prelaciones/index.html" role="listitem">Prelaciones</a>
+                <a href="../Gestionar Asignaciones/index.html" role="listitem"> Inscripción</a>
+                <a href="../Gestionar Asignaciones/gestionar-asignacion.html" role="listitem">Asignacion</a>
             </div>
 
-            <div class="flex items-center gap-6">
-                <nav class="hidden md:flex items-center gap-6">
-                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
-                        href="../../access-control-I/user-table.html">Inicio</a>
-                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
-                        href="../Gestionar Asignaciones/index.html">Inscripciones</a>
-                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
-                        href="../Gestionar Asignaciones/gestionar-asignacion.html">Asignaciones</a>
-                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
-                        href="../catalogo-materias/index.html">Catálogo</a>
-                    <a class="text-nav-gray hover:text-primary text-base font-medium transition-colors"
-                        href="../gestion-materias/index.html">Materias</a>
-                    <a class="text-primary text-base font-bold transition-colors border-b-2 border-primary pb-1"
-                        href="index.html">Prelaciones</a>
-                </nav>
-
-                <div class="flex items-center gap-4">
-                    <button
-                        class="size-10 flex items-center justify-center rounded-lg bg-gray-50 text-gray-600 hover:bg-gray-100 transition-colors">
-                        <span class="material-symbols-outlined">notifications</span>
-                    </button>
-                    <div
-                        class="size-10 rounded-full bg-gray-200 overflow-hidden border-2 border-transparent hover:border-primary transition-all cursor-pointer">
-                        <img alt="Profile avatar" class="w-full h-full object-cover"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuADIAQNBOIhz8AgCJ4DVy8EvGEOtmBnmnGZ0YuFkSgoGk3FsiRM7HvL-ZsWuROht5F95KmOr4EbF94VN9LevPicOwahD_k-7hSMKTiXTGkglji04V35VjTZt7DdBYZKI0p6hd_kbx4ZOrwcGPwBE-OKjtSX7S0eMpvLRrwNIENK3l1MTGCEC-U-2NQFD7qBGimKZP7-iCg6Via2oOS3gcIWYoNGw2qTpJN9RW3LvyyM2KDfOo--lJGH043TvsKdYBlWavR6R87PamfY" />
-                    </div>
+            <div class="profile-menu" aria-label="Menú de perfil">
+                <button class="profile-button" id="profile-button" type="button" aria-haspopup="true"
+                    aria-expanded="false">
+                    <span class="profile-avatar" id="profile-avatar" aria-hidden="true">--</span>
+                    <span class="sr-only">Abrir menú de perfil</span>
+                </button>
+                <div class="profile-dropdown" id="profile-dropdown" role="menu">
+                    <ul class="profile-list" role="menu">
+                        <li class="profile-info" id="profile-info-name" role="presentation">Usuario</li>
+                        <li role="none"><button type="button" class="profile-item" data-profile-action="create"
+                                role="menuitem">Crear usuario</button></li>
+                        <li role="none"><button type="button" class="profile-item" data-profile-action="edit"
+                                role="menuitem">Editar
+                                usuario</button></li>
+                        <li role="none"><button type="button" class="profile-item" data-profile-action="logout"
+                                role="menuitem">Cerrar sesión</button></li>
+                    </ul>
                 </div>
             </div>
-        </div>
+        </nav>
     </header>
 
     <div class="page-header container">
@@ -247,6 +245,7 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="../js/navbar.js"></script>
 </body>
 
 </html>
