@@ -67,6 +67,38 @@ export class AssignmentModel {
         };
     }
 
+    // Obtener todos los profesores disponibles (no asignados a ninguna sección del año académico activo)
+    static async getAllTeachers(academicYearId) {
+        let query = `
+            SELECT u.user_id, CONCAT(u.first_name, ' ', u.last_name) AS name, u.email
+            FROM users u
+            JOIN roles r ON u.role_id = r.role_id
+            WHERE r.role_name = 'Docente'`;
+
+        const params = [];
+
+        // Si se proporciona academicYearId, filtrar profesores no asignados en ese año
+        if (academicYearId) {
+            query += `
+            AND u.user_id NOT IN (
+                SELECT DISTINCT ta.teacher_user_id
+                FROM teacher_assignments ta
+                JOIN sections s ON ta.section_id = s.section_id
+                WHERE s.academic_year_id = ?
+            )`;
+            params.push(academicYearId);
+        }
+
+        query += ` ORDER BY u.first_name, u.last_name`;
+
+        const [teachers] = await db.query(query, params);
+
+        return {
+            message: 'Profesores obtenidos exitosamente',
+            teachers
+        };
+    }
+
     // Obtener profesores asignados a una sección específica (con sus materias)
     static async getAssignedTeachers(sectionId) {
         if (!sectionId) return { error: 'El ID de la sección es requerido' };

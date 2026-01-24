@@ -10,6 +10,7 @@ router.get("/unassigned-students/:academicYearId", assignmentController.getUnass
 router.get("/assigned-students/:sectionId", assignmentController.getAssignedStudents);
 
 // Profesores
+router.get("/teachers", assignmentController.getAllTeachers);
 router.get("/unassigned-teachers/:sectionId", assignmentController.getUnassignedTeachers);
 router.get("/assigned-teachers/:sectionId", assignmentController.getAssignedTeachers);
 router.post("/assign-teacher", assignmentController.assignTeacher);

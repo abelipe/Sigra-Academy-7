@@ -136,6 +136,19 @@ export class subjectController {
         }
     }
 
+    // controlador para actualizar asignaciones de materias a un grado
+    updateSubjectGradeAssignments = async (req, res) => {
+        const { gradeId, subjectIds } = req.body;
+        try {
+            const result = await this.model.updateSubjectGradeAssignments(gradeId, subjectIds);
+            if (result.error) return res.status(400).json({ error: result.error });
+            return res.status(200).json(result);
+        } catch (error) {
+            console.error('Error in updateSubjectGradeAssignments:', error);
+            return res.status(500).json({ error: "Error interno del servidor" });
+        }
+    }
+
     // controlador para eliminar una materia
     deleteSubject = async (req, res) => {
         const { subjectId } = req.params

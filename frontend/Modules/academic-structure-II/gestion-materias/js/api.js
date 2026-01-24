@@ -52,14 +52,9 @@ export async function apiObtenerCatalogoMaterias() {
 }
 
 export async function apiObtenerMateriasAsignadasPorGrado(gradeId) {
-	// Intentar obtener las materias asignadas a un grado específico
-	// Por ahora, devuelve un array vacío ya que no hay endpoint específico
 	try {
-		const response = await request(`/subjects/all`, { method: "GET" });
-		const allSubjects = response.subjects || [];
-		// Filtrar por el grado (anio)
-		const gradeName = `${gradeId}° año`;
-		const assignedSubjects = allSubjects.filter(m => m.anio === gradeName);
+		const response = await request(`/subjects/grade/${gradeId}`, { method: "GET" });
+		const assignedSubjects = response.subjects || [];
 		return {
 			data: assignedSubjects.map(m => ({
 				subject_id: m.subject_id,
@@ -67,13 +62,28 @@ export async function apiObtenerMateriasAsignadasPorGrado(gradeId) {
 			}))
 		};
 	} catch (error) {
+		console.warn('Error al obtener materias asignadas, retornando array vacío:', error);
 		return { data: [] };
 	}
 }
 
+
 export async function apiGuardarMateriasDeGrado(gradeId, subjectIds) {
-	// Este endpoint no existe en el backend actual
-	// Retornar éxito simulado por ahora
-	console.warn('apiGuardarMateriasDeGrado: Endpoint no implementado en backend');
-	return { success: true, message: 'Cambios guardados (simulado)' };
+	try {
+		const response = await request('/subjects/assign-to-grade', {
+			method: 'POST',
+			body: JSON.stringify({
+				gradeId: parseInt(gradeId),
+				subjectIds: subjectIds.map(id => parseInt(id))
+			})
+		});
+		return {
+			success: true,
+			message: response.message || 'Cambios guardados correctamente',
+			data: response
+		};
+	} catch (error) {
+		console.error('Error al guardar materias:', error);
+		throw new Error(error.message || 'No se pudieron guardar los cambios');
+	}
 }

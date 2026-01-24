@@ -17,9 +17,12 @@ router.get("/grade/:gradeId", controller.getSubjectsByGrade)
 router.get("/subject/:subjectId", controller.getSubjectById)
 // Ruta para crear una materia
 router.post("/create", controller.createSubject)
+// Ruta para actualizar asignaciones de materias a un grado
+router.post("/assign-to-grade", controller.updateSubjectGradeAssignments)
 // Ruta para actualizar una materia
 router.put("/update/:subjectId", controller.updateSubject)
 // Ruta para eliminar una materia
 router.delete("/delete/:subjectId", controller.deleteSubject)
 
 export const subjectRoute = router
+

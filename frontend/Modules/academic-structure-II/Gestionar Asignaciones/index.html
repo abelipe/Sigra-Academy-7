@@ -107,16 +107,31 @@
             </nav>
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 pb-6">
                 <div>
-                    <h1 class="text-4xl font-black text-text-main tracking-tight text-primary">Inscripción de
+                    <h1 class="text-4xl font-black text-text-main tracking-tight text-primary" id="pageTitle">
+                        Inscripción de
                         Estudiantes en Sección</h1>
                     <p class="text-gray-500 mt-2 text-lg">Administre el alta de nuevos usuarios en el período académico
                         actual.</p>
                 </div>
-                <div class="hidden md:block">
-                    <span
-                        class="bg-blue-50 text-primary text-xs font-bold px-3 py-1 rounded-full border border-blue-100 uppercase tracking-wide">
-                        Período 2025-I
-                    </span>
+                <div class="flex flex-col sm:flex-row gap-3 items-end">
+                    <div class="flex items-center bg-gray-200 dark:bg-gray-700 rounded-lg p-1 h-fit">
+                        <button id="toggleStudents"
+                            class="relative bg-white dark:bg-gray-600 shadow-sm rounded-md py-1.5 px-4 text-sm font-semibold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-primary"
+                            type="button">
+                            Estudiantes
+                        </button>
+                        <button id="toggleTeachers"
+                            class="ml-0.5 relative border border-transparent rounded-md py-1.5 px-4 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 dark:focus:ring-offset-gray-800 focus:ring-primary"
+                            type="button">
+                            Profesores
+                        </button>
+                    </div>
+                    <div class="hidden md:block">
+                        <span
+                            class="bg-blue-50 text-primary text-xs font-bold px-3 py-1 rounded-full border border-blue-100 uppercase tracking-wide">
+                            Período 2025-I
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -126,20 +141,21 @@
                 <div class="p-8 space-y-8">
                     <div class="flex items-center gap-3 pb-2 border-b border-gray-100">
                         <div class="bg-primary/10 p-2 rounded-lg">
-                            <span class="material-symbols-outlined text-primary">person_add</span>
+                            <span class="material-symbols-outlined text-primary" id="personIcon">person_add</span>
                         </div>
-                        <h3 class="text-xl font-bold text-text-main">Datos del Estudiante</h3>
+                        <h3 class="text-xl font-bold text-text-main" id="formTitle">Datos del Estudiante</h3>
                     </div>
                     <form class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="md:col-span-2 space-y-2">
-                                <label class="block text-sm font-bold text-gray-700">Buscar Estudiante</label>
+                                <label class="block text-sm font-bold text-gray-700" id="personLabel">Buscar
+                                    Estudiante</label>
                                 <div class="flex gap-2">
-                                    <select id="studentSelector"
+                                    <select id="personSelector"
                                         class="flex-1 border-gray-300 rounded-lg shadow-sm focus:border-primary focus:ring-primary py-2.5 px-4">
                                         <option value="">Cargando estudiantes no inscritos...</option>
                                     </select>
-                                    <button id="refreshStudents" type="button"
+                                    <button id="refreshPersons" type="button"
                                         class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                                         <span class="material-symbols-outlined">refresh</span>
                                     </button>
@@ -275,7 +291,8 @@
                         <div
                             class="bg-blue-50/50 rounded-lg p-4 border border-blue-100 flex gap-3 text-sm text-primary/80">
                             <span class="material-symbols-outlined text-primary shrink-0">info</span>
-                            <p>Asegúrese de verificar que el estudiante haya completado el proceso de admisión antes de
+                            <p id="infoMessage">Asegúrese de verificar que el estudiante haya completado el proceso de
+                                admisión antes de
                                 finalizar la inscripción en la sección.</p>
                         </div>
                     </form>
@@ -285,10 +302,10 @@
                         class="px-6 py-2.5 rounded-lg font-bold text-sm text-gray-600 hover:bg-white hover:text-error hover:shadow-sm border border-transparent hover:border-gray-200 transition-all">
                         Cancelar
                     </button>
-                    <button
+                    <button id="submitButton"
                         class="px-6 py-2.5 bg-success text-white rounded-lg font-bold text-sm shadow-md shadow-success/20 hover:bg-emerald-600 hover:shadow-lg transition-all flex items-center gap-2">
                         <span class="material-symbols-outlined text-xl">check_circle</span>
-                        Finalizar Inscripción de Estudiante
+                        <span id="submitButtonText">Finalizar Inscripción de Estudiante</span>
                     </button>
                 </div>
             </div>
@@ -299,21 +316,81 @@
         <span class="material-symbols-outlined text-3xl">question_mark</span>
     </button>
 
+    <!-- Modal para seleccionar materia -->
+    <div id="subjectModal"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
+        <div
+            class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all">
+            <div
+                class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50/50 dark:bg-gray-900/50">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center">
+                    <span class="material-symbols-outlined mr-2 text-primary">book</span>
+                    Asignar Materia
+                </h3>
+                <button onclick="closeSubjectModal()"
+                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Seleccione la materia que impartirá el profesor
+                    en esta sección:</p>
+                <div id="subjectList" class="space-y-2 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                    <p class="text-center text-gray-400 py-4">Cargando materias...</p>
+                </div>
+            </div>
+            <div class="p-4 bg-gray-50 dark:bg-gray-900/50 flex justify-end">
+                <button onclick="closeSubjectModal()"
+                    class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+    </style>
+
     <script>
         const API_BASE = 'http://localhost:3000/api';
         let currentAcademicYearId = null;
+        let currentMode = 'students'; // 'students' or 'teachers'
+        let currentGradeId = null;
+        let selectedSubjectId = null;
 
         document.addEventListener('DOMContentLoaded', async function () {
             const yearInput = document.getElementById('yearInput');
-            const studentSelector = document.getElementById('studentSelector');
+            const personSelector = document.getElementById('personSelector');
             const sectionsContainer = document.getElementById('sectionsContainer');
             const sectionsTable = document.getElementById('sectionsTable');
             const sectionsTableBody = document.getElementById('sectionsTableBody');
             const noSectionsMessage = document.getElementById('noSectionsMessage');
-            const submitBtn = document.querySelector('button.bg-success');
-            const refreshBtn = document.getElementById('refreshStudents');
+            const submitBtn = document.getElementById('submitButton');
+            const refreshBtn = document.getElementById('refreshPersons');
+            const toggleStudents = document.getElementById('toggleStudents');
+            const toggleTeachers = document.getElementById('toggleTeachers');
 
-            // 1. Load Active Year and Students
+            // Toggle buttons
+            toggleStudents.addEventListener('click', () => switchMode('students'));
+            toggleTeachers.addEventListener('click', () => switchMode('teachers'));
+
+            // 1. Load Active Year and initial data
             await loadInitialData();
 
             async function loadInitialData() {
@@ -323,39 +400,88 @@
                     const activeYear = dataYears.years?.find(y => y.is_active) || dataYears.years?.[0];
                     if (activeYear) {
                         currentAcademicYearId = activeYear.year_id;
-                        document.querySelector('.bg-blue-50').textContent = activeYear.name;
-                        loadStudents();
+                        const periodBadges = document.querySelectorAll('.bg-blue-50');
+                        periodBadges.forEach(badge => badge.textContent = activeYear.name);
+                        loadPersons();
                     }
                 } catch (error) {
                     console.error('Error initialization:', error);
                 }
             }
 
-            async function loadStudents() {
+            function switchMode(mode) {
+                currentMode = mode;
+                updateUI();
+                loadPersons();
+                // Clear selections
+                yearInput.value = '';
+                sectionsContainer.classList.add('hidden');
+            }
+
+            function updateUI() {
+                const isStudentMode = currentMode === 'students';
+
+                // Update toggle styles
+                if (isStudentMode) {
+                    toggleStudents.classList.add('bg-white', 'dark:bg-gray-600', 'shadow-sm', 'font-semibold');
+                    toggleStudents.classList.remove('border-transparent', 'font-medium');
+                    toggleTeachers.classList.remove('bg-white', 'dark:bg-gray-600', 'shadow-sm', 'font-semibold');
+                    toggleTeachers.classList.add('border-transparent', 'font-medium');
+                } else {
+                    toggleTeachers.classList.add('bg-white', 'dark:bg-gray-600', 'shadow-sm', 'font-semibold');
+                    toggleTeachers.classList.remove('border-transparent', 'font-medium');
+                    toggleStudents.classList.remove('bg-white', 'dark:bg-gray-600', 'shadow-sm', 'font-semibold');
+                    toggleStudents.classList.add('border-transparent', 'font-medium');
+                }
+
+                // Update texts
+                document.getElementById('pageTitle').textContent = isStudentMode ?
+                    'Inscripción de Estudiantes en Sección' : 'Asignación de Profesores a Sección';
+                document.getElementById('formTitle').textContent = isStudentMode ?
+                    'Datos del Estudiante' : 'Datos del Profesor';
+                document.getElementById('personLabel').textContent = isStudentMode ?
+                    'Buscar Estudiante' : 'Buscar Profesor';
+                document.getElementById('submitButtonText').textContent = isStudentMode ?
+                    'Finalizar Inscripción de Estudiante' : 'Finalizar Asignación de Profesor';
+                document.getElementById('infoMessage').textContent = isStudentMode ?
+                    'Asegúrese de verificar que el estudiante haya completado el proceso de admisión antes de finalizar la inscripción en la sección.' :
+                    'El profesor será asignado a la sección con la materia seleccionada. Asegúrese de que el profesor esté capacitado para impartir la materia.';
+                document.getElementById('personIcon').textContent = isStudentMode ? 'person_add' : 'school';
+            }
+
+            async function loadPersons() {
                 if (!currentAcademicYearId) return;
-                studentSelector.innerHTML = '<option value="">Cargando...</option>';
+                personSelector.innerHTML = '<option value="">Cargando...</option>';
                 try {
-                    const res = await fetch(`${API_BASE}/academic-assignments/unassigned-students/${currentAcademicYearId}`);
+                    const endpoint = currentMode === 'students' ?
+                        `${API_BASE}/academic-assignments/unassigned-students/${currentAcademicYearId}` :
+                        `${API_BASE}/academic-assignments/teachers?academicYearId=${currentAcademicYearId}`;
+
+                    const res = await fetch(endpoint);
                     const data = await res.json();
-                    studentSelector.innerHTML = '<option value="">Seleccione un estudiante...</option>';
-                    if (data.students) {
-                        data.students.forEach(s => {
+                    const items = currentMode === 'students' ? data.students : data.teachers;
+
+                    personSelector.innerHTML = `<option value="">Seleccione ${currentMode === 'students' ? 'un estudiante' : 'un profesor'}...</option>`;
+                    if (items) {
+                        items.forEach(item => {
                             const opt = document.createElement('option');
-                            opt.value = s.user_id;
-                            opt.textContent = `${s.name} (${s.email})`;
-                            studentSelector.appendChild(opt);
+                            opt.value = item.user_id;
+                            opt.textContent = `${item.name} (${item.email})`;
+                            personSelector.appendChild(opt);
                         });
                     }
                 } catch (error) {
-                    console.error('Error loading students:', error);
+                    console.error('Error loading persons:', error);
                 }
             }
 
-            refreshBtn.addEventListener('click', loadStudents);
+            refreshBtn.addEventListener('click', loadPersons);
 
             // 2. Load Sections by Grade
             yearInput.addEventListener('input', async function () {
                 const grade = this.value;
+                currentGradeId = grade;
+
                 if (!grade || grade < 1) {
                     sectionsContainer.classList.add('hidden');
                     return;
@@ -394,7 +520,7 @@
                     tr.onclick = () => tr.querySelector('input').checked = true;
                     tr.innerHTML = `
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <input type="radio" name="seccion" value="${sec.section_id}" ${available <= 0 ? 'disabled' : ''}
+                            <input type="radio" name="seccion" value="${sec.section_id}" data-grade="${sec.grade_id}" ${available <= 0 ? 'disabled' : ''}
                                 class="focus:ring-primary h-4 w-4 text-primary border-gray-300">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-text-main">${sec.grade_name}</td>
@@ -409,45 +535,134 @@
                 });
             }
 
-            // 3. Complete Enrollment
+            // 3. Complete Enrollment/Assignment
             submitBtn.addEventListener('click', async () => {
-                const studentId = studentSelector.value;
+                const personId = personSelector.value;
                 const sectionInput = document.querySelector('input[name="seccion"]:checked');
 
-                if (!studentId || !sectionInput) {
-                    alert('Por favor seleccione un estudiante y una sección.');
+                if (!personId || !sectionInput) {
+                    alert(`Por favor seleccione ${currentMode === 'students' ? 'un estudiante' : 'un profesor'} y una sección.`);
                     return;
                 }
 
                 const sectionId = sectionInput.value;
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Procesando...';
 
-                try {
-                    const response = await fetch(`${API_BASE}/enrollments/create`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            student_user_id: parseInt(studentId),
-                            section_id: parseInt(sectionId)
-                        })
-                    });
+                if (currentMode === 'teachers') {
+                    // For teachers, open subject modal
+                    openSubjectModal(personId, sectionId, sectionInput.dataset.grade);
+                } else {
+                    // For students, proceed directly
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> <span>Procesando...</span>';
 
-                    const data = await response.json();
-                    if (data.error) {
-                        alert('Error: ' + data.error);
-                    } else {
-                        alert('¡Estudiante inscrito exitosamente!');
-                        window.location.reload();
+                    try {
+                        const response = await fetch(`${API_BASE}/enrollments/create`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                student_user_id: parseInt(personId),
+                                section_id: parseInt(sectionId)
+                            })
+                        });
+
+                        const data = await response.json();
+                        if (data.error) {
+                            alert('Error: ' + data.error);
+                        } else {
+                            alert('¡Estudiante inscrito exitosamente!');
+                            window.location.reload();
+                        }
+                    } catch (error) {
+                        alert('Error en el servidor al procesar la inscripción.');
+                    } finally {
+                        submitBtn.disabled = false;
+                        updateSubmitButtonText();
                     }
-                } catch (error) {
-                    alert('Error en el servidor al procesar la inscripción.');
-                } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<span class="material-symbols-outlined text-xl">check_circle</span> Finalizar Inscripción de Estudiante';
                 }
             });
+
+            function updateSubmitButtonText() {
+                submitBtn.innerHTML = `<span class="material-symbols-outlined text-xl">check_circle</span> <span id="submitButtonText">${currentMode === 'students' ? 'Finalizar Inscripción de Estudiante' : 'Finalizar Asignación de Profesor'}</span>`;
+            }
         });
+
+        // Subject Modal Functions
+        let pendingTeacherAssignment = null;
+
+        function openSubjectModal(teacherId, sectionId, gradeId) {
+            pendingTeacherAssignment = { teacherId, sectionId, gradeId };
+            const modal = document.getElementById('subjectModal');
+            const list = document.getElementById('subjectList');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            list.innerHTML = '<p class="text-center text-gray-400 py-4">Cargando materias...</p>';
+
+            const url = `${API_BASE}/subjects/grade/${gradeId}`;
+
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    list.innerHTML = '';
+                    if (!data.subjects || data.subjects.length === 0) {
+                        list.innerHTML = '<p class="text-center text-gray-400 py-4">No hay materias registradas para este grado.</p>';
+                        return;
+                    }
+                    data.subjects.forEach(sub => {
+                        const btn = document.createElement('button');
+                        btn.className = 'w-full flex items-center justify-between p-4 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-primary hover:bg-primary/5 dark:hover:bg-primary/10 transition-all text-left group';
+                        btn.onclick = () => confirmTeacherAssignment(sub.subject_id);
+                        btn.innerHTML = `
+                            <div>
+                                <p class="text-sm font-bold text-gray-900 dark:text-white group-hover:text-primary transition-colors">${sub.subject_name}</p>
+                                <p class="text-xs text-gray-500 font-mono uppercase">${sub.code_subject}</p>
+                            </div>
+                            <span class="material-symbols-outlined text-gray-300 group-hover:text-primary transition-colors">add_circle</span>
+                        `;
+                        list.appendChild(btn);
+                    });
+                })
+                .catch(err => {
+                    console.error('Error fetching subjects:', err);
+                    list.innerHTML = '<p class="text-center text-red-400 py-4">Error al cargar materias.</p>';
+                });
+        }
+
+        async function confirmTeacherAssignment(subjectId) {
+            if (!pendingTeacherAssignment) return;
+
+            const { teacherId, sectionId } = pendingTeacherAssignment;
+
+            try {
+                const response = await fetch(`${API_BASE}/academic-assignments/assign-teacher`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        teacher_user_id: parseInt(teacherId),
+                        section_id: parseInt(sectionId),
+                        subject_id: parseInt(subjectId)
+                    })
+                });
+
+                const data = await response.json();
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    alert('¡Profesor asignado exitosamente!');
+                    closeSubjectModal();
+                    window.location.reload();
+                }
+            } catch (error) {
+                alert('Error en el servidor al procesar la asignación.');
+            }
+        }
+
+        function closeSubjectModal() {
+            const modal = document.getElementById('subjectModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            pendingTeacherAssignment = null;
+        }
     </script>
     <script src="../js/navbar.js"></script>
 </body>
