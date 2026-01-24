@@ -36,6 +36,18 @@ export class AssignmentController {
         }
     }
 
+    getAllTeachers = async (req, res) => {
+        const { academicYearId } = req.query; // Optional query parameter
+        try {
+            const result = await this.assignmentModel.getAllTeachers(academicYearId ? Number(academicYearId) : null);
+            if (result.error) return res.status(404).json({ error: result.error });
+            return res.status(200).json(result);
+        } catch (error) {
+            console.error('Error in getAllTeachers:', error);
+            return res.status(500).json({ error: 'Error al obtener profesores' });
+        }
+    }
+
     getAssignedTeachers = async (req, res) => {
         const { sectionId } = req.params;
         try {
