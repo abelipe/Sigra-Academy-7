@@ -1,5 +1,6 @@
 import * as courseModel from './manager.model.mjs'
 import { GradesLogModel } from '../grades-record-V/grades/grades.model.mjs'
+import { ResourceModel } from '../teaching-manager-IV/courseResources/resources.model.mjs';
 import { db } from '../../../database/db.database.mjs'
 /* Controlador para obtener cursos de un estudiante */
 export const getCoursesByStudent = async (req, res) => {
@@ -102,18 +103,23 @@ export const uploadActivitySubmission = async (req, res) => {
 export const getMaterialsByAssignment = async (req, res) => {
   try {
     const { assignmentId } = req.params;
-    if (courseModel.getMaterialsByAssignmentId) {
-      const materials = await courseModel.getMaterialsByAssignmentId(assignmentId);
-      return res.json({ success: true, data: materials });
+    
+    // Llamamos al modelo que ya tienes creado en el módulo de recursos
+    const result = await ResourceModel.getResourcesByAssignment(assignmentId);
+    
+    // Si el modelo devuelve un error o no hay recursos
+    if (result.error) {
+        return res.status(404).json({ success: false, message: result.error });
     }
 
-    const mock = [
-      { id: 1, title: 'Guía de estudio', type: 'Documento', url: '/Public/resources/Modulo-1/guia.pdf' },
-      { id: 2, title: 'Presentación 1', type: 'Diapositiva', url: '/Public/resources/Modulo-1/ppt1.pdf' }
-    ];
+    // Si todo va bien, devolvemos los datos de la DB
+    res.json({ 
+      success: true, 
+      data: result.resources || [] 
+    });
 
-    res.json({ success: true, data: mock });
   } catch (error) {
+    console.error("Error en getMaterialsByAssignment:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
