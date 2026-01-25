@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Gestión de Horarios - SIGRA</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#002F87",
+                        "success": "#10B981",
+                        "error": "#C52B3D",
+                        "background-light": "#F3F4F6",
+                        "background-dark": "#1a1c20",
+                        "content-card": "#FFFFFF",
+                        "text-main": "#1F2937",
+                        "nav-gray": "#64748B"
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+    <link rel="stylesheet" href="./css/horarios.css" />
+    <link rel="stylesheet" href="../css/navbar.css" />
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-text-main antialiased min-h-screen flex flex-col">
+    <header>
+        <nav class="navbar" aria-label="Barra de navegación principal">
+            <a class="brand" aria-label="SIGRA" href="../../landing/index.html">
+                <img class="brand-logo" src="../../../Public/resources/Modulo-1/logo.png" alt="Logo SIGRA" />
+                <span>SIGRA</span>
+            </a>
+
+            <div class="nav-links" role="list">
+                <a href="../../landing/index.html" role="listitem">Inicio</a>
+                <a href="../catalogo-materias/index.html" role="listitem">Catalogo</a>
+                <a href="../gestion-materias/index.html" role="listitem">Materias</a>
+                <a href="../definicion-prelaciones/index.html" role="listitem">Prelaciones</a>
+                <a class="active" href="../gestion-horarios/index.html" role="listitem">Horarios</a>
+                <a href="../Gestionar Asignaciones/index.html" role="listitem">Inscripción</a>
+                <a href="../Gestionar Asignaciones/gestionar-asignacion.html" role="listitem">Asignacion</a>
+            </div>
+
+            <div class="profile-menu" aria-label="Menú de perfil">
+                <button class="profile-button" id="profile-button" type="button" aria-haspopup="true"
+                    aria-expanded="false">
+                    <span class="profile-avatar" id="profile-avatar" aria-hidden="true">--</span>
+                    <span class="sr-only">Abrir menú de perfil</span>
+                </button>
+                <div class="profile-dropdown" id="profile-dropdown" role="menu">
+                    <ul class="profile-list" role="menu">
+                        <li class="profile-info" id="profile-info-name" role="presentation">Usuario</li>
+                        <li role="none"><button type="button" class="profile-item" data-profile-action="create"
+                                role="menuitem">Crear usuario</button></li>
+                        <li role="none"><button type="button" class="profile-item" data-profile-action="edit"
+                                role="menuitem">Editar
+                                usuario</button></li>
+                        <li role="none"><button type="button" class="profile-item" data-profile-action="logout"
+                                role="menuitem">Cerrar sesión</button></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="contenedor pagina">
+
+        <section class="cabecera-seccion">
+            <div class="cabecera-seccion__texto">
+                <h1 class="titulo">Gestión de Horarios</h1>
+                <p class="subtitulo">Configure los horarios de clases para cada materia, profesor y sección.</p>
+            </div>
+
+            <div class="cabecera-seccion__acciones">
+                <button id="btnNuevoHorario" class="btn btn--primario" type="button">
+                    <span class="btn__icono" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                    </span>
+                    Nuevo Horario
+                </button>
+            </div>
+        </section>
+
+        <section class="tarjeta tarjeta--selector">
+            <div class="selector">
+                <div class="selector__bloque">
+                    <label class="etiqueta" for="selectGrado">Seleccionar Año Académico</label>
+                    <div class="select">
+                        <select id="selectGrado" aria-label="Seleccionar año académico"></select>
+                        <span class="select__chevron" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="selector__bloque">
+                    <label class="etiqueta" for="selectSeccion">Seleccionar Sección</label>
+                    <div class="select">
+                        <select id="selectSeccion" aria-label="Seleccionar sección">
+                            <option value="">-- Primero seleccione un año --</option>
+                        </select>
+                        <span class="select__chevron" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tarjeta">
+            <div class="tarjeta__cabecera">
+                <div class="tarjeta__titulo">
+                    <span class="tarjeta__icono" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                            <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" />
+                            <path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </span>
+                    Horarios Configurados
+                </div>
+            </div>
+
+            <div class="tabla-container">
+                <table class="tabla">
+                    <thead>
+                        <tr>
+                            <th>Materia</th>
+                            <th>Profesor</th>
+                            <th>Día</th>
+                            <th>Hora Inicio</th>
+                            <th>Hora Fin</th>
+                            <th>Aula</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaHorarios">
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 40px;">
+                                Seleccione un año y sección para ver los horarios
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Crear/Editar Horario -->
+    <div id="modalHorario" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal__cabecera">
+                <h2 class="modal__titulo" id="modalTitulo">Nuevo Horario</h2>
+                <button class="modal__cerrar" id="btnCerrarModal" type="button" aria-label="Cerrar modal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal__cuerpo">
+                <div class="formulario-grupo">
+                    <label class="formulario-label" for="modalAsignacion">Asignación (Materia - Profesor)</label>
+                    <select id="modalAsignacion" class="formulario-input">
+                        <option value="">-- Seleccione una asignación --</option>
+                    </select>
+                </div>
+
+                <div class="formulario-grupo">
+                    <label class="formulario-label" for="modalDia">Día de la Semana</label>
+                    <select id="modalDia" class="formulario-input">
+                        <option value="">-- Seleccione un día --</option>
+                        <option value="Lunes">Lunes</option>
+                        <option value="Martes">Martes</option>
+                        <option value="Miércoles">Miércoles</option>
+                        <option value="Jueves">Jueves</option>
+                        <option value="Viernes">Viernes</option>
+                    </select>
+                </div>
+
+                <div class="formulario-fila">
+                    <div class="formulario-grupo">
+                        <label class="formulario-label" for="modalHoraInicio">Hora de Inicio</label>
+                        <input type="time" id="modalHoraInicio" class="formulario-input" />
+                    </div>
+
+                    <div class="formulario-grupo">
+                        <label class="formulario-label" for="modalHoraFin">Hora de Fin</label>
+                        <input type="time" id="modalHoraFin" class="formulario-input" />
+                    </div>
+                </div>
+
+                <div class="formulario-grupo">
+                    <label class="formulario-label" for="modalAula">Aula / Salón</label>
+                    <input type="text" id="modalAula" class="formulario-input" placeholder="Ej: Aula 101" />
+                </div>
+            </div>
+
+            <div class="modal__pie">
+                <button id="btnCancelarModal" class="btn btn--secundario" type="button">Cancelar</button>
+                <button id="btnGuardarHorario" class="btn btn--primario" type="button">Guardar Horario</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./js/main.js"></script>
+    <script src="../js/navbar.js"></script>
+</body>
+
+</html>
