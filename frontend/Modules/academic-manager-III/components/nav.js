@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <a href="../../landing/index.html">Inicio</a>
       <a href="manager.view.html">Mis Cursos</a>
       <a href="schedule.html">Mi Horario</a>
-      <a href="final-report.html">Boletín Final</a>
+      <a href="final-report.html">Boletín</a>
     </div>
 
     <div class="profile-menu" aria-label="Menú de perfil">
